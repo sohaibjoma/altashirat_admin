@@ -2,6 +2,8 @@ import axios from "axios";
 
 const token = localStorage.getItem("userToken");
 import { useAppLocale } from "../../store/appLocale";
+import { useErrorStore } from "../../stores/errors";
+import { useNotificationStore } from "../../stores/notification";
 
 
 const AxiosInstance = axios.create({
@@ -22,9 +24,23 @@ AxiosInstance.interceptors.request.use(
 );
 
 AxiosInstance.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    const errorStore = useErrorStore();
+    const notificationStore = useNotificationStore();
+    if (response.data.errors) {
+      if(response.data.errors.status === 409){
+      errorStore.setApiError(response.data.errors); 
+      }  
+      else if(response.data.errors.status === 422){
+        errorStore.setApiError(response.data.errors); 
+      }
+    }
+    if (response.data.message) {
+      notificationStore.setNotification("sucess"); 
+    }
+    return response 
+  },
   (error) => {
-    throw error
     Promise.reject(error)
   }
 );
