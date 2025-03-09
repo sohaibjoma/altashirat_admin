@@ -1,3 +1,5 @@
-import vuetify from "./vuetify/index.js";
+import vuetify from './vuetify/index.js';
+import i18n from './i18n/index.js';
+import './veeValidate/index.js';
 
-export { vuetify }
+export { vuetify, i18n };

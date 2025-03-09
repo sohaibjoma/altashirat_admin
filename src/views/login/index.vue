@@ -1,5 +1,5 @@
 <template>
-  <div>دخول <v-icon>mdi-home</v-icon></div>
+  <div>{{ $t('hello') }}<v-icon>mdi-home</v-icon></div>
   <v-btn color="primary">hello </v-btn>
 </template>
 

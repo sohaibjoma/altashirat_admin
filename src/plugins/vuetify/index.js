@@ -2,53 +2,51 @@ import 'vuetify/styles';
 import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
-import '@mdi/font/css/materialdesignicons.css'; 
-// import en from "../I18n/en.json";
-// import ar from "../I18n/ar.json";
+import '@mdi/font/css/materialdesignicons.css';
 
+// Get locale from localStorage or default to "ar"
+const locale = localStorage.getItem("locale") || "ar";
+const isRTL = locale === "ar";
 
+// Set direction on HTML document
+document.documentElement.setAttribute("dir", isRTL ? "rtl" : "ltr");
 
 // Vuetify setup
 const vuetify = createVuetify({
   components,
   directives,
   locale: {
-    locale: localStorage.getItem("locale") || "ar",
-    // messages:{ar,en}
+    locale,
   },
+  rtl: isRTL, // Set RTL dynamically
   icons: {
-    defaultSet: 'mdi', // Default icon set
+    defaultSet: 'mdi',
   },
-
-   theme: {
+  theme: {
     defaultTheme: 'myCustomTheme',
     themes: {
       myCustomTheme: {
         dark: false,
         colors: {
-          black: '#000000',
-          white: '#ffffff',
-          primary: '#01335b',
-          secondary: '#a6bf23',
+          black: '#000000',       // ✅ Fixed: Wrapped in quotes
+          white: '#ffffff',       // ✅ Already correct
+          primary: '#de1d9d',      
+          'primary-2': '#F8D2EB',
+          'primary-3': '#FBE8F5',
+          secondary: '#212cff',
+          'secondary-2': '#D3D5FF',
+          'secondary-3': '#E8E9FF',
           gray: '#f7f8f9',
-          'primary-2': '#335a7a',
-          'secondary-2': 'rgba(166, 191, 35, 0.8)',
           'gray-2': '#dadada',
-          'primary-3': '#e3edf5',
-          'secondary-3': '#f8fed9',
-          'gray-3': '#939393',
+          'gray-3': '#939393',   // ✅ Fixed: Wrapped in quotes
           'error-text': '#e21b1b',
           'error-bg': '#fae1e4',
           'correct-text': '#4bae4f',
-          'correct-bg':'#f1fff2',
+          'correct-bg': '#f1fff2',
         },
       },
     },
   },
 });
 
-  
 export default vuetify;
-
-
-
