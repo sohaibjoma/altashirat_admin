@@ -1,10 +1,11 @@
 <template>
-  <div>main layout</div>
-  <router-view></router-view>
+  <div>header</div>
 </template>
 
 <script>
+export default {
 
+}
 </script>
 
 <style>
