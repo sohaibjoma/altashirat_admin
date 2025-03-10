@@ -1,48 +1,54 @@
 import axios from "axios";
-
-const token = localStorage.getItem("userToken");
-import { useAppLocale } from "../../store/appLocale";
-import { useErrorStore } from "../../stores/errors";
+import { useAuthStore } from "../../stores/auth";
 import { useNotificationStore } from "../../stores/notification";
+import { useErrorStore } from "../../stores/errors";
 
-
-const AxiosInstance = axios.create({
+const axiosInstance = axios.create({
   baseURL: "https://intern.api.altashirat.solutionplus.net/api",
-  headers:{
-    Authorization:token? `Bearer ${token}` : "",
-  } 
 });
 
-AxiosInstance.interceptors.request.use(
-  (config) => {
-    const usedAppLocale = useAppLocale();
-    config.headers["x-locale"]= localStorage.getItem("locale") || usedAppLocale.appLocale
-    console.log(config);
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+axiosInstance.interceptors.request.use((config) => {
+  const authStore = useAuthStore();
+  const token = authStore.token;
 
-AxiosInstance.interceptors.response.use(
-  (response) => {
-    const errorStore = useErrorStore();
-    const notificationStore = useNotificationStore();
-    if (response.data.errors) {
-      if(response.data.errors.status === 409){
-      errorStore.setApiError(response.data.errors); 
-      }  
-      else if(response.data.errors.status === 422){
-        errorStore.setApiError(response.data.errors); 
-      }
-    }
-    if (response.data.message) {
-      notificationStore.setNotification("sucess"); 
-    }
-    return response 
-  },
+  if (token) {
+    config.headers["Authorization"] = `Bearer ${token}`;
+  }
+  return config;
+});
+
+axiosInstance.interceptors.response.use(
+  (response) => response,
   (error) => {
-    Promise.reject(error)
+    const notificationStore = useNotificationStore();
+    const errorStore = useErrorStore();
+
+    errorStore.clearErrors();
+
+    if (error.response) {
+      if (error.response.status === 409 || error.response.status === 422) {
+        errorStore.setErrors(error.response.data.errors);
+        notificationStore.setNotification(
+          "Please fix the errors in the form.",
+          "error"
+        );
+      } else {
+        console.error("API Error:", error.response);
+        notificationStore.setNotification(
+          "An unexpected error occurred.",
+          "error"
+        );
+      }
+    } else {
+      console.error("Network Error:", error);
+      notificationStore.setNotification(
+        "Network issue. Please try again later.",
+        "error"
+      );
+    }
+
+    return Promise.reject(error);
   }
 );
 
-export default AxiosInstance
+export default axiosInstance;

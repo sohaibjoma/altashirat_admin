@@ -2,14 +2,24 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 
 export const useErrorStore = defineStore("error", () => {
-const error = ref(null);
+  const errors = ref({});
 
-const setApiError=(data)=>{
-  error.value=data
-}
+  const setErrors = (newErrors) => {
+    errors.value = newErrors;
+  };
 
-return {  
-  error,
-  setApiError
-}
+  const clearErrors = () => {
+    errors.value = {};
+  };
+
+  const getErrorsForField = (fieldName) => {
+    return errors.value[fieldName] || [];
+  };
+
+  return {
+    errors,
+    setErrors,
+    clearErrors,
+    getErrorsForField,
+  };
 });

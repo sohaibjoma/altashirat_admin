@@ -1,0 +1,17 @@
+.notification--error{
+  border: var(--error-text) 1px solid !important;
+  background: var(--error-bg) !important;
+  color: var(--error-text) !important;
+  width: 600px ;
+  text-align: center;
+  height:40px;
+}
+
+.notification--correct{
+  border: var(--correct-text) 1px solid !important;
+  background: var(--correct-bg) !important;
+  color: var(--correct-text) !important;
+  width: 600px ;
+  text-align: center;
+  height:40px;
+}

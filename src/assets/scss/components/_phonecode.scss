@@ -1,0 +1,9 @@
+@font-face {
+  font-family: 'Noto';
+  src: url('../../fonts/noto/NotoColorEmoji-Regular.ttf') format('truetype');
+}
+
+.phone__flag {
+  margin-inline-start: 5px;
+  font-family: 'Noto', sans-serif;
+}
