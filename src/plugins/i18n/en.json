@@ -80,6 +80,10 @@
     "edit":"Edit"
   },
 
+  "profile": {
+    "title": "Profile"
+  },
+
   "errorNotification": "Something went wrong please try again",
   "successNotification": "done successfully!"
 

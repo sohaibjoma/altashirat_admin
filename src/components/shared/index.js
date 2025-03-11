@@ -29,6 +29,10 @@ import SuccessNotify from './Inputs/notifications/SuccessNotify/index.vue'
 app.component("ErrorNotify",ErrorNotify)
 app.component("SuccessNotify",SuccessNotify)
 
+//image compponent import
+import Image from './Image/index.vue'
+app.component("Image",Image)
+
 // table import 
 
 
