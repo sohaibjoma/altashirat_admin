@@ -1,0 +1,64 @@
+body{
+  background-color: var(--gray);
+}
+
+.drawer__listitem--active{
+  background-color: var(--secondary-color-3);
+}
+
+.icon--pink{
+  color: var(--primary);
+}
+
+.active-class {
+  background-color: var(--primary-2) !important;
+  font-weight: bolder !important;
+}
+
+.tool-bar{
+  position: relative;
+  width: 1050px;
+  left: -250px;
+
+  @media (max-width: 1300px) {
+    left: 0px;
+  }
+}
+
+.drawer__logo{
+  height: 70px;
+  width: 70px;
+  border-radius: 50%;
+  text-align: center;
+  margin-top : 10px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.drawer__logo__img{
+  height: 70px;
+  width: 70px;
+  border-radius: 50%;
+  text-align: center;
+  margin-top : 10px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.v-toolbar__avatar{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.header__icon{
+  width: 20px;
+  height: 20px;
+}
+
+.nav__icon{
+  width: 50px;
+  height: 30px;
+}
+
+

@@ -22,7 +22,7 @@ export const useAuthStore = defineStore("auth", () => {
   const clearToken = () => {
     token.value = null;
     user.value = null;
-    localStorage.setItem("userToken")= newToken;
+    localStorage.setItem("userToken")= null;
     localStorage.setItem("auth_user")= null;
   };
 
@@ -45,7 +45,7 @@ export const useAuthStore = defineStore("auth", () => {
       const { DELETE } = useApi();
       await DELETE("/logout");
       clearToken();
-      router.push("/login");
+      router.push("/");
     } catch (error) {
       console.error("Logout failed:", error);
     }
