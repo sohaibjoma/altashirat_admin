@@ -15,11 +15,26 @@
             </div>
 
             <div class="d-flex gap-0">
-              <PhoneNum v-model="data.phoneNumber" rules="required|phoneno" :hint="$t('inputs.phoneno.hint')" name="phone.number"/>
-              <PhoneCode v-model="data.phoneCode" rules="required" name="phone[country_code]"/>
+              <PhoneNum
+                v-model="data.phoneNumber"
+                rules="required|phoneno"
+                :hint="$t('inputs.phoneno.hint')"
+                name="phone.number"
+              />
+              <PhoneCode
+                v-model="data.phoneCode"
+                rules="required"
+                name="phone[country_code]"
+              />
             </div>
 
-            <Password v-model="data.password" rules="required|password" :label="$t('login.password')" :hint="$t('inputs.password.hint')" name="password"/>
+            <Password
+              v-model="data.password"
+              rules="required|password"
+              :label="$t('login.password')"
+              :hint="$t('inputs.password.hint')"
+              name="password"
+            />
 
             <div class="text-end mt-8 ps-8">
               <MainButton
@@ -81,20 +96,20 @@ async function formSubmitting({ setErrors }) {
     // Show success notification
     notificationStore.setNotification("success");
   } catch (error) {
-if (error.response) {
-  if (error.response.status === 422 || error.response.status === 408) {
-    console.log("backend errors:", error.response.data.errors);
+    if (error.response) {
+      if (error.response.status === 422 || error.response.status === 408) {
+        console.log("backend errors:", error.response.data.errors);
 
-    // Store backend errors
-    backendErrors.value = error.response.data.errors;
-    setErrors(error.response.data.errors);
+        // Store backend errors
+        backendErrors.value = error.response.data.errors;
+        setErrors(error.response.data.errors);
 
-    // Show error notification
-    notificationStore.setNotification("error"); 
-  } else {
-    console.error("Unexpected error:", error);
-  }
-}
+        // Show error notification
+        notificationStore.setNotification("error");
+      } else {
+        console.error("Unexpected error:", error);
+      }
+    }
   }
 }
 </script>
