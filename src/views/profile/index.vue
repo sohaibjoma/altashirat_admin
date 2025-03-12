@@ -1,15 +1,17 @@
 <template>
   <v-layout class="d-flex align-center bg-gray">
-    <v-container>
+    <v-container class="d-flex flex-column">
       <v-card class="mt-64 pt-8 pb-8 w-75 ms-auto me-auto">
         <!-- Edit Profile Form -->
-        <h1 class="text-start border-s-xl ps-3 text-h4 border-secondary">
+        <h1 class="text-start border-s-xl ps-3 border-secondary">
           {{ $t("profile.title") }}
         </h1>
-        <EditProfileForm @submit="handleEditProfileSubmit" />
-
+        <EditProfileForm @submit="handleEditProfileSubmit"/>
+        </v-card>
         <!-- Change Password Form -->
-        <h1 class="text-start border-s-xl ps-3 text-h4 border-secondary mt-12">
+        <v-card class="pb-8 w-75 ms-auto me-auto mt-12">
+
+        <h1 class="text-start border-s-xl ps-3 border-secondary mt-12">
           {{ $t("profile.change_password") }}
         </h1>
         <ChangePasswordForm @submit="handleChangePasswordSubmit" />

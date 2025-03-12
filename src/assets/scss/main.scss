@@ -2,6 +2,7 @@
 @use 'components/phonecode';
 @use 'components/notifications';
 @use 'components/drawer';
+@use 'components/customtable';
 
 @font-face {
   font-family: 'Tajawal';
@@ -13,4 +14,10 @@
 body{
   background-color: var(--gray);
   font-family: 'Tajawal', sans-serif;
+}
+
+.dashboard__breadcrumb{
+  height: 50px;
+  background-color: var(--white);
+  width: 100%;
 }

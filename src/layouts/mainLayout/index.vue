@@ -2,7 +2,7 @@
   <v-app class="bg-gray pt-2">
     <SideBar />
     <VueHeader />
-    <v-main class="me-4 ms-4">
+    <v-main class="me-4">
       <router-view></router-view>
     </v-main>
   </v-app>

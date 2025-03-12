@@ -9,6 +9,17 @@
       <v-app-bar-nav-icon @click.stop="toggleDrawer">
         <v-icon icon="mdi-menu" class="icon--pink"></v-icon>
       </v-app-bar-nav-icon>
+
+      <router-link to="/profile">
+              <Image 
+        name="avatar.png"
+        class="v-toolbar__avatar"
+      />
+      </router-link>
+      <div class="ps-4 text-start d-flex flex-column" v-if="userName">
+        <span class="font-weight-bold">{{userName}}</span>
+        <span class="text-body-2">{{ $t('drawer.superAdmin') }}</span>
+      </div>
       <v-spacer></v-spacer>
       
       <v-select
@@ -46,22 +57,20 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
-import i18n from "../../../../plugins/I18n";
-import vuetify from "../../../../plugins/vuetify";
+import { computed, watch, ref } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "../../../../stores/auth";
 import { useDrawerStore } from "../../../../stores/drawer";
 import { useAppLocale } from "../../../../stores/appLocale";
-import { useAuthStore } from "../../../../stores/auth";
-import { useRouter } from "vue-router";
+import i18n from "../../../../plugins/I18n";
+import vuetify from "../../../../plugins/vuetify";
 
-//handling drawer state
+// Handling drawer state
 const drawerStore = useDrawerStore();
-const { toggleDrawer } = drawerStore
+const { toggleDrawer } = drawerStore;
 
 const appLocale = useAppLocale();
-const { setAppLocale } = appLocale
-
-
+const { setAppLocale } = appLocale;
 
 // Reactive reference for the selected locale
 const localed = ref(localStorage.getItem("locale") || "en");
@@ -69,27 +78,32 @@ const localed = ref(localStorage.getItem("locale") || "en");
 // Function to update the locale settings
 const setLocale = () => {
   localStorage.setItem("locale", localed.value);
-  i18n.global.locale = localed.value; 
-  vuetify.locale.current = localed.value; 
-  vuetify.locale.rtl = localed.value === "ar"; 
-  setAppLocale(localed.value)
+  i18n.global.locale = localed.value;
+  vuetify.locale.current = localed.value;
+  vuetify.locale.rtl = localed.value === "ar";
+  setAppLocale(localed.value);
   window.location.reload();
 };
 
 // Watch for changes in the selected locale
 watch(localed, (newLocale) => {
   console.log("Locale changed to:", newLocale);
-  setLocale(); 
+  setLocale();
 });
 
-//logout functionality
+// Logout functionality
 const authStore = useAuthStore();
 const logout = () => authStore.logout();
 
-//settings functionality
+// Settings functionality
 const router = useRouter();
-const goToSettings = () => router.push('/settings');
+const goToSettings = () => router.push("/settings");
+
+// Ensure user is reactive
+const user = computed(() => authStore.user?.user || authStore.user || {});
+const userName = computed(() => user.value?.firstname || "Guest");
 </script>
+
 
 <style>
 

@@ -18,7 +18,7 @@
               alt="dash"
               class="pe-4 nav__icon"
             />
-            <router-link :to=route.path class="text-decoration-none text-black">
+            <router-link v-if="route.path" :to=route.path class="text-decoration-none text-black">
             {{ route.meta.title }}
             </router-link>
             </div>
@@ -32,12 +32,12 @@
 import { onMounted, ref } from "vue";
 import { useDrawerStore } from "../../../../stores/drawer";
 import { storeToRefs } from "pinia";
-import routes from "../../../../router/asyncRoutes";
+import mainLayoutRoute from "../../../../router/modules/layouts/mainLayout";
 
 const displayedRoutes = ref([]);
 
 onMounted(() => {
-  displayedRoutes.value = routes.filter(route => route.meta && !route.meta.hidden);
+  displayedRoutes.value = mainLayoutRoute.children.filter(route => route.meta && !route.meta.hidden);
   if (displayedRoutes.value.length > 0) {
     activeItem.value = displayedRoutes.value[0].meta.title;
   }

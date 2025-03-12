@@ -8,11 +8,15 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  const authStore = useAuthStore();
-  const token = authStore.token;
+  const token = localStorage.getItem("userToken");
+  const xlocale = localStorage.getItem("locale");
 
   if (token) {
     config.headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  if (xlocale) {
+    config.headers["x-locale"] = xlocale;
   }
   return config;
 });

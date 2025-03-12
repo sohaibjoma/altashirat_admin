@@ -40,13 +40,12 @@
 
 <script setup>
 import { Field } from "vee-validate";
-import { useLocaleStore } from "../../../../store/locale";
+import { useLocaleStore } from "../../../../stores/locale";
 import { ref, computed } from "vue";
-import { useI18n } from "vue-i18n";
-import { useErrorStore } from "../../../../../stores/errors";
+import { t } from "../../../../plugins/i18n";
+import { useErrorStore } from "../../../../stores/errors";
 
 const errorStore = useErrorStore();
-const { t } = useI18n();
 const localeStore = useLocaleStore();
 
 const backendErrors = computed(() => errorStore.getErrorsForField(props.name));
@@ -69,7 +68,7 @@ const handleLocaleChange = (newLocale) => {
   emit("update:modelValue", newLocale); 
 };
 
-defineProps({
+const props = defineProps({
   hint: String,
   name: String,
   modelValue: String,

@@ -19,54 +19,40 @@
                   class="mb-3"
                 />
 
-                <!-- Visible Select -->
-                <Select
-                  v-model="form.visible"
-                  :label="$t('visible')"
-                  :placeholder="$t('selectVisibility')"
-                  :items="[
-                    { text: $t('visible'), value: 1 },
-                    { text: $t('hidden'), value: 0 },
-                  ]"
-                  name="visible"
-                  rules="required"
-                  class="mb-3"
-                />
+        <!-- Visible Select -->
+        <Select
+          v-model="form.visible"
+          :label="$t('visible')"
+          :placeholder="$t('selectVisibility')"
+          :items="[
+            { text: $t('visible'), value: 1 },
+            { text: $t('hidden'), value: 0 },
+          ]"
+          name="visible"
+          :rules="(value) => value !== null && value !== undefined ? true : $t('errorMsgs.required')"
+        />
 
-                <!-- Locale Select for edit only -->
-                <Select
-                  v-if="isEdit"
-                  v-model="form.locale"
-                  :label="$t('locale')"
-                  :placeholder="$t('selectLocale')"
-                  :items="[
-                    { text: 'English', value: 'en' },
-                    { text: 'العربية', value: 'ar' },
-                  ]"
-                  name="locale"
-                  rules="required"
-                  class="mb-3"
-                />
-              </v-form>
-            </Form>
-          </v-card-text>
-          <v-card-actions class="px-4 pb-4">
-            <v-spacer></v-spacer>
-            <v-btn @click="goBack" variant="outlined" class="mr-2">
-              {{ $t("cancel") }}
-            </v-btn>
-            <v-btn 
-              color="primary" 
-              :loading="loading" 
-              @click="submitForm"
-            >
-              {{ isEdit ? $t("update") : $t("add") }}
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+        <!-- Locale Select for edit only -->
+        <LocaleSelector
+          v-if="isEdit"
+          name="locale"
+          rules="required"
+          v-model="form.locale"
+          :label="$t('actions.language')"
+        />
+
+        <!-- Action Buttons -->
+        <div class="d-flex mt-5 gap-3">
+          <v-btn @click="goBack" variant="outlined">
+            {{ $t("cancel") }}
+          </v-btn>
+          <v-btn type="submit" color="primary" :loading="loading">
+            {{ isEdit ? $t("update") : $t("add") }}
+          </v-btn>
+        </div>
+      </v-form>
+    </Form>
+  </div>
 </template>
 
 <script setup>
@@ -150,7 +136,10 @@ const submitForm = async () => {
   try {
     if (isEdit.value) {
       await POST(`/admin-panel/titles/${route.params.id}`, updateFormData());
-      notificationStore.setNotification("Title updated successfully!", "success");
+      notificationStore.setNotification(
+        "Title updated successfully!",
+        "success"
+      );
     } else {
       await POST("/admin-panel/titles", createFormData());
       notificationStore.setNotification("Title added successfully!", "success");
