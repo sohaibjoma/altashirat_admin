@@ -176,8 +176,6 @@ const formattedKey = computed(() => {
     : "";
 });
 
-const { settingsObject } = settingsStore;
-const initialFetchedValue = ref(null);
 
 watchEffect(() => {
   if (route.params.id) {

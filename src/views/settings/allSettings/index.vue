@@ -1,5 +1,5 @@
 <template>
-  <v-container class="bg-white rounded-te-lg rounded-ts-lg border-sm" fluid>
+  <v-container class="bg-white rounded-te-lg rounded-ts-lg border-sm w-75 ms-auto me-auto" fluid>
     <h1 class="text-start ps-3 border-s-xl border-primary">
       {{ $t("settings.title") }}
     </h1>

@@ -1,9 +1,9 @@
 <template>
   <v-app class="bg-gray">
-    <div class="d-flex pe-4 justify-space-between align-center mt-2">
+    <div class="d-flex pe-4 justify-space-between align-center ">
       <v-breadcrumbs
         :items="[$t('drawer.countries')]"
-        class="dashboard__breadcrumb mt-3 me-3 rounded-te-lg rounded-be-lg"
+        class="dashboard__breadcrumb me-3 rounded-te-lg rounded-be-lg"
       ></v-breadcrumbs>
     </div>
     <customTable
@@ -11,6 +11,7 @@
       :tableHeaders="['id', 'name', 'actions']"
       :page="page"
       @update:page="page = $event"
+      class="rounded-lg"
     >
       <template #actions="{ item }">
         <ToggleVisibility

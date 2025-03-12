@@ -22,21 +22,16 @@
             { text: $t('hidden'), value: 0 },
           ]"
           name="visible"
-          rules="required"
+          :rules="(value) => value !== null && value !== undefined ? true : $t('errorMsgs.required')"
         />
 
         <!-- Locale Select for edit only -->
-        <Select
+        <LocaleSelector
           v-if="isEdit"
-          v-model="form.locale"
-          :label="$t('locale')"
-          :placeholder="$t('selectLocale')"
-          :items="[
-            { text: 'English', value: 'en' },
-            { text: 'العربية', value: 'ar' },
-          ]"
           name="locale"
           rules="required"
+          v-model="form.locale"
+          :label="$t('actions.language')"
         />
 
         <!-- Action Buttons -->
@@ -134,7 +129,10 @@ const submitForm = async () => {
   try {
     if (isEdit.value) {
       await POST(`/admin-panel/titles/${route.params.id}`, updateFormData());
-      notificationStore.setNotification("Title updated successfully!", "success");
+      notificationStore.setNotification(
+        "Title updated successfully!",
+        "success"
+      );
     } else {
       await POST("/admin-panel/titles", createFormData());
       notificationStore.setNotification("Title added successfully!", "success");

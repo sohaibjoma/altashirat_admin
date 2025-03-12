@@ -69,6 +69,10 @@ defineRule("textArea", (value)=>{
   return true;
 })
 
+defineRule("requiredSelect", (value) => {
+  return value !== null && value !== undefined ? true : t("errorMsgs.required");
+});
+
 defineRule("range", (value) => {
   if (!numeric(value)) {
     return t("errorMsgs.numeric");
