@@ -116,11 +116,11 @@ const fetchSetting = async () => {
       setting.value = response.data.setting;
 
       formData.value = {
-        value: initialFetchedValue.value || "",
-        locale: setting.value.locale || localStorage.getItem("locale") ,
-        is_active: initialFetchedValue.value ? 1 : 0, 
-        max_value: initialFetchedValue.value || 0,
-        range: initialFetchedValue.value || 0,
+        value: setting.value.value || "",
+        locale: setting.value.locale || localStorage.getItem("locale") || "en",
+        is_active: setting.value.is_active ? 1 : 0,
+        max_value: setting.value.max_value || 0,
+        range: setting.value.range || 0,
       };
     }
   } catch (error) {
@@ -132,16 +132,17 @@ const fetchSetting = async () => {
 
 const updateField = (field, value) => {
   let newValue = null;
-  if(field === "range" || field === "max_value"){
+  if (field === "range" || field === "max_value") {
     newValue = Number(value);
-  } 
-  else if (field === "is_active"){
-    newValue= value? 1 : 0;
+  } else if (field === "is_active") {
+    newValue = value ? 1 : 0;
   }
 
-  console.log(`Field '${field}' changed from '${formData.value[field]}' to '${newValue}'`);
-  formData.value[field] = newValue; 
-  changedFields.value[field] = newValue; 
+  console.log(
+    `Field '${field}' changed from '${formData.value[field]}' to '${newValue}'`
+  );
+  formData.value[field] = newValue;
+  changedFields.value[field] = newValue;
 };
 
 const updateSetting = async () => {
@@ -175,14 +176,16 @@ const formattedKey = computed(() => {
     : "";
 });
 
-const { settingsObject } = settingsStore
-const initialFetchedValue = ref(null)
+const { settingsObject } = settingsStore;
+const initialFetchedValue = ref(null);
 
-onMounted(async () => {
-  settingID.value = route.params.id;
-  initialFetchedValue.value = settingsObject.settingID
-  await fetchSetting(settingID.value);
-});
+watchEffect(() => {
+  if (route.params.id) {
+    settingID.value = route.params.id;
+    fetchSetting();
+  }
+},
+{ immediate: true });
 </script>
 
 <style scoped></style>
