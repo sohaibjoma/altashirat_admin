@@ -10,14 +10,13 @@
     :type="type"
     :hint="hint"
     persistent-hint
-    class="ms-5 me-5"
     @blur="validateOnImmediate"
   ></v-text-field>
 </template>
 
 <script setup>
 import { useField } from "vee-validate";
-import { computed } from 'vue';
+import { computed } from "vue";
 
 const props = defineProps({
   rules: [Array, Function],

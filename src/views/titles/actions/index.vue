@@ -1,16 +1,23 @@
 <template>
-  <div class="pa-12 mt-12">
-    <h2 class="mb-5">{{ isEdit ? $t("editTitle") : $t("addTitle") }}</h2>
-    <Form v-slot="{ handleSubmit }">
-      <v-form @submit.prevent="handleSubmit(submitForm)">
-        <!-- Name Input -->
-        <TextInput
-          v-model="form.name"
-          :label="$t('name')"
-          :placeholder="$t('enterName')"
-          name="name"
-          rules="alpha"
-        />
+  <v-container>
+    <v-row justify="center">
+      <v-col cols="12" md="8" lg="6">
+        <v-card class="mt-5 pa-2">
+          <v-card-title class="text-h5 pt-4 pb-2">
+            {{ isEdit ? $t("editTitle") : $t("addTitle") }}
+          </v-card-title>
+          <v-card-text>
+            <Form v-slot="{ handleSubmit }">
+              <v-form @submit.prevent="handleSubmit(submitForm)">
+                <!-- Name Input -->
+                <TextInput
+                  v-model="form.name"
+                  :label="$t('name')"
+                  :placeholder="$t('enterName')"
+                  name="name"
+                  rules="alpha"
+                  class="mb-3"
+                />
 
         <!-- Visible Select -->
         <Select
