@@ -34,7 +34,10 @@
     "password": "Enter a valid password (min 8 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character)",
     "email": "Enter a valid email",
     "confirmed": "It doesn't match the password",
-    "alpha": "Enter a valid name"
+    "alpha": "Enter a valid name",
+    "textArea": "Number of digits should not eeceed 40000",
+    "rangeError":"Number should not exceed 100",
+    "numberError": "Number should not exceed 999999"
   },
 
   "drawer": {
