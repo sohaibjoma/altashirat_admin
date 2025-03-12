@@ -5,7 +5,6 @@
         {{ formattedKey }}
       </v-card-title>
 
-      <!-- Render form only when data is available -->
       <v-card-text>
         <Form v-slot="{ handleSubmit }">
           <form @submit.prevent="handleSubmit(updateSetting)">
@@ -64,12 +63,7 @@
             />
 
             <div class="text-end">
-              <MainButton
-                color="secondary"
-                width="135px"
-                type="submit"
-                class="me-9"
-              >
+              <MainButton color="secondary" width="135px" type="submit">
                 {{ $t("titles.edit") }}
               </MainButton>
             </div>
@@ -109,12 +103,10 @@ const data = ref({
 const fetchSetting = async () => {
   try {
     const response = await GET(`admin-panel/settings/${settingID.value}`);
-
     console.log("Full API Response:", response);
 
     if (response.data.setting) {
       setting.value = response.data.setting;
-
       data.value = {
         value: setting.value.value || "",
         locale: setting.value.locale || localStorage.getItem("locale") || "en",
@@ -131,16 +123,10 @@ const fetchSetting = async () => {
 };
 
 const updateField = (field, value) => {
-  let newValue = null;
-  if (field === "range" || field === "max_value") {
-    newValue = Number(value);
-  } else if (field === "is_active") {
-    newValue = value ? 1 : 0;
-  }
+  let newValue = field === "range" || field === "max_value" ? Number(value) : value;
+  if (field === "is_active") newValue = value ? 1 : 0;
 
-  console.log(
-    `Field '${field}' changed from '${data.value[field]}' to '${newValue}'`
-  );
+  console.log(`Field '${field}' changed from '${data.value[field]}' to '${newValue}'`);
   data.value[field] = newValue;
   changedFields.value[field] = newValue;
 };
@@ -151,18 +137,11 @@ const updateSetting = async () => {
     payload.append("_method", "put");
     payload.append("locale", data.value.locale);
 
-    // Convert values where necessary before appending
     for (const key in changedFields.value) {
-      let value = changedFields.value[key];
-
-      payload.append(key, value);
-      console.log("payloaded", payload);
+      payload.append(key, changedFields.value[key]);
     }
 
-    const response = await POST(
-      `admin-panel/settings/${settingID.value}`,
-      payload
-    );
+    const response = await POST(`admin-panel/settings/${settingID.value}`, payload);
     console.log(response);
     router.push("/settings");
   } catch (error) {
@@ -171,13 +150,8 @@ const updateSetting = async () => {
 };
 
 const formattedKey = computed(() => {
-  return setting.value?.key
-    ? t(`settings.${setting.value.key}`, setting.value.key)
-    : "";
+  return setting.value?.key ? t(`settings.${setting.value.key}`, setting.value.key) : "";
 });
-
-const { settingsObject } = settingsStore;
-const initialFetchedValue = ref(null);
 
 onMounted(() => {
   if (route.params.id) {
@@ -196,7 +170,7 @@ watchEffect(() => {
       range: setting.value.range || 0,
     };
   }
-},{ immediate: true });
+}, { immediate: true });
 </script>
 
 <style scoped></style>

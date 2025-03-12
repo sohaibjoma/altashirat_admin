@@ -1,12 +1,12 @@
 <template>
-  <v-container class="bg-white rounded-te-lg rounded-ts-lg border-sm " fluid>
-    <h1 class="text-start ps-3 border-s-xl border-primary mb-2">
+  <v-container class="bg-white rounded-te-lg rounded-ts-lg border-sm w-75 ms-auto me-auto" fluid>
+    <h1 class="text-start ps-3 border-s-xl border-primary">
       {{ $t("settings.title") }}
     </h1>
-    <hr>
+    <hr />
 
     <v-row class="mt-4">
-      <v-col v-for="setting in settings" :key="setting.id" cols="12">
+      <v-col v-for="setting in settingsStore.settings" :key="setting.id" cols="12">
         <v-card class="pa-3 d-flex align-center justify-space-between mb-2 bg-gray">
           <div>
             <h3>{{ t(`settings.${setting.key}`) }}</h3>
@@ -21,34 +21,22 @@
 </template>
 
 <script setup>
-import { useApi } from '../../../composables/api';
-import { onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { t } from "../../../plugins/i18n";
+import { useSettingsStore } from "../../../stores/settings";
 
-
-const { GET } = useApi();
-const settings = ref([]);
 const router = useRouter();
-
-const fetchSettings = async () => {
-  const response = await GET('admin-panel/settings?pagination=all');
-  settings.value = response.data.data;
-};
-
-// // Format setting key: "default-currency" → "Default Currency"
-// const formattedKey = computed(() => {
-//   return setting.value?.key
-//     ? t(`settings.${setting.value.key}`, setting.value.key)
-//     : "";
-// });
+const settingsStore = useSettingsStore();
 
 const editSetting = (id) => {
   router.push(`/settings/${id}`);
 };
 
-onMounted(fetchSettings);
+// Fetch settings when the component is mounted
+onMounted(async () => {
+  await settingsStore.fetchSettings();
+});
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

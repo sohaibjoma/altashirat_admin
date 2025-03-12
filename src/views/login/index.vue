@@ -90,7 +90,7 @@ async function formSubmitting({ setErrors }) {
     console.log("Response:", res);
 
     localStorage.setItem("userToken", res.data.token);
-    authStore.setToken(res.data.token);
+    authStore.fetchUser();
     router.push("/profile");
 
     // Show success notification

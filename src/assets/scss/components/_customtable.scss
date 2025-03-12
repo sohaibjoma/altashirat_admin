@@ -1,0 +1,26 @@
+.table--customized{
+  width: 100%;
+  border-collapse: collapse;
+  border: var(--gray-2) 1px solid;
+  border-radius: 10px;
+
+  th{
+    border: var(--gray-2) 1px solid;
+    font-weight: bold !important;
+  }
+  td{
+    border: var(--gray-2) 1px solid;
+  }
+}
+
+.table__avatar__id__header{
+  width: 50px;   
+}
+
+.table__name__email__header{
+  width: 200px;
+}
+
+.table__action__header{
+  width: 300px;
+}

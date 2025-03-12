@@ -46,15 +46,14 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
+  const router = useRouter();
+
   const logout = async () => {
     try {
       const { DELETE } = useApi();
       await DELETE("/logout");
       clearToken();
-      if (useRouter) {
-        const router = useRouter();
-        router.push("/");
-      }
+      router.push("/");
     } catch (error) {
       console.error("Logout failed:", error);
     }

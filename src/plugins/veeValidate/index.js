@@ -1,5 +1,5 @@
 import { defineRule, configure } from "vee-validate";
-import { required, email, alpha, numeric } from "@vee-validate/rules";
+import { required, email, alpha, numeric} from "@vee-validate/rules";
 import { t } from "../i18n"; // Adjust the path to your i18n file
 
 // Configure VeeValidate to use localized error messages
@@ -105,6 +105,39 @@ defineRule("maxDigits", (value, [limit]) => {
   }
   if (value.toString().length > limit) {
     return t("errorMsgs.maxDigits", { max: limit });
+  }
+  return true;
+});
+
+defineRule("textArea", (value)=>{
+  if (!(value.length <= 40000)) {
+    return t("errorMsgs.textArea");
+  }
+  return true;
+})
+
+defineRule("requiredSelect", (value) => {
+  return value !== null && value !== undefined ? true : t("errorMsgs.required");
+});
+
+defineRule("range", (value) => {
+  if (!numeric(value)) {
+    return t("errorMsgs.numeric");
+  }
+  const numValue = Number(value);
+  if (numValue < 0 || numValue > 100) {
+    return t("errorMsgs.rangeError", { min: 0, max: 100 });
+  }
+  return true;
+});
+
+defineRule("numberRule", (value) => {
+  if (!numeric(value)) {
+    return t("errorMsgs.numeric");
+  }
+  const numValue = Number(value);
+  if (numValue < 0 || numValue > 999999) {
+    return t("errorMsgs.numberError", { min: 0, max: 999999 });
   }
   return true;
 });

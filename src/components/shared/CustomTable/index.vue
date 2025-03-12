@@ -1,24 +1,23 @@
 <template>
   <v-container>
-    <v-table class="table--customized mt-4">
+    <v-table class="table--customized mt-4 h-100">
       <thead>
         <tr>
-          <th v-for="header in tableHeaders" :key="header" class="text-right">
-            {{ header }}
+          <th v-for="header in tableHeaders" :key="header">
+            {{ $t(`table.${header}`) }}
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="title in titles" :key="title.id">
-          <td>{{ title.id }}</td>
-          <td :class="title.visible ? '' : 'text-gray-2'">{{ title.name }}</td>
+        <tr v-for="item in titles" :key="item.id">
+          <td>{{ item.id }}</td>
+          <td :class="item.visible ? '' : 'text-gray-2'">{{ item.name }}</td>
           <td class="d-flex">
-            <slot name="actions" :title="title"></slot>
-          </td> 
+            <slot name="actions" :item="item"></slot>
+          </td>
         </tr>
       </tbody>
     </v-table>
-    <!-- Pass `pageCount` to pagination -->
     <pagination
       :length="pageCount"
       :page="page"
@@ -38,7 +37,7 @@ const pageCount = ref(0);
 const props = defineProps({
   URLEndpoint: String,
   tableHeaders: Array,
-  page: Number, // Accept `page` from parent
+  page: Number,
 });
 
 const { GET } = useApi();
@@ -60,6 +59,7 @@ onMounted(() => {
   emitter.on("reload", getData);
 });
 
-// Watch for `page` changes and fetch data again
 watch(() => props.page, getData, { immediate: true });
 </script>
+
+<style scoped></style>

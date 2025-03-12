@@ -2,16 +2,14 @@
   <v-switch
     v-model="switcher"
     base-color="primary"
-    @update:modelValue="visibilityToggle">
+    @update:modelValue="visibilityToggle"
+  >
     <template v-slot:append>
       <v-icon color="primary">
         {{ switcher ? "mdi-eye" : "mdi-eye-off" }}
       </v-icon>
     </template>
   </v-switch>
-
-
-
 </template>
 
 <script setup>
@@ -19,35 +17,53 @@ import { inject, onMounted, ref } from "vue";
 import { useApi } from "../../../composables/api";
 
 const switcher = ref(false);
-
-onMounted(() => {
-  props.title.visible ? switcher.value = false : switcher.value = true
-})
-
-
 const emitter = inject("emitter");
 const { POST, GET } = useApi();
+
 const props = defineProps({
-  title: Object
+  record: {
+    type: Object,
+    required: true,
+  },
+  payload: {
+    type: Function,
+    required: true,
+  },
+});
+
+onMounted(() => {
+  if (props.record && props.record.visible !== undefined) {
+    switcher.value = !props.record.visible;
+  }
 });
 
 async function visibilityToggle() {
-  const response = await GET(`/admin-panel/titles/${props.title.id}`);
-  console.log(response.data);
+  try {
+    if (!props.record || !props.record.id || !props.record.resource) {
+      console.error(
+        "Record, record ID, or resource is undefined.",
+        props.record
+      );
+      return;
+    }
 
-  const updateFormData = () => {
-  const formData = new FormData();
-  formData.append("name", response.data.title.name);
-  formData.append("visible", response.data.title.visible ? "0" : "1");
-  formData.append("locale", "en");
-  formData.append("_method", "put");
-  return formData;
-};
+    const response = await GET(
+      `/admin-panel/${props.record.resource}/${props.record.id}`
+    );
+    console.log("Current record data:", response.data);
 
-  await POST(`/admin-panel/titles/${props.title.id}`, updateFormData());
-  emitter.emit("reload");
+    const formData = props.payload(response.data);
+
+    await POST(
+      `/admin-panel/${props.record.resource}/${props.record.id}`,
+      formData
+    );
+
+    emitter.emit("reload");
+  } catch (error) {
+    console.error("Error toggling visibility:", error);
+  }
 }
-
 </script>
 
-<style></style>
+<style scoped></style>
