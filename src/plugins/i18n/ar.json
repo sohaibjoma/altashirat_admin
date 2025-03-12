@@ -23,7 +23,7 @@
       "lastHint": "يرجى إدخال الاسم الأخير"
     },
 
-    "email":"ادخل بريد إلكتروني صحيح"
+    "email": "ادخل بريد إلكتروني صحيح"
   },
 
   "errorMsgs": {
@@ -34,7 +34,7 @@
     "password": "ادخل كلمة مرور صالحة (8 أحرف على الأقل وتحتوي على حرف كبير وحرف صغير ورقم وحرف خاص)",
     "phone": "ادخل رقم هاتف صحيح",
     "confirmPassword": "تأكد من كلمة المرور",
-    "alpha" : "ادخل اسم صحيح"
+    "alpha": "ادخل اسم صحيح"
   },
 
   "drawer": {
@@ -45,20 +45,20 @@
     "titles": "المسميات الوظيفية"
   },
 
-  "table":{
-    "name" : "الاسم",
-    "email" : "البريد الالكتروني",
-    "jobDescription" : "المهام الوظيفية"
+  "table": {
+    "name": "الاسم",
+    "email": "البريد الالكتروني",
+    "jobDescription": "المهام الوظيفية"
   },
 
-  "actions":{
-    "firstName" : "الاسم الأول",
-    "lastName" : "الاسم الاخير",
-    "email" : "البريد الالكتروني",
-    "language" : "اللغة",
+  "actions": {
+    "firstName": "الاسم الأول",
+    "lastName": "الاسم الاخير",
+    "email": "البريد الالكتروني",
+    "language": "اللغة",
     "phoneno": "رقم الهاتف",
-    "password" : "كلمة المرور",
-    "confirmPassword" : "تأكيد كلمة المرور"
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور"
   },
 
   "languages": {
@@ -66,18 +66,18 @@
     "ar": "ترجمة إلى اللغة العربية"
   },
 
-  "titles":{
-    "title":"المسمى الوظيفي",
-    "addTitle":"اضافة مسمى وظيفي",
-    "editTitle":"تعديل مسمى وظيفي",
-    "visible" :"إظهار",
-    "titleHint":"ادخل مسمى وظيفي صحيح",
-    "localeHint":"اختر لغة صحيحة",
-    "visiblityiHint":"اختر حالة الاظهار",
-    "show":"اظهار",
-    "hide":"اخفاء",
-    "create":"انشاء",
-    "edit":"تعديل"
+  "titles": {
+    "title": "المسمى الوظيفي",
+    "addTitle": "اضافة مسمى وظيفي",
+    "editTitle": "تعديل مسمى وظيفي",
+    "visible": "إظهار",
+    "titleHint": "ادخل مسمى وظيفي صحيح",
+    "localeHint": "اختر لغة صحيحة",
+    "visiblityiHint": "اختر حالة الاظهار",
+    "show": "اظهار",
+    "hide": "اخفاء",
+    "create": "انشاء",
+    "edit": "تعديل"
   },
 
   "profile": {
@@ -85,7 +85,28 @@
   },
 
   "settings": {
-    "title": "الإعدادات"
+    "title": "الإعدادات",
+    "terms_and_conditions": "الشروط والأحكام",
+    "usage_policy": "سياسة الاستخدام",
+    "additional_tax_rate": "نسبة الضريبة الإضافية",
+    "fixed_tax_amount": "مبلغ الضريبة الثابت",
+    "welcome": "مرحبًا بك في التشيرات",
+    "contacts_email": "البريد الإلكتروني للتواصل",
+    "contacts_phone": "رقم الهاتف للتواصل",
+    "contacts_address": "عنوان التواصل",
+    "privacy_policy": "سياسة الخصوصية",
+    "about1": "القسم الأول عن الشركة",
+    "about2": "القسم الثاني عن الشركة",
+    "user_must_verify_email": "يجب على المستخدم تأكيد البريد الإلكتروني",
+    "email_verification_subject": "التشيرات | تأكيد البريد الإلكتروني",
+    "email_verification_body": "مرحبًا بك في التشيرات. يرجى استخدام الرابط أدناه لتأكيد بريدك الإلكتروني.",
+    "email_verified_successfully_subject": "التشيرات | تم تأكيد البريد الإلكتروني بنجاح",
+    "email_verified_successfully_body": "شكرًا لك على تأكيد عنوان بريدك الإلكتروني.",
+    "reset_password_email_subject": "التشيرات | إعادة تعيين كلمة المرور",
+    "reset_password_email_body": "يرجى النقر على الرابط التالي لإعادة تعيين كلمة المرور الخاصة بحسابك.",
+    "guest_set_password_email_subject": "التشيرات | تعيين كلمة المرور",
+    "guest_set_password_email_body": "يرجى النقر على الرابط التالي لتعيين كلمة المرور الخاصة بحسابك.",
+    "edit" : "قم بالتعديل هنا"
   },
 
   "errorNotification": "خطأ في ادخال البيانات حاول مرة أخرى ",

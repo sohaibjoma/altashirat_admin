@@ -1,64 +1,64 @@
 {
   "create": "create",
 
-  "login":{
+  "login": {
     "title": "Login",
     "phone": "Phone Number",
     "password": "Password",
     "login": "Login"
   },
 
-  "inputs":{
-    "phoneno":{
+  "inputs": {
+    "phoneno": {
       "hint": "Please enter your phone number"
     },
 
-    "password":{
+    "password": {
       "hint": "Please enter your password",
       "confirmHint": "Please confirm your password"
     },
 
-    "names":{
+    "names": {
       "firstHint": "Please enter your name",
       "lastHint": "Please enter your last name"
     },
 
-    "email":"Enter a valid email"
+    "email": "Enter a valid email"
   },
 
-  "errorMsgs":{
+  "errorMsgs": {
     "required": "This {field} field is required",
-    "firstName" :"Enter a valid first name ",
-    "lastName" :"Enter a valid last name ",
-    "phone" :"Enter a valid phone number",
-    "password" :"Enter a valid password (min 8 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character)",
-    "email" :"Enter a valid email",
-    "confirmed" : "It doesn't match the password",
-    "alpha" : "Enter a valid name"
+    "firstName": "Enter a valid first name ",
+    "lastName": "Enter a valid last name ",
+    "phone": "Enter a valid phone number",
+    "password": "Enter a valid password (min 8 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character)",
+    "email": "Enter a valid email",
+    "confirmed": "It doesn't match the password",
+    "alpha": "Enter a valid name"
   },
 
-  "drawer":{
-    "superAdmin" : "Super Admin",
+  "drawer": {
+    "superAdmin": "Super Admin",
     "dashboard": "Dashboard",
-    "users" : "Users",
-    "permissions" : "Permissions",
+    "users": "Users",
+    "permissions": "Permissions",
     "titles": "Job Titles"
   },
 
-  "table":{
-    "name" : "Name",
-    "email" : "Email",
-    "jobDescription" : "Job Description"
+  "table": {
+    "name": "Name",
+    "email": "Email",
+    "jobDescription": "Job Description"
   },
 
-  "actions":{
-    "firstName" : "First Name",
-    "lastName" : "Last Name",
-    "email" : "Email",
-    "language" : "Language",
+  "actions": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "language": "Language",
     "phoneno": "Phone Number",
-    "password" : "Password",
-    "confirmPassword" : "Confirm Password"
+    "password": "Password",
+    "confirmPassword": "Confirm Password"
   },
 
   "languages": {
@@ -66,18 +66,18 @@
     "ar": "Translate to Arabic"
   },
 
-  "titles":{
-    "title":"Job Title",
-    "addTitle":"Add Job Title",
-    "editTitle":"Edit Job Title",
-    "visible" :"Visible",
-    "titleHint":"Enter a valid job title",
-    "localeHint":"Choose a valid locale",
-    "visiblityiHint":"Choose visiblity state",
-    "show":"Show",
-    "hide":"Hide",
-    "create":"Create",
-    "edit":"Edit"
+  "titles": {
+    "title": "Job Title",
+    "addTitle": "Add Job Title",
+    "editTitle": "Edit Job Title",
+    "visible": "Visible",
+    "titleHint": "Enter a valid job title",
+    "localeHint": "Choose a valid locale",
+    "visiblityiHint": "Choose visiblity state",
+    "show": "Show",
+    "hide": "Hide",
+    "create": "Create",
+    "edit": "Edit"
   },
 
   "profile": {
@@ -85,10 +85,30 @@
   },
 
   "settings": {
-    "title": "Settings"
+    "title": "Settings",
+    "terms_and_conditions": "Terms and Conditions",
+    "usage_policy": "Usage Policy",
+    "additional_tax_rate": "Additional Tax Rate",
+    "fixed_tax_amount": "Fixed Tax Amount",
+    "welcome": "Welcome to Altashirat",
+    "contacts_email": "Contact Email",
+    "contacts_phone": "Contact Phone",
+    "contacts_address": "Contact Address",
+    "privacy_policy": "Privacy Policy",
+    "about1": "About Section 1",
+    "about2": "About Section 2",
+    "user_must_verify_email": "User Must Verify Email",
+    "email_verification_subject": "Altashirat | Email Verification",
+    "email_verification_body": "Welcome to Altashirat. Please use the link below to verify your email.",
+    "email_verified_successfully_subject": "Altashirat | Email Verified Successfully",
+    "email_verified_successfully_body": "Thanks for verifying your email address.",
+    "reset_password_email_subject": "Altashirat | Reset Account Password",
+    "reset_password_email_body": "Please click the following link in order to reset your account password.",
+    "guest_set_password_email_subject": "Altashirat | Set Account Password",
+    "guest_set_password_email_body": "Please click the following link in order to set your account password.",
+    "edit": "Edit here"
   },
 
   "errorNotification": "Something went wrong please try again",
   "successNotification": "done successfully!"
-
 }
