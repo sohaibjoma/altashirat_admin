@@ -1,0 +1,63 @@
+<template>
+  <div class="text-center">
+    <v-dialog max-width="800">
+      <template v-slot:activator="{ props: activatorProps }">
+        <img
+          src="../../../assets/imgs/delete.png"
+          alt=""
+          class="v-toolbar__avatar me-2 cursor-pointer p-0"
+          v-bind="activatorProps"
+          text="Open Dialog"
+        />
+      </template>
+
+      <template v-slot:default="{ isActive }">
+        <v-card title="Use Google's location service?">
+          <template v-slot:text>
+            Are you sure you want to delete this entry permenantly?
+          </template>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <v-btn
+              text="Cancel"
+              variant="text"
+              @click="isActive.value = false"
+            ></v-btn>
+
+            <v-btn
+              color="surface-variant"
+              text="Delete"
+              variant="flat"
+              @click="deleteTitle"
+            ></v-btn>
+          </v-card-actions>
+        </v-card>
+      </template>
+    </v-dialog>
+  </div>
+</template>
+
+<script setup>
+import { inject, ref } from 'vue';
+import { useApi } from '../../../composables/api';
+
+//opening and closing the pop up controller 
+const isActive = ref(false);
+
+const props =defineProps({
+  title: Object
+});
+
+const emitter = inject("emitter");
+const { DELETE } = useApi();
+
+
+async function deleteTitle(){
+  await DELETE(`/admin-panel/titles/${props.title.id}`);
+  isActive.value = false;
+  emitter.emit("reload"); 
+}
+</script>
+
