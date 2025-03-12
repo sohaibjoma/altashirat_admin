@@ -1,6 +1,6 @@
 <template>
-  <v-container class="bg-white rounded-te-lg rounded-ts-lg border-sm" fluid>
-    <h1 class="text-start ps-3 border-s-xl border-primary">
+  <v-container class="bg-white rounded-te-lg rounded-ts-lg border-sm " fluid>
+    <h1 class="text-start ps-3 border-s-xl border-primary mb-2">
       {{ $t("settings.title") }}
     </h1>
     <hr>
