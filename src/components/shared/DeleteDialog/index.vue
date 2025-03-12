@@ -12,10 +12,8 @@
       </template>
 
       <template v-slot:default="{ isActive }">
-        <v-card title="Use Google's location service?">
-          <template v-slot:text>
-            Are you sure you want to delete this entry permenantly?
-          </template>
+        <v-card title="Are you sure you want to delete this item?">
+          <template v-slot:text> </template>
 
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -40,24 +38,22 @@
 </template>
 
 <script setup>
-import { inject, ref } from 'vue';
-import { useApi } from '../../../composables/api';
+import { inject, ref } from "vue";
+import { useApi } from "../../../composables/api";
 
-//opening and closing the pop up controller 
+//opening and closing the pop up controller
 const isActive = ref(false);
 
-const props =defineProps({
-  title: Object
+const props = defineProps({
+  title: Object,
 });
 
 const emitter = inject("emitter");
 const { DELETE } = useApi();
 
-
-async function deleteTitle(){
+async function deleteTitle() {
   await DELETE(`/admin-panel/titles/${props.title.id}`);
   isActive.value = false;
-  emitter.emit("reload"); 
+  emitter.emit("reload");
 }
 </script>
-

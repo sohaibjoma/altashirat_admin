@@ -16,6 +16,6 @@ const props = defineProps({
 });
 
 function editTitle(id) {
-  router.push(`/titles/actions/${id}`);
+  router.push(`/titles/${id}/edit`);
 }
 </script>
