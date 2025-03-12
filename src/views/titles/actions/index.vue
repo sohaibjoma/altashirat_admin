@@ -1,56 +1,72 @@
 <template>
-  <div class="pa-12 mt-12">
-    <h2 class="mb-5">{{ isEdit ? $t("editTitle") : $t("addTitle") }}</h2>
-    <Form v-slot="{ handleSubmit }">
-      <v-form @submit.prevent="handleSubmit(submitForm)">
-        <!-- Name Input -->
-        <TextInput
-          v-model="form.name"
-          :label="$t('name')"
-          :placeholder="$t('enterName')"
-          name="name"
-          rules="alpha"
-        />
+  <v-container>
+    <v-row justify="center">
+      <v-col cols="12" md="8" lg="6">
+        <v-card class="mt-5 pa-2">
+          <v-card-title class="text-h5 pt-4 pb-2">
+            {{ isEdit ? $t("editTitle") : $t("addTitle") }}
+          </v-card-title>
+          <v-card-text>
+            <Form v-slot="{ handleSubmit }">
+              <v-form @submit.prevent="handleSubmit(submitForm)">
+                <!-- Name Input -->
+                <TextInput
+                  v-model="form.name"
+                  :label="$t('name')"
+                  :placeholder="$t('enterName')"
+                  name="name"
+                  rules="alpha"
+                  class="mb-3"
+                />
 
-        <!-- Visible Select -->
-        <Select
-          v-model="form.visible"
-          :label="$t('visible')"
-          :placeholder="$t('selectVisibility')"
-          :items="[
-            { text: $t('visible'), value: 1 },
-            { text: $t('hidden'), value: 0 },
-          ]"
-          name="visible"
-          rules="required"
-        />
+                <!-- Visible Select -->
+                <Select
+                  v-model="form.visible"
+                  :label="$t('visible')"
+                  :placeholder="$t('selectVisibility')"
+                  :items="[
+                    { text: $t('visible'), value: 1 },
+                    { text: $t('hidden'), value: 0 },
+                  ]"
+                  name="visible"
+                  rules="required"
+                  class="mb-3"
+                />
 
-        <!-- Locale Select for edit only -->
-        <Select
-          v-if="isEdit"
-          v-model="form.locale"
-          :label="$t('locale')"
-          :placeholder="$t('selectLocale')"
-          :items="[
-            { text: 'English', value: 'en' },
-            { text: 'العربية', value: 'ar' },
-          ]"
-          name="locale"
-          rules="required"
-        />
-
-        <!-- Action Buttons -->
-        <div class="d-flex mt-5 gap-3">
-          <v-btn @click="goBack" variant="outlined">
-            {{ $t("cancel") }}
-          </v-btn>
-          <v-btn type="submit" color="primary" :loading="loading">
-            {{ isEdit ? $t("update") : $t("add") }}
-          </v-btn>
-        </div>
-      </v-form>
-    </Form>
-  </div>
+                <!-- Locale Select for edit only -->
+                <Select
+                  v-if="isEdit"
+                  v-model="form.locale"
+                  :label="$t('locale')"
+                  :placeholder="$t('selectLocale')"
+                  :items="[
+                    { text: 'English', value: 'en' },
+                    { text: 'العربية', value: 'ar' },
+                  ]"
+                  name="locale"
+                  rules="required"
+                  class="mb-3"
+                />
+              </v-form>
+            </Form>
+          </v-card-text>
+          <v-card-actions class="px-4 pb-4">
+            <v-spacer></v-spacer>
+            <v-btn @click="goBack" variant="outlined" class="mr-2">
+              {{ $t("cancel") }}
+            </v-btn>
+            <v-btn 
+              color="primary" 
+              :loading="loading" 
+              @click="submitForm"
+            >
+              {{ isEdit ? $t("update") : $t("add") }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup>
