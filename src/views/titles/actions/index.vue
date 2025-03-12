@@ -19,40 +19,49 @@
                   class="mb-3"
                 />
 
-        <!-- Visible Select -->
-        <Select
-          v-model="form.visible"
-          :label="$t('visible')"
-          :placeholder="$t('selectVisibility')"
-          :items="[
-            { text: $t('visible'), value: 1 },
-            { text: $t('hidden'), value: 0 },
-          ]"
-          name="visible"
-          :rules="(value) => value !== null && value !== undefined ? true : $t('errorMsgs.required')"
-        />
+                <!-- Visible Select -->
+                <Select
+                  v-model="form.visible"
+                  :label="$t('visible')"
+                  :placeholder="$t('selectVisibility')"
+                  :items="[
+                    { text: $t('visible'), value: 1 },
+                    { text: $t('hidden'), value: 0 },
+                  ]"
+                  name="visible"
+                  :rules="
+                    (value) =>
+                      value !== null && value !== undefined
+                        ? true
+                        : $t('errorMsgs.required')
+                  "
+                />
 
-        <!-- Locale Select for edit only -->
-        <LocaleSelector
-          v-if="isEdit"
-          name="locale"
-          rules="required"
-          v-model="form.locale"
-          :label="$t('actions.language')"
-        />
+                <!-- Locale Select for edit only -->
+                <LocaleSelector
+                  v-if="isEdit"
+                  name="locale"
+                  rules="required"
+                  v-model="form.locale"
+                  :label="$t('actions.language')"
+                />
 
-        <!-- Action Buttons -->
-        <div class="d-flex mt-5 gap-3">
-          <v-btn @click="goBack" variant="outlined">
-            {{ $t("cancel") }}
-          </v-btn>
-          <v-btn type="submit" color="primary" :loading="loading">
-            {{ isEdit ? $t("update") : $t("add") }}
-          </v-btn>
-        </div>
-      </v-form>
-    </Form>
-  </div>
+                <!-- Action Buttons -->
+                <div class="d-flex mt-5 gap-3">
+                  <v-btn @click="goBack" variant="outlined">
+                    {{ $t("cancel") }}
+                  </v-btn>
+                  <v-btn type="submit" color="primary" :loading="loading">
+                    {{ isEdit ? $t("update") : $t("add") }}
+                  </v-btn>
+                </div>
+              </v-form>
+            </Form>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup>
