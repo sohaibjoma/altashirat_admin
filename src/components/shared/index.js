@@ -6,6 +6,7 @@ import PhoneNum from "./Inputs/textfields/PhoneNum/index.vue"
 import PhoneCode from "./Inputs/textfields/PhoneCode/index.vue"
 import Password from "./Inputs/textfields/Password/index.vue"
 import ConfirmPassword from "./Inputs/textfields/ConfirmPassword/index.vue"
+import Select from "./Inputs/Select/index.vue"
 
 
 app.component("TextInput",TextInput);
@@ -13,6 +14,7 @@ app.component("PhoneNum",PhoneNum);
 app.component("PhoneCode",PhoneCode);
 app.component("Password",Password);
 app.component("ConfirmPassword",ConfirmPassword);
+app.component("Select", Select);
 
 //buttons and selects imports
 import MainButton from './Inputs/buttons/MainButton/index.vue'

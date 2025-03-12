@@ -45,13 +45,18 @@
     "dashboard": "Dashboard",
     "users": "Users",
     "permissions": "Permissions",
-    "titles": "Job Titles"
+    "titles": "Job Titles",
+    "countries": "Countries"
   },
 
   "table": {
     "name": "Name",
     "email": "Email",
-    "jobDescription": "Job Description"
+    "jobDescription": "Job Description",
+    "locale": "Locale",
+    "visible": "Visible",
+    "actions": "Actions",
+    "id": "ID"
   },
 
   "actions": {

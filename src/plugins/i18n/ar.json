@@ -45,13 +45,18 @@
     "dashboard": "لوحة التحكم",
     "users": "المستخدمين",
     "permissions": "الصلاحيات",
-    "titles": "المسميات الوظيفية"
+    "titles": "المسميات الوظيفية",
+    "countries": "الدول"
   },
 
   "table": {
     "name": "الاسم",
     "email": "البريد الالكتروني",
-    "jobDescription": "المهام الوظيفية"
+    "jobDescription": "المهام الوظيفية",
+    "visible": "الحالة",
+    "actions": "العمليات",
+    "id": "الرقم",
+    "locale": "اللغة"
   },
 
   "actions": {

@@ -3,8 +3,7 @@
     {{ label }}
   </div>
   <v-text-field
-    :model-value="value"
-    @update:model-value="updateValue"
+    v-model="internalValue"
     :error="!!errorMessage"
     :error-messages="errorMessage"
     variant="outlined"
@@ -18,13 +17,15 @@
 
 <script setup>
 import { useField } from "vee-validate";
+import { computed } from 'vue';
 
 const props = defineProps({
-  rules: [Array, Function], // Should be array or function, not string
+  rules: [Array, Function],
   hint: String,
   name: String,
   type: String,
   label: String,
+  modelValue: String,
 });
 
 const emit = defineEmits(["update:modelValue"]);
@@ -34,11 +35,13 @@ const { value, errorMessage, setTouched, validate } = useField(
   props.rules
 );
 
-// Emit update to parent component
-const updateValue = (newValue) => {
-  value.value = newValue;
-  emit("update:modelValue", newValue);
-};
+const internalValue = computed({
+  get: () => props.modelValue,
+  set: (newValue) => {
+    value.value = newValue;
+    emit("update:modelValue", newValue);
+  },
+});
 
 const validateOnImmediate = () => {
   setTouched(true);
