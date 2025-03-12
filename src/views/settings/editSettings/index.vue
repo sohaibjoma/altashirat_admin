@@ -12,8 +12,7 @@
 
       <!-- Render form only when data is available -->
       <v-card-text v-else>
-        <Form v-slot="{ handleSubmit }">
-          <form @submit.prevent="handleSubmit(updateSetting)">
+        <Form @submit.prevent="updateSetting">
           <LocaleSelector
             name="locale"
             rules="required"
@@ -22,18 +21,58 @@
           />
 
           <TextArea
-            name="value"
+            v-if="setting?.layout === 'textarea'"
+            name="textArea"
             rules="required"
             v-model="formData.value"
+            @update:modelValue="updateField('value', $event)"
             :label="$t('settings.edit')"
           />
 
+          <BooleanCheckbox
+            v-if="setting?.layout === 'checkbox'"
+            name="is_active"
+            rules="required"
+            v-model="formData.is_active"
+            @update:modelValue="updateField('is_active', $event)"
+            :label="$t('settings.active')"
+          />
+
+          <NumberInput
+            v-if="setting?.layout === 'number'"
+            name="max_value"
+            rules="required"
+            v-model="formData.max_value"
+            @update:modelValue="updateField('max_value', $event)"
+            :label="$t('settings.max_value')"
+          />
+
+          <RangeInput
+            v-if="setting?.layout === 'range'"
+            name="range"
+            rules="required"
+            v-model="formData.range"
+            @update:modelValue="updateField('range', $event)"
+            :label="$t('settings.range')"
+            :min="0"
+            :max="100"
+            :step="1"
+          />
+
+          <TextInput
+            v-if="setting?.layout === 'text'"
+            name="text"
+            rules="required"
+            v-model="formData.value"
+            @update:modelValue="updateField('value', $event)"
+            :label="$t('settings.text')"
+          />
+
           <div class="text-end">
-            <MainButton color="secondary" width="135px" class="me-9" type="submit">
+            <MainButton color="secondary" width="135px" type="submit" class="me-9">
               {{ $t("titles.edit") }}
             </MainButton>
           </div>
-          </form>
         </Form>
       </v-card-text>
     </v-card>
@@ -52,11 +91,15 @@ const router = useRouter();
 
 const settingID = ref("");
 const setting = ref(null);
-const loading = ref(true); // Track loading state
+const loading = ref(true);
+const changedFields = ref({}); // Track modified fields
 
 const formData = ref({
   value: "",
   locale: "",
+  is_active: false,
+  max_value: null,
+  range: null,
 });
 
 const fetchSetting = async () => {
@@ -67,13 +110,49 @@ const fetchSetting = async () => {
 
     if (response.data.setting) {
       setting.value = response.data.setting;
+
+      formData.value = {
+        value: setting.value.value || "",
+        locale: setting.value.locale || "en",
+        is_active: setting.value.is_active || false,
+        max_value: setting.value.max_value || null,
+        range: setting.value.range || null,
+      };
     }
   } catch (error) {
     console.error("Error fetching setting:", error);
   } finally {
-    loading.value = false; 
-    formData.value.value = setting.value.value;
-    formData.value.locale = setting.value.locale;// Stop loading regardless of success or error
+    loading.value = false;
+  }
+};
+
+const updateField = (field, value) => {
+  changedFields.value[field] = value; // Simply track changes without modifying values
+};
+
+const updateSetting = async () => {
+  try {
+    const payload = new FormData();
+    payload.append("_method", "put");
+    payload.append("locale", formData.value.locale);
+
+    // Convert values where necessary before appending
+    for (const key in changedFields.value) {
+      let value = changedFields.value[key];
+
+      if (["range", "max_value"].includes(key)) {
+        value = parseInt(value, 10);
+        if (isNaN(value)) continue; // Skip appending if NaN
+      }
+
+      payload.append(key, value);
+    }
+
+    const response = await POST(`admin-panel/settings/${settingID.value}`, payload);
+    console.log(response);
+    router.push("/settings");
+  } catch (error) {
+    console.error("Error updating setting:", error);
   }
 };
 
@@ -85,18 +164,6 @@ onMounted(() => {
   settingID.value = route.params.id;
   fetchSetting();
 });
-
-const updateSetting = async () => {
-  try {
-    await POST(`admin-panel/settings/${setting.value.key}`, {
-      value: formData.value.value,
-      locale: formData.value.locale,
-    });
-    router.push("/settings");
-  } catch (error) {
-    console.error("Error updating setting:", error);
-  }
-};
 </script>
 
 <style scoped></style>

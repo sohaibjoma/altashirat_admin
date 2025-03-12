@@ -24,6 +24,15 @@ app.component("MainButton",MainButton)
 app.component("OutlinedButton",OutlinedButton)
 app.component("LocaleSelector",LocaleSelector)
 
+//inputs imports
+import BooleanCheckbox from './Inputs/BooleanCheckbox/index.vue'
+import NumberInput from './Inputs/NumberInput/index.vue'
+import RangeInput from './Inputs/RangeInput/index.vue'
+
+app.component("BooleanCheckbox",BooleanCheckbox)
+app.component("NumberInput",NumberInput)
+app.component("RangeInput",RangeInput)
+
 //notifications imports 
 import ErrorNotify from './Inputs/notifications/ErrorNotify/index.vue'
 import SuccessNotify from './Inputs/notifications/SuccessNotify/index.vue'
@@ -35,6 +44,7 @@ app.component("SuccessNotify",SuccessNotify)
 import Image from './Image/index.vue'
 app.component("Image",Image)
 
+//
 // table import 
 
 
