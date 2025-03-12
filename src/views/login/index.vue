@@ -44,10 +44,12 @@ import { useRouter } from "vue-router";
 import { useApi } from "../../composables/api";
 import { ref } from "vue";
 import { useNotificationStore } from "../../stores/notification";
+import { useAuthStore } from "../../stores/auth";
 
 const { POST } = useApi();
 const router = useRouter();
 const notificationStore = useNotificationStore();
+const authStore = useAuthStore();
 
 // Reactive backend errors object
 const backendErrors = ref({});
@@ -73,6 +75,7 @@ async function formSubmitting({ setErrors }) {
     console.log("Response:", res);
 
     localStorage.setItem("userToken", res.data.token);
+    authStore.setToken(res.data.token);
     router.push("/profile");
 
     // Show success notification

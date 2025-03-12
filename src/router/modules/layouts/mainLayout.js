@@ -2,10 +2,12 @@
 
 import mainLayout from "../../../layouts/mainLayout/index.vue"
 import profileRoute from "../profile"
+import settingsRoutes from "../settings"
 const mainLayoutRoute = {
   path: '/dashboard', component: mainLayout,
   children:[
     profileRoute,
+    ...settingsRoutes
   ]
 }
 

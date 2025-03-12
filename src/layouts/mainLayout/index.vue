@@ -1,8 +1,8 @@
 <template>
-  <v-app class="bg-gray pt-4 ps-4 pe-4">
+  <v-app class="bg-gray pt-2">
     <SideBar />
     <VueHeader />
-    <v-main class="mx-4">
+    <v-main class="me-4 ms-4">
       <router-view></router-view>
     </v-main>
   </v-app>

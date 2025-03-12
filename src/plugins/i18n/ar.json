@@ -84,6 +84,10 @@
     "title": "الملف الشخصي"
   },
 
+  "settings": {
+    "title": "الإعدادات"
+  },
+
   "errorNotification": "خطأ في ادخال البيانات حاول مرة أخرى ",
   "successNotification": "تم إدخال البيانات بنجاح!"
 }

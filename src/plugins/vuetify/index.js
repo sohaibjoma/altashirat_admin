@@ -28,8 +28,8 @@ const vuetify = createVuetify({
       myCustomTheme: {
         dark: false,
         colors: {
-          black: '#000000',       // ✅ Fixed: Wrapped in quotes
-          white: '#ffffff',       // ✅ Already correct
+          black: '#000000',      
+          white: '#ffffff',       
           primary: '#de1d9d',      
           'primary-2': '#F8D2EB',
           'primary-3': '#FBE8F5',
@@ -38,7 +38,7 @@ const vuetify = createVuetify({
           'secondary-3': '#E8E9FF',
           gray: '#f7f8f9',
           'gray-2': '#dadada',
-          'gray-3': '#939393',   // ✅ Fixed: Wrapped in quotes
+          'gray-3': '#939393',  
           'error-text': '#e21b1b',
           'error-bg': '#fae1e4',
           'correct-text': '#4bae4f',

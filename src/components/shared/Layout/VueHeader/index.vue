@@ -2,7 +2,7 @@
 
   <v-container fluid>
       <v-app-bar 
-    class="rounded-te-xl rounded-be-xl ps-8 pe-8 pt-2 pb-2 bg-white"
+    class="rounded-te-xl rounded-be-xl ps-8 pe-8 pt-2 pb-2 bg-white me-3"
     >
       <v-toolbar class="bg-white"
     >
@@ -34,7 +34,7 @@
         <Image name="logout.png" alt="logout" class="header__icon"/>
       </div>
 
-      <div class="ps-3 border-s-sm">
+      <div class="ps-3 border-s-sm cursor-pointer" @click="goToSettings">
         <div class="bg-primary-2 pt-2 ps-2 pe-2 rounded-lg">
         <Image name="settings.png" alt="settings" class="header__icon"/>
         </div>
@@ -52,6 +52,7 @@ import vuetify from "../../../../plugins/vuetify";
 import { useDrawerStore } from "../../../../stores/drawer";
 import { useAppLocale } from "../../../../stores/appLocale";
 import { useAuthStore } from "../../../../stores/auth";
+import { useRouter } from "vue-router";
 
 //handling drawer state
 const drawerStore = useDrawerStore();
@@ -84,6 +85,10 @@ watch(localed, (newLocale) => {
 //logout functionality
 const authStore = useAuthStore();
 const logout = () => authStore.logout();
+
+//settings functionality
+const router = useRouter();
+const goToSettings = () => router.push('/settings');
 </script>
 
 <style>

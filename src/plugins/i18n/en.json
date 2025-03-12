@@ -84,6 +84,10 @@
     "title": "Profile"
   },
 
+  "settings": {
+    "title": "Settings"
+  },
+
   "errorNotification": "Something went wrong please try again",
   "successNotification": "done successfully!"
 
