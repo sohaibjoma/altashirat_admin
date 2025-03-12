@@ -1,7 +1,7 @@
 <template>
   <Field
-    name="confirmation"
-    :rules="'required|confirmed:@password'"
+    :name="name"
+    :rules="`required|confirmed:@${targetField}`"
     :messages="{ confirmed: 'The passwords must match' }"
     v-slot="{ field, errors }"
   >
@@ -21,14 +21,18 @@
 </template>
 
 <script setup>
-import { Field, ErrorMessage } from "vee-validate";
+import { Field } from "vee-validate";
+import { ref } from "vue";
 
-import {ref} from 'vue';
+const props = defineProps({
+  name: String,
+  targetField: String,
+});
 
 let showPass = ref(false);
 
 function toggleShowPass() {
-  showPass.value=!showPass.value
+  showPass.value = !showPass.value;
 }
 </script>
 

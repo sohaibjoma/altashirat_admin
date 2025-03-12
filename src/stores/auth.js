@@ -3,27 +3,29 @@ import { useApi } from "../composables/api";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
-const router = useRouter();
-
 export const useAuthStore = defineStore("auth", () => {
   const token = ref(localStorage.getItem("userToken") || null);
-  const user = ref(localStorage.getItem("auth_user") || null);
+  const user = ref(
+    localStorage.getItem("auth_user")
+      ? JSON.parse(localStorage.getItem("auth_user"))
+      : null
+  );
 
   const setToken = (newToken) => {
     token.value = newToken;
-    localStorage.setItem("userToken")= newToken;
+    localStorage.setItem("userToken", newToken);
   };
 
   const setUser = (newUser) => {
     user.value = newUser;
-    localStorage.setItem("auth_user") = newUser;
+    localStorage.setItem("auth_user", JSON.stringify(newUser));
   };
 
   const clearToken = () => {
     token.value = null;
     user.value = null;
-    localStorage.setItem("userToken")= null;
-    localStorage.setItem("auth_user")= null;
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("auth_user");
   };
 
   const fetchUser = async () => {
@@ -33,10 +35,14 @@ export const useAuthStore = defineStore("auth", () => {
 
       if (response.data) {
         setUser(response.data);
-        setToken(response.data.token);
+        if (response.data.token) {
+          setToken(response.data.token);
+        }
       }
+      return response.data;
     } catch (error) {
       console.error("Failed to fetch user data:", error);
+      return null;
     }
   };
 
@@ -45,7 +51,10 @@ export const useAuthStore = defineStore("auth", () => {
       const { DELETE } = useApi();
       await DELETE("/logout");
       clearToken();
-      router.push("/");
+      if (useRouter) {
+        const router = useRouter();
+        router.push("/");
+      }
     } catch (error) {
       console.error("Logout failed:", error);
     }

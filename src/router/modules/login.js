@@ -7,11 +7,11 @@ const loginRoute = {
   },
   beforeEnter: (to, from, next) => {
     if (localStorage.getItem("userToken")) {
-      next({ path: 'profile' }); // Redirect authenticated users
+      next({ path: 'profile' });
     } else {
       next(); 
     }
-  }, 
+  },
 }
 
 export default loginRoute
