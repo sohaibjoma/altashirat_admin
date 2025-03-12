@@ -12,32 +12,32 @@
     "phoneno": {
       "hint": "Please enter your phone number"
     },
-
     "password": {
       "hint": "Please enter your password",
       "confirmHint": "The passwords must match",
       "newPassword": "Please enter your new password",
       "confirmPassword": "Confirm Password"
     },
-
     "names": {
       "firstHint": "Please enter your first name",
       "middleHint": "Please enter your middle name",
       "lastHint": "Please enter your last name"
     },
-
     "email": "Enter a valid email"
   },
 
   "errorMsgs": {
     "required": "This {field} field is required",
-    "firstName": "Enter a valid first name ",
-    "lastName": "Enter a valid last name ",
+    "firstName": "Enter a valid first name",
+    "lastName": "Enter a valid last name",
     "phone": "Enter a valid phone number",
     "password": "Enter a valid password (min 8 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character)",
     "email": "Enter a valid email",
     "confirmed": "It doesn't match the password",
-    "alpha": "Enter a valid name"
+    "alpha": "Enter a valid name",
+    "textArea": "Number of digits should not eeceed 40000",
+    "rangeError":"Number should not exceed 100",
+    "numberError": "Number should not exceed 999999"
   },
 
   "drawer": {
@@ -45,13 +45,18 @@
     "dashboard": "Dashboard",
     "users": "Users",
     "permissions": "Permissions",
-    "titles": "Job Titles"
+    "titles": "Job Titles",
+    "countries": "Countries"
   },
 
   "table": {
     "name": "Name",
     "email": "Email",
-    "jobDescription": "Job Description"
+    "jobDescription": "Job Description",
+    "locale": "Locale",
+    "visible": "Visible",
+    "actions": "Actions",
+    "id": "ID"
   },
 
   "actions": {
@@ -76,7 +81,7 @@
     "visible": "Visible",
     "titleHint": "Enter a valid job title",
     "localeHint": "Choose a valid locale",
-    "visiblityiHint": "Choose visiblity state",
+    "visiblityHint": "Choose visibility state",
     "show": "Show",
     "hide": "Hide",
     "create": "Create",
@@ -101,9 +106,34 @@
   },
 
   "settings": {
-    "title": "Settings"
+    "title": "Settings",
+    "terms_and_conditions": "Terms and Conditions",
+    "usage_policy": "Usage Policy",
+    "additional_tax_rate": "Additional Tax Rate",
+    "fixed_tax_amount": "Fixed Tax Amount",
+    "welcome": "Welcome to Altashirat",
+    "contacts_email": "Contact Email",
+    "contacts_phone": "Contact Phone",
+    "contacts_address": "Contact Address",
+    "privacy_policy": "Privacy Policy",
+    "about1": "About Section 1",
+    "about2": "About Section 2",
+    "user_must_verify_email": "User Must Verify Email",
+    "email_verification_subject": "Altashirat | Email Verification",
+    "email_verification_body": "Welcome to Altashirat. Please use the link below to verify your email.",
+    "email_verified_successfully_subject": "Altashirat | Email Verified Successfully",
+    "email_verified_successfully_body": "Thanks for verifying your email address.",
+    "reset_password_email_subject": "Altashirat | Reset Account Password",
+    "reset_password_email_body": "Please click the following link in order to reset your account password.",
+    "guest_set_password_email_subject": "Altashirat | Set Account Password",
+    "guest_set_password_email_body": "Please click the following link in order to set your account password.",
+    "edit": "Edit here",
+    "active": "Active",
+    "max_value": "Maximum Value",
+    "range": "Range",
+    "text": "Text"
   },
 
-  "errorNotification": "Something went wrong please try again",
-  "successNotification": "done successfully!"
+  "errorNotification": "Something went wrong, please try again",
+  "successNotification": "Done successfully!"
 }

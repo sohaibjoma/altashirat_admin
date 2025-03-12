@@ -37,7 +37,10 @@
     "password": "ادخل كلمة مرور صالحة (8 أحرف على الأقل وتحتوي على حرف كبير وحرف صغير ورقم وحرف خاص)",
     "phone": "ادخل رقم هاتف صحيح",
     "confirmPassword": "تأكد من كلمة المرور",
-    "alpha": "ادخل اسم صحيح"
+    "alpha": "ادخل اسم صحيح",
+    "textArea": "ينبغي ألا يتعدى عدد الحروف 40000",
+    "rangeError": "ينبغى الا يتعدي الرقم 100",
+    "numberError": "ينبغي الا يتعدي الرقم 999999"
   },
 
   "drawer": {
@@ -45,13 +48,18 @@
     "dashboard": "لوحة التحكم",
     "users": "المستخدمين",
     "permissions": "الصلاحيات",
-    "titles": "المسميات الوظيفية"
+    "titles": "المسميات الوظيفية",
+    "countries": "الدول"
   },
 
   "table": {
     "name": "الاسم",
     "email": "البريد الالكتروني",
-    "jobDescription": "المهام الوظيفية"
+    "jobDescription": "المهام الوظيفية",
+    "visible": "الحالة",
+    "actions": "العمليات",
+    "id": "الرقم",
+    "locale": "اللغة"
   },
 
   "actions": {
@@ -101,7 +109,32 @@
   },
 
   "settings": {
-    "title": "الإعدادات"
+    "title": "الإعدادات",
+    "terms_and_conditions": "الشروط والأحكام",
+    "usage_policy": "سياسة الاستخدام",
+    "additional_tax_rate": "نسبة الضريبة الإضافية",
+    "fixed_tax_amount": "مبلغ الضريبة الثابت",
+    "welcome": "مرحبًا بك في التشيرات",
+    "contacts_email": "البريد الإلكتروني للتواصل",
+    "contacts_phone": "رقم الهاتف للتواصل",
+    "contacts_address": "عنوان التواصل",
+    "privacy_policy": "سياسة الخصوصية",
+    "about1": "القسم الأول عن الشركة",
+    "about2": "القسم الثاني عن الشركة",
+    "user_must_verify_email": "يجب على المستخدم تأكيد البريد الإلكتروني",
+    "email_verification_subject": "التشيرات | تأكيد البريد الإلكتروني",
+    "email_verification_body": "مرحبًا بك في التشيرات. يرجى استخدام الرابط أدناه لتأكيد بريدك الإلكتروني.",
+    "email_verified_successfully_subject": "التشيرات | تم تأكيد البريد الإلكتروني بنجاح",
+    "email_verified_successfully_body": "شكرًا لك على تأكيد عنوان بريدك الإلكتروني.",
+    "reset_password_email_subject": "التشيرات | إعادة تعيين كلمة المرور",
+    "reset_password_email_body": "يرجى النقر على الرابط التالي لإعادة تعيين كلمة المرور الخاصة بحسابك.",
+    "guest_set_password_email_subject": "التشيرات | تعيين كلمة المرور",
+    "guest_set_password_email_body": "يرجى النقر على الرابط التالي لتعيين كلمة المرور الخاصة بحسابك.",
+    "edit" : "قم بالتعديل هنا",
+    "active": "نشط",
+    "max_value": "القيمة القصوى",
+    "range": "المدى",
+    "text": "نص"
   },
 
   "errorNotification": "خطأ في ادخال البيانات حاول مرة أخرى ",

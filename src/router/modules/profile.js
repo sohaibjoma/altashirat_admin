@@ -3,7 +3,7 @@ import {t} from "../../plugins/i18n"
 const profileRoute = {
   path: '/profile', component: profile,
    meta: {
-    hidden: false,
+    hidden: true,
     title: t("profile.title")
   },
 }

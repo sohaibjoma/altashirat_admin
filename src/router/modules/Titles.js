@@ -1,19 +1,26 @@
-import record from "../../views/titles/record/index.vue"
-import actions from "../../views/titles/actions/index.vue"
-import {t } from "../../plugins/I18n/index"
+import { t } from "../../plugins/I18n/index";
 
-const TitlesRoutes = [
-  { path: '/titles', component: record, name: 'TitleRecord' ,meta:{
-    hidden: false,
+export default [
+  {
+    path: "/titles",
+    component: () => import("../../views/titles/record/index.vue"),
+    meta: {
+      hidden: false,
     title: t("drawer.titles")
-  } },
-  { path: '/titles/actions', component: actions, name: 'Titleactions' ,meta:{
-    hidden: true
-  }},
-  { path: '/titles/actions/:id', component: actions, name: 'EditAction' ,meta:{
-    hidden: true
-  }}
-
-]
-
-export default TitlesRoutes;
+    },
+  },
+  {
+    path: "/titles/add",
+    component: () => import("../../views/titles/actions/index.vue"),
+    meta: {
+      hidden: true,
+    },
+  },
+  {
+    path: "/titles/:id/edit",
+    component: () => import("../../views/titles/actions/index.vue"),
+    meta: {
+      hidden: true,
+    },
+  },
+];

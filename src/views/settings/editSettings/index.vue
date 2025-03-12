@@ -1,71 +1,176 @@
 <template>
-  <v-container v-if="setting">
-    <v-card class="pa-5">
-      <v-card-title></v-card-title>
+  <v-container>
+    <v-card class="pa-5 rounded-lg">
+      <v-card-title class="border-s-xl border-primary">
+        {{ formattedKey }}
+      </v-card-title>
+
       <v-card-text>
-        <LocaleSelector
-          :hint="$t('actions.language')"
-          name="locale"
-          rules="required"
-          v-model="formData.locale"
-          :label="$t('actions.language')"
-        />
+        <Form v-slot="{ handleSubmit }">
+          <form @submit.prevent="handleSubmit(updateSetting)">
+            <LocaleSelector
+              name="locale"
+              rules="required"
+              v-model="data.locale"
+              :label="$t('actions.language')"
+            />
+
+            <TextArea
+              v-if="setting?.layout === 'textarea'"
+              name="textArea"
+              rules="textArea"
+              v-model="data.value"
+              @update:modelValue="updateField('value', $event)"
+              :label="$t('settings.edit')"
+            />
+
+            <BooleanCheckbox
+              v-if="setting?.layout === 'checkbox'"
+              name="is_active"
+              v-model="data.is_active"
+              @update:modelValue="updateField('is_active', $event)"
+              :label="$t('settings.active')"
+            />
+
+            <NumberInput
+              v-if="setting?.layout === 'number'"
+              name="max_value"
+              rules="numberRule"
+              v-model="data.max_value"
+              @update:modelValue="updateField('max_value', $event)"
+              :label="$t('settings.max_value')"
+            />
+
+            <RangeInput
+              v-if="setting?.layout === 'range'"
+              name="range"
+              rules="range"
+              v-model="data.range"
+              @update:modelValue="updateField('range', $event)"
+              :label="$t('settings.range')"
+              :min="0"
+              :max="100"
+              :step="1"
+            />
+
+            <TextInput
+              v-if="setting?.layout === 'text'"
+              name="text"
+              rules="alpha"
+              v-model="data.value"
+              @update:modelValue="updateField('value', $event)"
+              :label="$t('settings.text')"
+            />
+
+            <div class="text-end">
+              <MainButton color="secondary" width="135px" type="submit">
+                {{ $t("titles.edit") }}
+              </MainButton>
+            </div>
+          </form>
+        </Form>
       </v-card-text>
-      <v-card-actions>
-        <MainButton
-          color="secondary"
-          width="135px"
-          class="me-5"
-          type="submit"
-          @click="updateSetting"
-        >
-          Save
-        </MainButton>
-      </v-card-actions>
     </v-card>
   </v-container>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useApi } from "../../../composables/api";
-import { useI18n } from "vue-i18n";
+import { t } from "../../../plugins/i18n";
+import { useSettingsStore } from "../../../stores/settings";
+import { Form } from "vee-validate";
 
+const settingsStore = useSettingsStore();
 const { GET, POST } = useApi();
 const route = useRoute();
 const router = useRouter();
-const { t } = useI18n();
 
+const settingID = ref("");
 const setting = ref(null);
-const formData = ref({ value: "", locale: "en" });
+const loading = ref(true);
+const changedFields = ref({}); // Track modified fields
+
+const data = ref({
+  value: "",
+  locale: "",
+  is_active: false,
+  max_value: null,
+  range: null,
+});
 
 const fetchSetting = async () => {
   try {
-    const response = await GET(`admin-panel/settings/${route.params.id}`);
-    if (response?.data) {
-      setting.value = { ...response.data };
-      formData.value = { value: response.data.value };
-    console.log(setting.value.key);
+    const response = await GET(`admin-panel/settings/${settingID.value}`);
+    console.log("Full API Response:", response);
+
+    if (response.data.setting) {
+      setting.value = response.data.setting;
+      data.value = {
+        value: setting.value.value || "",
+        locale: setting.value.locale || localStorage.getItem("locale") || "en",
+        is_active: setting.value.is_active ? 1 : 0,
+        max_value: setting.value.max_value || 0,
+        range: setting.value.range || 0,
+      };
     }
   } catch (error) {
     console.error("Error fetching setting:", error);
+  } finally {
+    loading.value = false;
   }
 };
 
-onMounted(fetchSetting);
+const updateField = (field, value) => {
+  let newValue = field === "range" || field === "max_value" ? Number(value) : value;
+  if (field === "is_active") newValue = value ? 1 : 0;
 
-// Format setting key for display (with null check)
-const formattedKey = computed(() => setting.value?.key?.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase()) || "");
-
-let settingID = route.params.id
-const updateSetting = async () => {
-  await POST(`admin-panel/settings/${settingID}`, {
-    value: formData.value.value,
-    locale: formData.value.locale,
-  });
-  router.push("/settings");
+  console.log(`Field '${field}' changed from '${data.value[field]}' to '${newValue}'`);
+  data.value[field] = newValue;
+  changedFields.value[field] = newValue;
 };
+
+const updateSetting = async () => {
+  try {
+    const payload = new FormData();
+    payload.append("_method", "put");
+    payload.append("locale", data.value.locale);
+
+    for (const key in changedFields.value) {
+      payload.append(key, changedFields.value[key]);
+    }
+
+    const response = await POST(`admin-panel/settings/${settingID.value}`, payload);
+    console.log(response);
+    router.push("/settings");
+  } catch (error) {
+    console.error("Error updating setting:", error);
+  }
+};
+
+const formattedKey = computed(() => {
+  return setting.value?.key ? t(`settings.${setting.value.key}`, setting.value.key) : "";
+});
+
+onMounted(() => {
+  if (route.params.id) {
+    settingID.value = route.params.id;
+    fetchSetting();
+  }
+});
+
+watchEffect(() => {
+  if (setting.value) {
+    data.value = {
+      value: setting.value.value || "",
+      locale: setting.value.locale || localStorage.getItem("locale") || "en",
+      is_active: setting.value.is_active ? 1 : 0,
+      max_value: setting.value.max_value || 0,
+      range: setting.value.range || 0,
+    };
+  }
+}, { immediate: true });
 </script>
 
 <style scoped></style>
