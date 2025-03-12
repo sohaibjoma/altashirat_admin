@@ -15,11 +15,14 @@
 
     "password": {
       "hint": "يرجى إدخال كلمة المرور",
-      "confirmHint": "يرجى تأكيد كلمة المرور"
+      "confirmHint": "يجب أن تتطابق كلمات المرور",
+      "newPassword": "يرجى إدخال كلمة مرور جديدة",
+      "confirmPassword": "تاكيد كلمة المرور"
     },
 
     "names": {
       "firstHint": "يرجى إدخال الاسم الأول",
+      "middleHint": "يرجى إدخال الاسم الأوسط",
       "lastHint": "يرجى إدخال الاسم الأخير"
     },
 
@@ -81,7 +84,20 @@
   },
 
   "profile": {
-    "title": "الملف الشخصي"
+    "title": "الملف الشخصي",
+    "firstname": "الاسم الاول",
+    "middlename": "الاسم الاوسط",
+    "lastname": "الاسم الاخير",
+    "email": "البريد الالكتروني",
+    "language": "اللغة",
+    "phoneCode": "الكود",
+    "phoneNumber": "رقم الهاتف",
+    "password": "كلمة المرور",
+    "confirmPassword": "تاكيد كلمة المرور",
+    "change_password": "تغيير كلمة المرور",
+    "old_password": "كلمة المرور القديمة",
+    "new_password": "كلمة المرور الجديدة",
+    "new_password_confirmation": "تاكيد كلمة المرور الجديدة"
   },
 
   "settings": {

@@ -1,29 +1,32 @@
 {
   "create": "create",
 
-  "login": {
+  "login":  {
     "title": "Login",
     "phone": "Phone Number",
     "password": "Password",
     "login": "Login"
   },
 
-  "inputs": {
-    "phoneno": {
+  "inputs":  {
+    "phoneno":  {
       "hint": "Please enter your phone number"
     },
 
-    "password": {
+    "password":  {
       "hint": "Please enter your password",
-      "confirmHint": "Please confirm your password"
+      "confirmHint": "The passwords must match",
+      "newPassword": "Please enter your new password",
+      "confirmPassword": "Confirm Password"
     },
 
-    "names": {
-      "firstHint": "Please enter your name",
+    "names":  {
+      "firstHint": "Please enter your first name",
+      "middleHint": "Please enter your middle name",
       "lastHint": "Please enter your last name"
     },
 
-    "email": "Enter a valid email"
+    "email":  "Enter a valid email"
   },
 
   "errorMsgs": {
@@ -39,12 +42,20 @@
 
   "drawer": {
     "superAdmin": "Super Admin",
+  "drawer": {
+    "superAdmin": "Super Admin",
     "dashboard": "Dashboard",
+    "users": "Users",
+    "permissions": "Permissions",
     "users": "Users",
     "permissions": "Permissions",
     "titles": "Job Titles"
   },
 
+  "table": {
+    "name": "Name",
+    "email": "Email",
+    "jobDescription": "Job Description"
   "table": {
     "name": "Name",
     "email": "Email",
@@ -56,7 +67,14 @@
     "lastName": "Last Name",
     "email": "Email",
     "language": "Language",
+  "actions": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "language": "Language",
     "phoneno": "Phone Number",
+    "password": "Password",
+    "confirmPassword": "Confirm Password"
     "password": "Password",
     "confirmPassword": "Confirm Password"
   },
@@ -78,10 +96,35 @@
     "hide": "Hide",
     "create": "Create",
     "edit": "Edit"
+  "titles": {
+    "title": "Job Title",
+    "addTitle": "Add Job Title",
+    "editTitle": "Edit Job Title",
+    "visible": "Visible",
+    "titleHint": "Enter a valid job title",
+    "localeHint": "Choose a valid locale",
+    "visiblityiHint": "Choose visiblity state",
+    "show": "Show",
+    "hide": "Hide",
+    "create": "Create",
+    "edit": "Edit"
   },
 
   "profile": {
-    "title": "Profile"
+    "title": "Profile",
+    "firstname": "First Name",
+    "middlename": "Middle Name",
+    "lastname": "Last Name",
+    "email": "Email",
+    "language": "Language",
+    "phoneCode": "Phone Code",
+    "phoneNumber": "Phone Number",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "change_password": "Change Password",
+    "old_password": "Old Password",
+    "new_password": "New Password",
+    "new_password_confirmation": "Confirm New Password"
   },
 
   "settings": {
