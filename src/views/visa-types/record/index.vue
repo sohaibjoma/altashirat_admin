@@ -2,19 +2,22 @@
   <v-app class="bg-gray">
     <div class="d-flex pe-4 justify-space-between align-center">
       <v-breadcrumbs
-        :items="[$t('drawer.titles')]"
+        :items="[$t('drawer.visaTypes')]"
         class="dashboard__breadcrumb me-3 rounded-te-lg rounded-be-lg"
       />
       <div>
         <mainButton class="me-auto" color="secondary" width="135px">
-          <router-link to="/titles/add" class="text-decoration-none text-white">
+          <router-link
+            to="/visa-types/add"
+            class="text-decoration-none text-white"
+          >
             {{ $t("create") }}
           </router-link>
         </mainButton>
       </div>
     </div>
     <customTable
-      :URLEndpoint="`/admin-panel/titles?page=${page}`"
+      :URLEndpoint="`/admin-panel/visa-types?page=${page}`"
       :tableHeaders="['id', 'name', 'actions']"
       :page="page"
       @update:page="page = $event"
@@ -22,12 +25,12 @@
     >
       <template #actions="{ item }">
         <ToggleVisibility
-          :record="{ ...item, resource: 'titles' }"
-          :payload="getTitlePayload"
+          :record="{ ...item, resource: 'visa-types' }"
+          :payload="getVisaTypePayload"
           class="me-2"
         />
-        <EditFiring :record="item" :resource="'titles'" class="me-2" />
-        <DeleteDialog :record="item" :resource="'titles'" class="mt-3" />
+        <EditFiring :record="item" :resource="'visa-types'" class="me-2" />
+        <DeleteDialog :record="item" :resource="'visa-types'" class="mt-3" />
       </template>
     </customTable>
   </v-app>
@@ -41,23 +44,23 @@ const { on, off } = useEventBus();
 const page = ref(1);
 
 const handleUpdate = () => {
-  console.log("Title updated or added event received");
+  console.log("Visa type updated or added event received");
 };
 
-on("title-updated", handleUpdate);
-on("title-added", handleUpdate);
+on("visa-type-updated", handleUpdate);
+on("visa-type-added", handleUpdate);
 
 onUnmounted(() => {
-  off("title-updated", handleUpdate);
-  off("title-added", handleUpdate);
+  off("visa-type-updated", handleUpdate);
+  off("visa-type-added", handleUpdate);
 });
 
-function getTitlePayload(responseData) {
+function getVisaTypePayload(responseData) {
   const formData = new FormData();
   formData.append("_method", "put");
-  formData.append("visible", responseData.title.visible ? "0" : "1");
-  formData.append("name", responseData.title.name);
-  formData.append("locale", "en");
+  formData.append("visible", responseData.visa_type.visible ? "0" : "1");
+  formData.append("name", responseData.visa_type.name);
+  formData.append("locale", responseData.visa_type.locale || "en");
   return formData;
 }
 </script>

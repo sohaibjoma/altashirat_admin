@@ -1,40 +1,59 @@
 <template>
-  <Field :name="name" :rules="rules" v-slot="{ field, errors }">
-    <v-text-field
-      v-bind="field"
-      :error-messages="[...errors.map((error) => $t(error)), ...backendErrors]"
-      variant="outlined"
-      :hint="hint"
-      persistent-hint
-      class="ms-5 w-75"
-      @update:model-value="handleInput"
-      :model-value="modelValue"
-    />
-  </Field>
+  <div>
+    {{ label }}
+  </div>
+  <v-text-field
+    v-model="internalValue"
+    :error="!!errorMessage"
+    :error-messages="errorMessage"
+    variant="outlined"
+    type="number"
+    :hint="hint"
+    class="ms-5 w-75"
+    persistent-hint
+    @blur="validateOnImmediate"
+  ></v-text-field>
 </template>
 
 <script setup>
-import { Field } from "vee-validate";
-import { computed } from "vue";
-import { useErrorStore } from "../../../../../stores/errors";
+import { useField } from "vee-validate";
+import { computed, watch } from "vue";
 
-const errorStore = useErrorStore();
-const backendErrors = computed(() => errorStore.getErrorsForField(props.name));
-
-const emit = defineEmits(["update:modelValue"]);
 const props = defineProps({
-  rules: String,
+  rules: [Array, Function],
   hint: String,
-  modelValue: String,
   name: String,
+  label: String,
+  modelValue: [String, Number],
 });
 
+const emit = defineEmits(["update:modelValue"]);
 
-// Custom function to handle input and clear errors
-const handleInput = (event) => {
-  emit("update:modelValue", event); // Update v-model
-  errorStore.clearErrors();// Clear backend errors for this field
+const { value, errorMessage, setTouched, validate } = useField(
+  props.name,
+  props.rules
+);
+
+const internalValue = computed({
+  get: () => props.modelValue || value.value,
+  set: (newValue) => {
+    value.value = newValue;
+    emit("update:modelValue", newValue);
+  },
+});
+
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    if (newVal !== undefined && newVal !== value.value) {
+      value.value = newVal;
+    }
+  },
+  { immediate: true }
+);
+
+const validateOnImmediate = () => {
+  setTouched(true);
+  validate();
 };
-
 </script>
-<style></style>

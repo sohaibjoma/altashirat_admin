@@ -4,7 +4,7 @@
       <template v-slot:activator="{ props: activatorProps }">
         <img
           src="../../../assets/imgs/delete.png"
-          alt=""
+          alt="Delete"
           class="v-toolbar__avatar me-2 cursor-pointer p-0"
           v-bind="activatorProps"
           text="Open Dialog"
@@ -28,7 +28,8 @@
               color="surface-variant"
               text="Delete"
               variant="flat"
-              @click="deleteTitle"
+              @click="deleteRecord"
+              :loading="loading"
             ></v-btn>
           </v-card-actions>
         </v-card>
@@ -41,19 +42,29 @@
 import { inject, ref } from "vue";
 import { useApi } from "../../../composables/api";
 
-//opening and closing the pop up controller
 const isActive = ref(false);
 
 const props = defineProps({
-  title: Object,
+  record: {
+    type: Object,
+    required: true,
+  },
+  resource: {
+    type: String,
+    required: true,
+  },
 });
 
 const emitter = inject("emitter");
 const { DELETE } = useApi();
 
-async function deleteTitle() {
-  await DELETE(`/admin-panel/titles/${props.title.id}`);
-  isActive.value = false;
-  emitter.emit("reload");
+async function deleteRecord() {
+  try {
+    await DELETE(`/admin-panel/${props.resource}/${props.record.id}`);
+    isActive.value = false;
+    emitter.emit("reload");
+  } catch (error) {
+    console.error(`Error deleting ${props.resource}:`, error);
+  }
 }
 </script>

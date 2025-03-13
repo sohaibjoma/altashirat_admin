@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { inject, onMounted, ref } from "vue";
+import { inject, onMounted, ref, watch } from "vue";
 import { useApi } from "../../../composables/api";
 
 const switcher = ref(false);
@@ -30,6 +30,17 @@ const props = defineProps({
     required: true,
   },
 });
+
+// Watch for changes in the record prop
+watch(
+  () => props.record,
+  (newRecord) => {
+    if (newRecord && newRecord.visible !== undefined) {
+      switcher.value = !newRecord.visible;
+    }
+  },
+  { immediate: true }
+);
 
 onMounted(() => {
   if (props.record && props.record.visible !== undefined) {
@@ -52,7 +63,19 @@ async function visibilityToggle() {
     );
     console.log("Current record data:", response.data);
 
+    // Check if payload function exists before calling it
+    if (typeof props.payload !== "function") {
+      console.error("Payload is not a function");
+      return;
+    }
+
+    // Safely create form data from the response
     const formData = props.payload(response.data);
+
+    if (!formData) {
+      console.error("Failed to create form data");
+      return;
+    }
 
     await POST(
       `/admin-panel/${props.record.resource}/${props.record.id}`,
