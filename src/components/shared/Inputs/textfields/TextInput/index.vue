@@ -10,6 +10,7 @@
     :type="type"
     :hint="hint"
     persistent-hint
+    class="ms-5 me-5"
     @blur="validateOnImmediate"
   ></v-text-field>
 </template>

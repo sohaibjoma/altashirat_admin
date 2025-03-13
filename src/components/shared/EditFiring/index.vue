@@ -1,9 +1,9 @@
 <template>
   <img
     src="../../../assets/imgs/rename.png"
-    alt=""
+    alt="Edit"
     class="v-toolbar__avatar me-2 cursor-pointer mt-3"
-    @click="editTitle(title.id)"
+    @click="editRecord(props.record.id)"
   />
 </template>
 
@@ -12,10 +12,18 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 const props = defineProps({
-  title: Object,
+  record: {
+    type: Object,
+    required: true,
+  },
+  resource: {
+    type: String,
+    required: true,
+    default: "titles",
+  },
 });
 
-function editTitle(id) {
-  router.push(`/titles/${id}/edit`);
+function editRecord(id) {
+  router.push(`/${props.resource}/${id}/edit`);
 }
 </script>

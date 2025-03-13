@@ -10,6 +10,7 @@
         :model-value="modelValue"
         :items="items"
         :placeholder="$t(placeholder)"
+        class="ms-5 me-5"
         :error-messages="[
           ...errors.map((error) => $t(error)),
           ...backendErrors,

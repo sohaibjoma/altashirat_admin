@@ -4,7 +4,7 @@
       <v-col cols="12" md="8" lg="6">
         <v-card class="mt-5 pa-2">
           <v-card-title class="text-h5 pt-4 pb-2">
-            {{ isEdit ? $t("editTitle") : $t("addTitle") }}
+            {{ isEdit ? $t("editVisaType") : $t("addVisaType") }}
           </v-card-title>
           <v-card-text>
             <Form v-slot="{ handleSubmit }">
@@ -104,22 +104,28 @@ const updateFormData = () => {
   return formData;
 };
 
-const fetchTitle = async (id) => {
+const fetchVisaType = async (id) => {
   try {
-    const response = await GET(`/admin-panel/titles/${id}`);
-    if (response.data && response.data.title) {
+    const response = await GET(`/admin-panel/visa-types/${id}`);
+    if (response.data && response.data.visa_type) {
       form.value = {
-        name: response.data.title.name || "",
-        visible: response.data.title.visible ? 1 : 0,
-        locale: response.data.title.locale || "en",
+        name: response.data.visa_type.name || "",
+        visible: response.data.visa_type.visible ? 1 : 0,
+        locale: response.data.visa_type.locale || "en",
       };
     } else {
       console.error("Invalid API response structure:", response);
-      notificationStore.setNotification("Failed to load title data.", "error");
+      notificationStore.setNotification(
+        "Failed to load visa type data.",
+        "error"
+      );
     }
   } catch (error) {
-    console.error("Failed to fetch title:", error);
-    notificationStore.setNotification("Failed to load title data.", "error");
+    console.error("Failed to fetch visa type:", error);
+    notificationStore.setNotification(
+      "Failed to load visa type data.",
+      "error"
+    );
   }
 };
 
@@ -128,7 +134,7 @@ watch(
   async (newId) => {
     if (newId) {
       isEdit.value = true;
-      await fetchTitle(newId);
+      await fetchVisaType(newId);
     } else {
       isEdit.value = false;
       form.value = {
@@ -146,18 +152,24 @@ const submitForm = async () => {
 
   try {
     if (isEdit.value) {
-      await POST(`/admin-panel/titles/${route.params.id}`, updateFormData());
+      await POST(
+        `/admin-panel/visa-types/${route.params.id}`,
+        updateFormData()
+      );
       notificationStore.setNotification(
-        "Title updated successfully!",
+        "Visa Type updated successfully!",
         "success"
       );
-      emit("title-updated");
+      emit("visa-type-updated");
     } else {
-      await POST("/admin-panel/titles", createFormData());
-      notificationStore.setNotification("Title added successfully!", "success");
-      emit("title-added");
+      await POST("/admin-panel/visa-types", createFormData());
+      notificationStore.setNotification(
+        "Visa Type added successfully!",
+        "success"
+      );
+      emit("visa-type-added");
     }
-    router.push("/titles");
+    router.push("/visa-types");
   } catch (error) {
     console.error("Form submission error:", error);
     if (error.response?.status === 422 || error.response?.status === 409) {
@@ -176,6 +188,8 @@ const submitForm = async () => {
 };
 
 const goBack = () => {
-  router.push("/titles");
+  router.push("/visa-types");
 };
 </script>
+
+<style scoped></style>
