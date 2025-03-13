@@ -39,6 +39,9 @@
               v-model="data.max_value"
               @update:modelValue="updateField('max_value', $event)"
               :label="$t('settings.max_value')"
+              :min="0"
+              :max="100"
+              :step="1"
             />
 
             <RangeInput
@@ -75,7 +78,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watchEffect } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useApi } from "../../../composables/api";
 import { t } from "../../../plugins/i18n";
@@ -108,13 +111,11 @@ const fetchSetting = async () => {
     if (response.data.setting) {
       setting.value = response.data.setting;
       data.value = {
-        value:
-          setting.value.value !== null ? setting.value.value.toString() : "",
+        value: setting.value.value?.toString() || "",
         locale: setting.value.locale || localStorage.getItem("locale") || "en",
-        is_active: setting.value.is_active ? 1 : 0,
-        max_value:
-          setting.value.max_value !== null ? setting.value.max_value : 0,
-        range: setting.value.value !== null ? setting.value.value : 0,
+        is_active: !!setting.value.is_active,
+        max_value: setting.value.max_value || 0,
+        range: setting.value.value || 0,
       };
     }
   } catch (error) {
@@ -127,7 +128,7 @@ const fetchSetting = async () => {
 const updateField = (field, value) => {
   let newValue =
     field === "range" || field === "max_value" ? Number(value) : value;
-  if (field === "is_active") newValue = value ? 1 : 0;
+  if (field === "is_active") newValue = value;
 
   console.log(
     `Field '${field}' changed from '${data.value[field]}' to '${newValue}'`
@@ -143,19 +144,23 @@ const updateSetting = async () => {
     payload.append("locale", data.value.locale);
 
     for (const key in changedFields.value) {
-      if (key === "range") {
-        payload.append("value", changedFields.value[key]);
+      if (key === "range" || key === "max_value") {
+        payload.append(key, changedFields.value[key]);
+      } else if (key === "is_active") {
+        payload.append(key, changedFields.value[key] ? '1' : '0');
       } else {
         payload.append(key, changedFields.value[key]);
       }
     }
-
+    console.log("Payload:", payload);
     const response = await POST(
       `admin-panel/settings/${settingID.value}`,
       payload
-    );
-    console.log(response);
+    ).then(()=>{
     router.push("/settings");
+    }
+    )
+
   } catch (error) {
     console.error("Error updating setting:", error);
   }
@@ -173,23 +178,6 @@ onMounted(() => {
     fetchSetting();
   }
 });
-
-watchEffect(
-  () => {
-    if (setting.value) {
-      data.value = {
-        value:
-          setting.value.value !== null ? setting.value.value.toString() : "",
-        locale: setting.value.locale || localStorage.getItem("locale") || "en",
-        is_active: setting.value.is_active ? 1 : 0,
-        max_value:
-          setting.value.max_value !== null ? setting.value.max_value : 0,
-        range: setting.value.value !== null ? setting.value.value : 0,
-      };
-    }
-  },
-  { immediate: true }
-);
 </script>
 
 <style scoped></style>
