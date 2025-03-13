@@ -14,6 +14,8 @@
       </div>
     </div>
     <customTable
+      max-width="800px"
+      width="100%"
       :URLEndpoint="`/admin-panel/titles?page=${page}`"
       :tableHeaders="['id', 'name', 'actions']"
       :page="page"
@@ -22,11 +24,11 @@
     >
       <template #actions="{ item }">
         <ToggleVisibility
+          class="d-flex align-center"
           :record="{ ...item, resource: 'titles' }"
           :payload="getTitlePayload"
-          class="me-2"
         />
-        <EditFiring :record="item" :resource="'titles'" class="me-2" />
+        <EditFiring :record="item" :resource="'titles'" class="mb-2" />
         <DeleteDialog :record="item" :resource="'titles'" class="mt-3" />
       </template>
     </customTable>

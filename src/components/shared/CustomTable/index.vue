@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-table class="table--customized mt-4 h-100">
+    <v-table class="table--customized mt-4">
       <thead>
         <tr>
           <th v-for="header in tableHeaders" :key="header">
@@ -12,7 +12,7 @@
         <tr v-for="item in data" :key="item.id">
           <td v-for="header in tableHeaders" :key="header">
             <template v-if="header === 'actions'">
-              <div class="d-flex">
+              <div class="d-flex align-center justify-space-around">
                 <slot name="actions" :item="item"></slot>
               </div>
             </template>

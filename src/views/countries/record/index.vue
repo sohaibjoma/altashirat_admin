@@ -1,6 +1,6 @@
 <template>
   <v-app class="bg-gray">
-    <div class="d-flex pe-4 justify-space-between align-center ">
+    <div class="d-flex pe-4 justify-space-between align-center">
       <v-breadcrumbs
         :items="[$t('drawer.countries')]"
         class="dashboard__breadcrumb me-3 rounded-te-lg rounded-be-lg"
@@ -9,15 +9,17 @@
     <customTable
       :URLEndpoint="`/admin-panel/countries?page=${page}`"
       :tableHeaders="['id', 'name', 'actions']"
+      max-width="800px"
+      width="100%"
       :page="page"
       @update:page="page = $event"
       class="rounded-lg"
     >
       <template #actions="{ item }">
         <ToggleVisibility
+          class="d-flex align-center"
           :record="{ ...item, resource: 'countries' }"
           :payload="getCountryPayload"
-          class="me-2"
         />
       </template>
     </customTable>

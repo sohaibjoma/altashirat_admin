@@ -5,6 +5,7 @@
       class="dashboard__breadcrumb me-3 rounded-te-lg rounded-be-lg"
     />
     <customTable
+      width="100%"
       :URLEndpoint="`/admin-panel/users?page=${page}`"
       :tableHeaders="['name', 'phone', 'email', 'role', 'actions']"
       :page="page"
@@ -21,9 +22,8 @@
         <BlockUser
           :userId="item.id"
           :blocked="item.blocked"
+          @update:blocked="(value) => (item.blocked = value)"
           url="/admin-panel/users"
-          class="me-2"
-          @update:blocked="updateBlocked(item, $event)"
         />
       </template>
     </customTable>
@@ -43,10 +43,6 @@ function fetchData() {
 onMounted(() => {
   emitter.on("reload", fetchData);
 });
-
-function updateBlocked(item, newValue) {
-  item.blocked = newValue;
-}
 </script>
 
 <style scoped></style>

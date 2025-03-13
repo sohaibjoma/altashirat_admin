@@ -45,13 +45,13 @@
                   :label="$t('actions.language')"
                 />
 
-                <div class="d-flex flex-wrap mt-5 gap-3">
-                  <v-btn @click="goBack" variant="outlined">
+                <div class="d-flex mt-5 align-center justify-space-around">
+                  <OutlinedButton @click="goBack">
                     {{ $t("cancel") }}
-                  </v-btn>
-                  <v-btn type="submit" color="primary" :loading="loading">
+                  </OutlinedButton>
+                  <MainButton type="submit" color="primary" :loading="loading">
                     {{ isEdit ? $t("update") : $t("add") }}
-                  </v-btn>
+                  </MainButton>
                 </div>
               </v-form>
             </Form>

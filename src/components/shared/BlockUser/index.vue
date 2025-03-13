@@ -1,9 +1,18 @@
 <template>
   <div>
-    <v-icon :color="isBlocked ? 'error' : 'success'" @click="openDialog">
-      {{ isBlocked ? "mdi-account-cancel" : "mdi-account-check" }}
-    </v-icon>
+    <!-- Block/Unblock Button -->
+    <OutlinedButton
+      :color="isBlocked ? 'error' : 'success'"
+      @click="openDialog"
+      class="me-2"
+    >
+      <v-icon :color="isBlocked ? 'error' : 'success'">
+        {{ isBlocked ? "mdi-account-cancel" : "mdi-account-check" }}
+      </v-icon>
+      {{ isBlocked ? "Unblock" : "Block" }}
+    </OutlinedButton>
 
+    <!-- Confirmation Dialog -->
     <v-dialog v-model="dialog" max-width="400">
       <v-card>
         <v-card-title>
@@ -88,4 +97,5 @@ const confirmBlock = async () => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>
