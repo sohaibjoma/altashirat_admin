@@ -6,7 +6,7 @@ export default [
     component: () => import("../../views/visa-types/record/index.vue"),
     meta: {
       hidden: false,
-      title: t("drawer.visa-types"),
+      title: t("drawer.visaTypes"),
     },
   },
   {

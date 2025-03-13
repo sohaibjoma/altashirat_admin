@@ -34,23 +34,9 @@
 </template>
 
 <script setup>
-import { ref, onUnmounted } from "vue";
-import { useEventBus } from "../../../composables/eventBus";
+import { ref } from "vue";
 
-const { on, off } = useEventBus();
 const page = ref(1);
-
-const handleUpdate = () => {
-  console.log("Title updated or added event received");
-};
-
-on("title-updated", handleUpdate);
-on("title-added", handleUpdate);
-
-onUnmounted(() => {
-  off("title-updated", handleUpdate);
-  off("title-added", handleUpdate);
-});
 
 function getTitlePayload(responseData) {
   const formData = new FormData();

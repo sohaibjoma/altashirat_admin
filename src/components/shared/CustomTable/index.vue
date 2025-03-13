@@ -9,11 +9,18 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in titles" :key="item.id">
-          <td>{{ item.id }}</td>
-          <td :class="item.visible ? '' : 'text-gray-2'">{{ item.name }}</td>
-          <td class="d-flex">
-            <slot name="actions" :item="item"></slot>
+        <tr v-for="item in data" :key="item.id">
+          <td v-for="header in tableHeaders" :key="header">
+            <template v-if="header === 'actions'">
+              <div class="d-flex">
+                <slot name="actions" :item="item"></slot>
+              </div>
+            </template>
+            <template v-else>
+              <span>
+                {{ getCellValue(item, header) }}
+              </span>
+            </template>
           </td>
         </tr>
       </tbody>
@@ -31,13 +38,17 @@
 import { useApi } from "../../../composables/api";
 import { inject, onMounted, ref, watch } from "vue";
 
-const titles = ref([]);
+const data = ref([]);
 const pageCount = ref(0);
 
 const props = defineProps({
   URLEndpoint: String,
   tableHeaders: Array,
   page: Number,
+  headerFieldMapping: {
+    type: Object,
+    default: () => ({}),
+  },
 });
 
 const { GET } = useApi();
@@ -46,10 +57,10 @@ async function getData() {
   if (!props.URLEndpoint) return;
   try {
     const response = await GET(props.URLEndpoint);
-    titles.value = response.data.data;
+    data.value = response.data.data;
     pageCount.value = response.data.meta.last_page;
   } catch (error) {
-    console.error("Error fetching titles:", error);
+    console.error("Error fetching data:", error);
   }
 }
 
@@ -60,6 +71,15 @@ onMounted(() => {
 });
 
 watch(() => props.page, getData, { immediate: true });
+
+function getCellValue(item, header) {
+  const fieldPath = props.headerFieldMapping[header] || header;
+  return getNestedValue(item, fieldPath);
+}
+
+function getNestedValue(obj, path) {
+  return path.split(".").reduce((acc, part) => acc && acc[part], obj);
+}
 </script>
 
 <style scoped></style>
