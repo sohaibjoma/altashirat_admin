@@ -6,20 +6,17 @@
     <v-checkbox
       v-bind="field"
       :error-messages="[...errors.map((error) => $t(error)), ...backendErrors]"
+      :label="hint"
       class="ms-5 me-5"
-      @update:modelValue="emit('update:modelValue', $event)"
       :model-value="modelValue"
-    >
-      <template v-slot:label>
-        {{ hint }}
-      </template>
-    </v-checkbox>
+      @update:modelValue="onUpdate"
+    ></v-checkbox>
   </Field>
 </template>
 
 <script setup>
 import { Field } from "vee-validate";
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import { useErrorStore } from "../../../../stores/errors";
 
 const errorStore = useErrorStore();
@@ -34,4 +31,17 @@ const props = defineProps({
   hint: String,
   name: String,
 });
+
+const onUpdate = (value) => {
+  emit("update:modelValue", value);
+};
+
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    if (newVal !== undefined && newVal !== props.modelValue) {
+      emit("update:modelValue", newVal);
+    }
+  }
+);
 </script>

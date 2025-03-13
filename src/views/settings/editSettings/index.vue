@@ -18,7 +18,7 @@
             <TextArea
               v-if="setting?.layout === 'textarea'"
               name="textArea"
-              rules="textArea"
+              rules="required"
               v-model="data.value"
               @update:modelValue="updateField('value', $event)"
               :label="$t('settings.edit')"
@@ -35,7 +35,7 @@
             <NumberInput
               v-if="setting?.layout === 'number'"
               name="max_value"
-              rules="numberRule"
+              rules="required"
               v-model="data.max_value"
               @update:modelValue="updateField('max_value', $event)"
               :label="$t('settings.max_value')"
@@ -44,7 +44,7 @@
             <RangeInput
               v-if="setting?.layout === 'range'"
               name="range"
-              rules="range"
+              rules="required"
               v-model="data.range"
               @update:modelValue="updateField('range', $event)"
               :label="$t('settings.range')"
@@ -56,7 +56,7 @@
             <TextInput
               v-if="setting?.layout === 'text'"
               name="text"
-              rules="alpha"
+              rules="required"
               v-model="data.value"
               @update:modelValue="updateField('value', $event)"
               :label="$t('settings.text')"
@@ -90,7 +90,7 @@ const router = useRouter();
 const settingID = ref("");
 const setting = ref(null);
 const loading = ref(true);
-const changedFields = ref({}); // Track modified fields
+const changedFields = ref({});
 
 const data = ref({
   value: "",
@@ -108,11 +108,13 @@ const fetchSetting = async () => {
     if (response.data.setting) {
       setting.value = response.data.setting;
       data.value = {
-        value: setting.value.value || "",
+        value:
+          setting.value.value !== null ? setting.value.value.toString() : "",
         locale: setting.value.locale || localStorage.getItem("locale") || "en",
         is_active: setting.value.is_active ? 1 : 0,
-        max_value: setting.value.max_value || 0,
-        range: setting.value.range || 0,
+        max_value:
+          setting.value.max_value !== null ? setting.value.max_value : 0,
+        range: setting.value.value !== null ? setting.value.value : 0,
       };
     }
   } catch (error) {
@@ -123,10 +125,13 @@ const fetchSetting = async () => {
 };
 
 const updateField = (field, value) => {
-  let newValue = field === "range" || field === "max_value" ? Number(value) : value;
+  let newValue =
+    field === "range" || field === "max_value" ? Number(value) : value;
   if (field === "is_active") newValue = value ? 1 : 0;
 
-  console.log(`Field '${field}' changed from '${data.value[field]}' to '${newValue}'`);
+  console.log(
+    `Field '${field}' changed from '${data.value[field]}' to '${newValue}'`
+  );
   data.value[field] = newValue;
   changedFields.value[field] = newValue;
 };
@@ -138,10 +143,17 @@ const updateSetting = async () => {
     payload.append("locale", data.value.locale);
 
     for (const key in changedFields.value) {
-      payload.append(key, changedFields.value[key]);
+      if (key === "range") {
+        payload.append("value", changedFields.value[key]);
+      } else {
+        payload.append(key, changedFields.value[key]);
+      }
     }
 
-    const response = await POST(`admin-panel/settings/${settingID.value}`, payload);
+    const response = await POST(
+      `admin-panel/settings/${settingID.value}`,
+      payload
+    );
     console.log(response);
     router.push("/settings");
   } catch (error) {
@@ -150,7 +162,9 @@ const updateSetting = async () => {
 };
 
 const formattedKey = computed(() => {
-  return setting.value?.key ? t(`settings.${setting.value.key}`, setting.value.key) : "";
+  return setting.value?.key
+    ? t(`settings.${setting.value.key}`, setting.value.key)
+    : "";
 });
 
 onMounted(() => {
@@ -160,17 +174,22 @@ onMounted(() => {
   }
 });
 
-watchEffect(() => {
-  if (setting.value) {
-    data.value = {
-      value: setting.value.value || "",
-      locale: setting.value.locale || localStorage.getItem("locale") || "en",
-      is_active: setting.value.is_active ? 1 : 0,
-      max_value: setting.value.max_value || 0,
-      range: setting.value.range || 0,
-    };
-  }
-}, { immediate: true });
+watchEffect(
+  () => {
+    if (setting.value) {
+      data.value = {
+        value:
+          setting.value.value !== null ? setting.value.value.toString() : "",
+        locale: setting.value.locale || localStorage.getItem("locale") || "en",
+        is_active: setting.value.is_active ? 1 : 0,
+        max_value:
+          setting.value.max_value !== null ? setting.value.max_value : 0,
+        range: setting.value.value !== null ? setting.value.value : 0,
+      };
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <style scoped></style>

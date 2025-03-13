@@ -20,7 +20,7 @@
 
 <script setup>
 import { Field } from "vee-validate";
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import { useErrorStore } from "../../../../stores/errors";
 
 const errorStore = useErrorStore();
@@ -39,8 +39,16 @@ const props = defineProps({
   step: Number,
 });
 
-
 const onUpdate = (value) => {
   emit("update:modelValue", Math.round(value));
 };
+
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    if (newVal !== undefined && newVal !== Math.round(props.modelValue)) {
+      emit("update:modelValue", newVal);
+    }
+  }
+);
 </script>
