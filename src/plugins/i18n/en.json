@@ -36,7 +36,7 @@
     "confirmed": "It doesn't match the password",
     "alpha": "Enter a valid name",
     "textArea": "Number of digits should not eeceed 40000",
-    "rangeError":"Number should not exceed 100",
+    "rangeError": "Number should not exceed 100",
     "numberError": "Number should not exceed 999999"
   },
 
@@ -47,7 +47,8 @@
     "permissions": "Permissions",
     "titles": "Job Titles",
     "countries": "Countries",
-    "visaTypes": "Visa Types"
+    "visaTypes": "Visa Types",
+    "employmentTypes": "Employment Types"
   },
 
   "table": {
@@ -73,7 +74,9 @@
     "addTitle": "Add Job Title",
     "editTitle": "Edit Job Title",
     "addVisaType": "Add Visa Type",
-    "editVisaType": "Edit Visa Type"
+    "editVisaType": "Edit Visa Type",
+    "addEmploymentType": "Add Employment Type",
+    "editEmploymentType": "Edit Employment Type"
   },
 
   "languages": {
