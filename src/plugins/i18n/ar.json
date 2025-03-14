@@ -49,7 +49,8 @@
     "users": "المستخدمين",
     "permissions": "الصلاحيات",
     "titles": "المسميات الوظيفية",
-    "countries": "الدول"
+    "countries": "الدول",
+    "visaTypes": "أنواع التأشيرات"
   },
 
   "table": {
@@ -59,7 +60,9 @@
     "visible": "الحالة",
     "actions": "العمليات",
     "id": "الرقم",
-    "locale": "اللغة"
+    "locale": "اللغة",
+    "role": "الصلاحيات",
+    "phone": "رقم الهاتف"
   },
 
   "actions": {
@@ -69,7 +72,11 @@
     "language": "اللغة",
     "phoneno": "رقم الهاتف",
     "password": "كلمة المرور",
-    "confirmPassword": "تأكيد كلمة المرور"
+    "confirmPassword": "تأكيد كلمة المرور",
+    "addTitle": "اضافة مسمى وظيفي",
+    "editTitle": "تعديل مسمى وظيفي",
+    "addVisaType": "اضافة نوع تأشيرة",
+    "editVisaType": "تعديل نوع تأشيرة"
   },
 
   "languages": {

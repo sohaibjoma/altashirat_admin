@@ -6,6 +6,7 @@ import settingsRoutes from "../settings"
 import TitlesRoutes from "../Titles"
 import CountriesRoutes from "../countries"
 import visaTypesRoutes from "../visa-types"
+import UsersRoutes from "../users"
 
 const mainLayoutRoute = {
   path: '/dashboard', component: mainLayout,
@@ -14,7 +15,8 @@ const mainLayoutRoute = {
     ...settingsRoutes,
     ...TitlesRoutes,
     ...CountriesRoutes,
-    ...visaTypesRoutes
+    ...visaTypesRoutes,
+    ...UsersRoutes
   ]
 }
 

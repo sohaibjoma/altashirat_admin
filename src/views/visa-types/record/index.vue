@@ -17,6 +17,8 @@
       </div>
     </div>
     <customTable
+      max-width="800px"
+      width="100%"
       :URLEndpoint="`/admin-panel/visa-types?page=${page}`"
       :tableHeaders="['id', 'name', 'actions']"
       :page="page"
@@ -25,11 +27,11 @@
     >
       <template #actions="{ item }">
         <ToggleVisibility
+          class="d-flex align-center"
           :record="{ ...item, resource: 'visa-types' }"
           :payload="getVisaTypePayload"
-          class="me-2"
         />
-        <EditFiring :record="item" :resource="'visa-types'" class="me-2" />
+        <EditFiring :record="item" :resource="'visa-types'" class="mb-2" />
         <DeleteDialog :record="item" :resource="'visa-types'" class="mt-3" />
       </template>
     </customTable>
