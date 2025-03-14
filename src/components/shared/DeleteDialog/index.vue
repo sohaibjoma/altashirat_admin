@@ -25,7 +25,7 @@
             ></v-btn>
 
             <v-btn
-              color="surface-variant"
+              color="error-text"
               text="Delete"
               variant="flat"
               @click="deleteRecord"

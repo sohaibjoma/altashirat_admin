@@ -1,15 +1,14 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col cols="12" md="8" lg="6">
-        <v-card class="mt-5 pa-2">
+      <v-col cols="12" md="10" lg="8" xl="7">
+        <v-card class="mt-5 pa-4">
           <v-card-title class="text-h5 pt-4 pb-2">
-            {{ isEdit ? $t("editTitle") : $t("addTitle") }}
+            {{ isEdit ? $t("actions.editTitle") : $t("actions.addTitle") }}
           </v-card-title>
           <v-card-text>
             <Form v-slot="{ handleSubmit }">
               <v-form @submit.prevent="handleSubmit(submitForm)">
-                <!-- Name Input -->
                 <TextInput
                   v-model="form.name"
                   :label="$t('name')"
@@ -19,7 +18,6 @@
                   class="mb-3"
                 />
 
-                <!-- Visible Select -->
                 <Select
                   v-model="form.visible"
                   :label="$t('visible')"
@@ -37,7 +35,6 @@
                   "
                 />
 
-                <!-- Locale Select for edit only -->
                 <LocaleSelector
                   v-if="isEdit"
                   name="locale"
@@ -46,14 +43,13 @@
                   :label="$t('actions.language')"
                 />
 
-                <!-- Action Buttons -->
-                <div class="d-flex mt-5 gap-3">
-                  <v-btn @click="goBack" variant="outlined">
+                <div class="d-flex mt-5 align-center justify-space-around">
+                  <OutlinedButton @click="goBack">
                     {{ $t("cancel") }}
-                  </v-btn>
-                  <v-btn type="submit" color="primary" :loading="loading">
+                  </OutlinedButton>
+                  <MainButton type="submit" color="primary" :loading="loading">
                     {{ isEdit ? $t("update") : $t("add") }}
-                  </v-btn>
+                  </MainButton>
                 </div>
               </v-form>
             </Form>

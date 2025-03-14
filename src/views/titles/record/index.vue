@@ -14,6 +14,8 @@
       </div>
     </div>
     <customTable
+      max-width="800px"
+      width="100%"
       :URLEndpoint="`/admin-panel/titles?page=${page}`"
       :tableHeaders="['id', 'name', 'actions']"
       :page="page"
@@ -22,11 +24,11 @@
     >
       <template #actions="{ item }">
         <ToggleVisibility
+          class="d-flex align-center"
           :record="{ ...item, resource: 'titles' }"
           :payload="getTitlePayload"
-          class="me-2"
         />
-        <EditFiring :record="item" :resource="'titles'" class="me-2" />
+        <EditFiring :record="item" :resource="'titles'" class="mb-2" />
         <DeleteDialog :record="item" :resource="'titles'" class="mt-3" />
       </template>
     </customTable>
@@ -34,23 +36,9 @@
 </template>
 
 <script setup>
-import { ref, onUnmounted } from "vue";
-import { useEventBus } from "../../../composables/eventBus";
+import { ref } from "vue";
 
-const { on, off } = useEventBus();
 const page = ref(1);
-
-const handleUpdate = () => {
-  console.log("Title updated or added event received");
-};
-
-on("title-updated", handleUpdate);
-on("title-added", handleUpdate);
-
-onUnmounted(() => {
-  off("title-updated", handleUpdate);
-  off("title-added", handleUpdate);
-});
 
 function getTitlePayload(responseData) {
   const formData = new FormData();
