@@ -1,55 +1,51 @@
 <template>
-  <div class="ms-4 mt-8 mb-4 font-weight-bold">
+  <div class="ms-4 mt-8 font-weight-bold">
     {{ label }}
   </div>
-  <Field :name="name" :rules="rules" v-slot="{ field, errors }">
-    <v-text-field
-      v-bind="field"
-      :error-messages="[...errors.map((error) => $t(error)), ...backendErrors]"
-      :label="hint"
-      class="ms-5 me-5"
-      variant="outlined"
-      type="number"
-      :min="min"
-      :max="max"
-      :step="step"
-      :model-value="modelValue"
-      @update:modelValue="onUpdate"
-    ></v-text-field>
-  </Field>
+  <v-text-field
+    v-model="internalValue"
+    :error="!!errorMessage"
+    :error-messages="errorMessage"
+    variant="outlined"
+    :type="type"
+    :hint="hint"
+    persistent-hint
+    class="ms-5 me-5"
+    @blur="validateOnImmediate"
+  ></v-text-field>
 </template>
 
 <script setup>
-import { Field } from "vee-validate";
-import { computed, watch } from "vue";
-import { useErrorStore } from "../../../../stores/errors";
+import { useField } from "vee-validate";
+import { computed } from "vue";
 
-const errorStore = useErrorStore();
-const backendErrors = computed(() => errorStore.getErrorsForField(props.name));
+const props = defineProps({
+  rules: [Array, Function],
+  hint: String,
+  name: String,
+  type: String,
+  label: String,
+  modelValue: [String, Number],
+});
 
 const emit = defineEmits(["update:modelValue"]);
 
-const props = defineProps({
-  modelValue: Number,
-  rules: String,
-  label: String,
-  hint: String,
-  name: String,
-  min: Number,
-  max: Number,
-  step: Number,
+const { value, errorMessage, setTouched, validate } = useField(
+  props.name,
+  props.rules
+);
+
+const internalValue = computed({
+  get: () => props.modelValue?.toString() || '',
+  set: (newValue) => {
+    const numericValue = newValue === '' ? null : Number(newValue);
+    value.value = numericValue;
+    emit("update:modelValue", numericValue);
+  },
 });
 
-const onUpdate = (value) => {
-  emit("update:modelValue", Number(value));
+const validateOnImmediate = () => {
+  setTouched(true);
+  validate();
 };
-
-watch(
-  () => props.modelValue,
-  (newVal) => {
-    if (newVal !== undefined && newVal !== Number(props.modelValue)) {
-      emit("update:modelValue", newVal);
-    }
-  }
-);
 </script>

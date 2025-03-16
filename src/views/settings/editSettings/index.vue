@@ -20,7 +20,6 @@
               name="textArea"
               rules="required"
               v-model="data.value"
-              @update:modelValue="updateField('value', $event)"
               :label="$t('settings.edit')"
             />
 
@@ -28,20 +27,7 @@
               v-if="setting?.layout === 'checkbox'"
               name="is_active"
               v-model="data.is_active"
-              @update:modelValue="updateField('is_active', $event)"
               :label="$t('settings.active')"
-            />
-
-            <NumberInput
-              v-if="setting?.layout === 'number'"
-              name="max_value"
-              rules="required"
-              v-model="data.max_value"
-              @update:modelValue="updateField('max_value', $event)"
-              :label="$t('settings.max_value')"
-              :min="0"
-              :max="100"
-              :step="1"
             />
 
             <RangeInput
@@ -49,11 +35,18 @@
               name="range"
               rules="required"
               v-model="data.range"
-              @update:modelValue="updateField('range', $event)"
               :label="$t('settings.range')"
               :min="0"
               :max="100"
               :step="1"
+            />
+
+            <NumberInput
+              v-if="setting?.layout === 'number'"
+              name="max_value"
+              rules="required"
+              v-model="data.max_value"
+              :label="$t('settings.max_value')"
             />
 
             <TextInput
@@ -61,7 +54,6 @@
               name="text"
               rules="required"
               v-model="data.value"
-              @update:modelValue="updateField('value', $event)"
               :label="$t('settings.text')"
             />
 
@@ -93,10 +85,9 @@ const router = useRouter();
 const settingID = ref("");
 const setting = ref(null);
 const loading = ref(true);
-const changedFields = ref({});
 
 const data = ref({
-  value: "",
+  value: null,
   locale: "",
   is_active: false,
   max_value: null,
@@ -111,30 +102,20 @@ const fetchSetting = async () => {
     if (response.data.setting) {
       setting.value = response.data.setting;
       data.value = {
-        value: setting.value.value?.toString() || "",
+        value: setting.value.value !== null ? String(setting.value.value) : null,
         locale: setting.value.locale || localStorage.getItem("locale") || "en",
-        is_active: !!setting.value.is_active,
-        max_value: setting.value.max_value || 0,
-        range: setting.value.value || 0,
+        is_active: Boolean(setting.value.is_active),
+        max_value: setting.value.max_value !== null ? Number(setting.value.max_value) : null,
+        range: setting.value.value !== null ? Number(setting.value.value) : 0,
       };
     }
+
+    console.log("data value", data.value);
   } catch (error) {
     console.error("Error fetching setting:", error);
   } finally {
     loading.value = false;
   }
-};
-
-const updateField = (field, value) => {
-  let newValue =
-    field === "range" || field === "max_value" ? Number(value) : value;
-  if (field === "is_active") newValue = value;
-
-  console.log(
-    `Field '${field}' changed from '${data.value[field]}' to '${newValue}'`
-  );
-  data.value[field] = newValue;
-  changedFields.value[field] = newValue;
 };
 
 const updateSetting = async () => {
@@ -143,33 +124,38 @@ const updateSetting = async () => {
     payload.append("_method", "put");
     payload.append("locale", data.value.locale);
 
-    for (const key in changedFields.value) {
-      if (key === "range" || key === "max_value") {
-        payload.append(key, changedFields.value[key]);
-      } else if (key === "is_active") {
-        payload.append(key, changedFields.value[key] ? '1' : '0');
-      } else {
-        payload.append(key, changedFields.value[key]);
-      }
+    switch (setting.value.layout) {
+      case "textarea":
+      case "text":
+        payload.append("value", data.value.value || "");
+        break;
+      case "checkbox":
+        payload.append("is_active", data.value.is_active ? "1" : "0");
+        break;
+      case "range":
+        payload.append("value", data.value.range !== null ? String(data.value.range) : "0");
+        break;
+      case "number":
+        // Explicitly ensure max_value is a number before sending
+        const maxValue = data.value.max_value !== null ? Number(data.value.max_value) : null;
+        payload.append("max_value", maxValue !== null ? String(maxValue) : "");
+        break;
     }
-    console.log("Payload:", payload);
+
+    console.log("Payload:", Object.fromEntries(payload));
     const response = await POST(
       `admin-panel/settings/${settingID.value}`,
       payload
-    ).then(()=>{
+    );
+    console.log("API Response:", response);
     router.push("/settings");
-    }
-    )
-
   } catch (error) {
     console.error("Error updating setting:", error);
   }
 };
 
 const formattedKey = computed(() => {
-  return setting.value?.key
-    ? t(`settings.${setting.value.key}`, setting.value.key)
-    : "";
+  return setting.value?.key ? t(`settings.${setting.value.key}`, setting.value.key) : "";
 });
 
 onMounted(() => {
@@ -180,4 +166,4 @@ onMounted(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped></style> 
