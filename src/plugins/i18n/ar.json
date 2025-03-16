@@ -50,7 +50,8 @@
     "permissions": "الصلاحيات",
     "titles": "المسميات الوظيفية",
     "countries": "الدول",
-    "visaTypes": "أنواع التأشيرات"
+    "visaTypes": "أنواع التأشيرات",
+    "employmentTypes": "أنواع التوظيف"
   },
 
   "table": {
@@ -76,7 +77,9 @@
     "addTitle": "اضافة مسمى وظيفي",
     "editTitle": "تعديل مسمى وظيفي",
     "addVisaType": "اضافة نوع تأشيرة",
-    "editVisaType": "تعديل نوع تأشيرة"
+    "editVisaType": "تعديل نوع تأشيرة",
+    "addEmploymentType": "اضافة نوع توظيف",
+    "editEmploymentType": "تعديل نوع توظيف"
   },
 
   "languages": {
@@ -137,7 +140,7 @@
     "reset_password_email_body": "يرجى النقر على الرابط التالي لإعادة تعيين كلمة المرور الخاصة بحسابك.",
     "guest_set_password_email_subject": "التشيرات | تعيين كلمة المرور",
     "guest_set_password_email_body": "يرجى النقر على الرابط التالي لتعيين كلمة المرور الخاصة بحسابك.",
-    "edit" : "قم بالتعديل هنا",
+    "edit": "قم بالتعديل هنا",
     "active": "نشط",
     "max_value": "القيمة القصوى",
     "range": "المدى",
