@@ -130,15 +130,15 @@ const updateSetting = async () => {
         payload.append("value", data.value.value || "");
         break;
       case "checkbox":
-        payload.append("is_active", data.value.is_active ? "1" : "0");
+        payload.append("value", data.value.is_active ? 1 : 0);
         break;
       case "range":
-        payload.append("value", data.value.range !== null ? String(data.value.range) : "0");
+        payload.append("value", data.value.range !== null ? String(data.value.range) : 0);
         break;
       case "number":
         // Explicitly ensure max_value is a number before sending
         const maxValue = data.value.max_value !== null ? Number(data.value.max_value) : null;
-        payload.append("max_value", maxValue !== null ? String(maxValue) : "");
+        payload.append("value", maxValue !== null ? String(maxValue) : "");
         break;
     }
 
