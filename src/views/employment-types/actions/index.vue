@@ -72,6 +72,9 @@ import { useApi } from "../../../composables/api";
 import { useErrorStore } from "../../../stores/errors";
 import { useNotificationStore } from "../../../stores/notification";
 import { useEventBus } from "../../../composables/eventBus";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const route = useRoute();
 const router = useRouter();
@@ -116,14 +119,14 @@ const fetchEmploymentType = async (id) => {
     } else {
       console.error("Invalid API response structure:", response);
       notificationStore.setNotification(
-        "Failed to load employment type data.",
+        t("notifications.employment_type_load_error"),
         "error"
       );
     }
   } catch (error) {
     console.error("Failed to fetch employment type:", error);
     notificationStore.setNotification(
-      "Failed to load employment type data.",
+      t("notifications.employment_type_load_error"),
       "error"
     );
   }
@@ -157,14 +160,14 @@ const submitForm = async () => {
         updateFormData()
       );
       notificationStore.setNotification(
-        "Employment type updated successfully!",
+        t("notifications.employment_type_updated_success"),
         "success"
       );
       emit("employment-type-updated");
     } else {
       await POST("/admin-panel/employment-types", createFormData());
       notificationStore.setNotification(
-        "Employment type added successfully!",
+        t("notifications.employment_type_added_success"),
         "success"
       );
       emit("employment-type-added");
@@ -175,12 +178,12 @@ const submitForm = async () => {
     if (error.response?.status === 422 || error.response?.status === 409) {
       errorStore.setErrors(error.response.data.errors);
       notificationStore.setNotification(
-        "Please fix the errors in the form.",
+        t("notifications.form_validation_error"),
         "error"
       );
     } else {
       notificationStore.setNotification(
-        "An unexpected error occurred.",
+        t("notifications.unexpected_error"),
         "error"
       );
     }

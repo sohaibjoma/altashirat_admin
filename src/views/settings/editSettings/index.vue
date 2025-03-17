@@ -12,7 +12,7 @@
               name="locale"
               rules="required"
               v-model="data.locale"
-              :label="$t('actions.language')"
+              :label="t('actions.language')"
             />
 
             <TextArea
@@ -20,14 +20,14 @@
               name="textArea"
               rules="required"
               v-model="data.value"
-              :label="$t('settings.edit')"
+              :label="t('settings.edit')"
             />
 
             <BooleanCheckbox
               v-if="setting?.layout === 'checkbox'"
               name="is_active"
               v-model="data.is_active"
-              :label="$t('settings.active')"
+              :label="t('settings.active')"
             />
 
             <RangeInput
@@ -35,7 +35,7 @@
               name="range"
               rules="required"
               v-model="data.range"
-              :label="$t('settings.range')"
+              :label="t('settings.range')"
               :min="0"
               :max="100"
               :step="1"
@@ -46,7 +46,7 @@
               name="max_value"
               rules="required"
               v-model="data.max_value"
-              :label="$t('settings.max_value')"
+              :label="t('settings.max_value')"
             />
 
             <TextInput
@@ -54,12 +54,12 @@
               name="text"
               rules="required"
               v-model="data.value"
-              :label="$t('settings.text')"
+              :label="t('settings.text')"
             />
 
             <div class="text-end">
               <MainButton color="secondary" width="135px" type="submit">
-                {{ $t("titles.edit") }}
+                {{ t("titles.edit") }}
               </MainButton>
             </div>
           </form>
@@ -74,13 +74,13 @@ import { ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useApi } from "../../../composables/api";
 import { t } from "../../../plugins/i18n";
-import { useSettingsStore } from "../../../stores/settings";
 import { Form } from "vee-validate";
+import { useNotificationStore } from "../../../stores/notification";
 
-const settingsStore = useSettingsStore();
 const { GET, POST } = useApi();
 const route = useRoute();
 const router = useRouter();
+const notificationStore = useNotificationStore();
 
 const settingID = ref("");
 const setting = ref(null);
@@ -102,17 +102,30 @@ const fetchSetting = async () => {
     if (response.data.setting) {
       setting.value = response.data.setting;
       data.value = {
-        value: setting.value.value !== null ? String(setting.value.value) : null,
+        value:
+          setting.value.value !== null ? String(setting.value.value) : null,
         locale: setting.value.locale || localStorage.getItem("locale") || "en",
         is_active: Boolean(setting.value.is_active),
-        max_value: setting.value.max_value !== null ? Number(setting.value.max_value) : null,
+        max_value:
+          setting.value.max_value !== null
+            ? Number(setting.value.max_value)
+            : null,
         range: setting.value.value !== null ? Number(setting.value.value) : 0,
       };
+    } else {
+      notificationStore.setNotification(
+        t("notifications.setting_load_error"),
+        "error"
+      );
     }
 
     console.log("data value", data.value);
   } catch (error) {
     console.error("Error fetching setting:", error);
+    notificationStore.setNotification(
+      t("notifications.setting_load_error"),
+      "error"
+    );
   } finally {
     loading.value = false;
   }
@@ -133,11 +146,14 @@ const updateSetting = async () => {
         payload.append("value", data.value.is_active ? 1 : 0);
         break;
       case "range":
-        payload.append("value", data.value.range !== null ? String(data.value.range) : 0);
+        payload.append(
+          "value",
+          data.value.range !== null ? String(data.value.range) : 0
+        );
         break;
       case "number":
-        // Explicitly ensure max_value is a number before sending
-        const maxValue = data.value.max_value !== null ? Number(data.value.max_value) : null;
+        const maxValue =
+          data.value.max_value !== null ? Number(data.value.max_value) : null;
         payload.append("value", maxValue !== null ? String(maxValue) : "");
         break;
     }
@@ -149,13 +165,23 @@ const updateSetting = async () => {
     );
     console.log("API Response:", response);
     router.push("/settings");
+    notificationStore.setNotification(
+      t("notifications.setting_update_success"),
+      "success"
+    );
   } catch (error) {
     console.error("Error updating setting:", error);
+    notificationStore.setNotification(
+      t("notifications.setting_update_error"),
+      "error"
+    );
   }
 };
 
 const formattedKey = computed(() => {
-  return setting.value?.key ? t(`settings.${setting.value.key}`, setting.value.key) : "";
+  return setting.value?.key
+    ? t(`settings.${setting.value.key}`, setting.value.key)
+    : "";
 });
 
 onMounted(() => {
@@ -166,4 +192,4 @@ onMounted(() => {
 });
 </script>
 
-<style scoped></style> 
+<style scoped></style>

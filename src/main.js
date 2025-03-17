@@ -1,11 +1,24 @@
-import { app } from './myApp/index.js'
-import './assets/scss/main.scss'
+import { app } from "./myApp/index.js";
+import "./assets/scss/main.scss";
 
-import './plugins/index.js';
-import { vuetify, i18n, emitter} from "./plugins/index.js"; 
-import './components/shared/index.js';
+import "./plugins/index.js";
+import { vuetify, i18n, emitter } from "./plugins/index.js";
+import "./components/shared/index.js";
 
-import router from './router/index.js'
-import { createPinia } from 'pinia'
+import router from "./router/index.js";
+import { createPinia } from "pinia";
+import { useAuthStore } from "./stores/auth";
+import authMiddleware from "./middleware/auth.js";
 
-app.provide('emitter', emitter).use(router).use(vuetify).use(createPinia()).use(i18n).mount('#app')
+const pinia = createPinia();
+
+app
+  .provide("emitter", emitter)
+  .use(router)
+  .use(vuetify)
+  .use(pinia)
+  .use(i18n)
+  .mount("#app");
+
+const authStore = useAuthStore(pinia);
+authMiddleware(router, authStore);

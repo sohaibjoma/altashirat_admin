@@ -27,9 +27,15 @@
           class="d-flex align-center"
           :record="{ ...item, resource: 'titles' }"
           :payload="getTitlePayload"
+          @visibility-toggled="handleVisibilityToggled"
         />
         <EditFiring :record="item" :resource="'titles'" class="mb-2" />
-        <DeleteDialog :record="item" :resource="'titles'" class="mt-3" />
+        <DeleteDialog
+          :record="item"
+          :resource="'titles'"
+          class="mt-3"
+          @item-deleted="handleItemDeleted"
+        />
       </template>
     </customTable>
   </v-app>
@@ -37,6 +43,11 @@
 
 <script setup>
 import { ref } from "vue";
+import { useNotificationStore } from "../../../stores/notification";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+const notificationStore = useNotificationStore();
 
 const page = ref(1);
 
@@ -48,6 +59,20 @@ function getTitlePayload(responseData) {
   formData.append("locale", "en");
   return formData;
 }
+
+const handleVisibilityToggled = () => {
+  notificationStore.setNotification(
+    t("notifications.title_visibility_toggled"),
+    "success"
+  );
+};
+
+const handleItemDeleted = () => {
+  notificationStore.setNotification(
+    t("notifications.title_deleted_success"),
+    "success"
+  );
+};
 </script>
 
 <style scoped></style>

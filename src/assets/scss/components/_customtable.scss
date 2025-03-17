@@ -1,26 +1,31 @@
-.table--customized{
+.table--customized {
   width: 100%;
   border-collapse: collapse;
   border: var(--gray-2) 1px solid;
   border-radius: 10px;
 
-  th{
+  th {
     border: var(--gray-2) 1px solid;
     font-weight: bold !important;
   }
-  td{
+  td {
     border: var(--gray-2) 1px solid;
+  }
+
+  .faded-row {
+    color: var(--gray-3);
+    opacity: 0.7;
   }
 }
 
-.table__avatar__id__header{
-  width: 50px;   
+.table__avatar__id__header {
+  width: 50px;
 }
 
-.table__name__email__header{
+.table__name__email__header {
   width: 200px;
 }
 
-.table__action__header{
+.table__action__header {
   width: 300px;
 }

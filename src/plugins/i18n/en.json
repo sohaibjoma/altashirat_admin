@@ -1,5 +1,6 @@
 {
   "create": "create",
+  "save": "save",
 
   "login": {
     "title": "Login",
@@ -12,6 +13,11 @@
     "phoneno": {
       "hint": "Please enter your phone number"
     },
+
+    "birthdate": {
+      "hint": "Please enter your birthdate"
+    },
+
     "password": {
       "hint": "Please enter your password",
       "confirmHint": "The passwords must match",
@@ -76,7 +82,13 @@
     "addVisaType": "Add Visa Type",
     "editVisaType": "Edit Visa Type",
     "addEmploymentType": "Add Employment Type",
-    "editEmploymentType": "Edit Employment Type"
+    "editEmploymentType": "Edit Employment Type",
+    "unblock": "Unblock",
+    "block": "Block",
+    "unblockUser": "Unblock User",
+    "blockUser": "Block User",
+    "areYouSure": "Are you sure you want to",
+    "thisUser": "this user"
   },
 
   "languages": {
@@ -112,7 +124,8 @@
     "change_password": "Change Password",
     "old_password": "Old Password",
     "new_password": "New Password",
-    "new_password_confirmation": "Confirm New Password"
+    "new_password_confirmation": "Confirm New Password",
+    "birthDate": "Birth Date"
   },
 
   "settings": {
@@ -144,6 +157,35 @@
     "text": "Text"
   },
 
-  "errorNotification": "Something went wrong, please try again",
-  "successNotification": "Done successfully!"
+  "notifications": {
+    "profile_updated_success": "Profile updated successfully",
+    "profile_updated_error": "Error updating profile data, please try again",
+    "password_changed_success": "Password changed successfully",
+    "password_changed_error": "Error changing password, please check your input",
+    "unexpected_error": "An unexpected error occurred, please try again",
+    "login_success": "Login successful",
+    "login_error": "Login error, please try again",
+    "employment_type_added_success": "Employment type added successfully!",
+    "employment_type_updated_success": "Employment type updated successfully!",
+    "employment_type_load_error": "Failed to load employment type data.",
+    "form_validation_error": "Please fix the errors in the form.",
+    "setting_load_error": "Failed to load setting data.",
+    "setting_update_success": "Setting updated successfully.",
+    "setting_update_error": "Failed to update setting.",
+    "title_added_success": "Title added successfully!",
+    "title_updated_success": "Title updated successfully!",
+    "title_load_error": "Failed to load title data.",
+    "title_visibility_toggled": "Title visibility toggled successfully!",
+    "title_deleted_success": "Title deleted successfully!",
+    "country_visibility_toggled": "Country visibility toggled successfully!",
+    "country_deleted_success": "Country deleted successfully!",
+    "user_blocked_success": "User blocked successfully!",
+    "user_unblocked_success": "User unblocked successfully!",
+    "user_block_status_update_error": "Failed to update user block status",
+    "visa_type_added_success": "Visa Type added successfully!",
+    "visa_type_updated_success": "Visa Type updated successfully!",
+    "visa_type_load_error": "Failed to load visa type data.",
+    "visa_type_visibility_toggled": "Visa type visibility toggled successfully!",
+    "visa_type_deleted_success": "Visa type deleted successfully!"
+  }
 }

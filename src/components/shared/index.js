@@ -9,6 +9,7 @@ import ConfirmPassword from "./Inputs/textfields/ConfirmPassword/index.vue"
 import Select from "./Inputs/Select/index.vue"
 import TextArea from "./Inputs/TextArea/index.vue"
 import BlockUser from "./BlockUser/index.vue"
+import DateInput from "./Inputs/Date/index.vue"
 
 app.component("TextInput",TextInput);
 app.component("PhoneNum",PhoneNum);
@@ -18,6 +19,7 @@ app.component("ConfirmPassword",ConfirmPassword);
 app.component("Select", Select);
 app.component("TextArea", TextArea);
 app.component("BlockUser", BlockUser);
+app.component("DateInput", DateInput);
 
 //buttons and selects imports
 import MainButton from './Inputs/buttons/MainButton/index.vue'
@@ -38,11 +40,9 @@ app.component("NumberInput",NumberInput)
 app.component("RangeInput",RangeInput)
 
 //notifications imports 
-import ErrorNotify from './Inputs/notifications/ErrorNotify/index.vue'
-import SuccessNotify from './Inputs/notifications/SuccessNotify/index.vue'
+import Notification from './Notification/index.vue'
 
-app.component("ErrorNotify",ErrorNotify)
-app.component("SuccessNotify",SuccessNotify)
+app.component("Notification",Notification)
 
 //image compponent import
 import Image from './Image/index.vue'

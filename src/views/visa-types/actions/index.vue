@@ -70,6 +70,9 @@ import { useApi } from "../../../composables/api";
 import { useErrorStore } from "../../../stores/errors";
 import { useNotificationStore } from "../../../stores/notification";
 import { useEventBus } from "../../../composables/eventBus";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const route = useRoute();
 const router = useRouter();
@@ -114,14 +117,14 @@ const fetchVisaType = async (id) => {
     } else {
       console.error("Invalid API response structure:", response);
       notificationStore.setNotification(
-        "Failed to load visa type data.",
+        t("notifications.visa_type_load_error"),
         "error"
       );
     }
   } catch (error) {
     console.error("Failed to fetch visa type:", error);
     notificationStore.setNotification(
-      "Failed to load visa type data.",
+      t("notifications.visa_type_load_error"),
       "error"
     );
   }
@@ -155,14 +158,14 @@ const submitForm = async () => {
         updateFormData()
       );
       notificationStore.setNotification(
-        "Visa Type updated successfully!",
+        t("notifications.visa_type_updated_success"),
         "success"
       );
       emit("visa-type-updated");
     } else {
       await POST("/admin-panel/visa-types", createFormData());
       notificationStore.setNotification(
-        "Visa Type added successfully!",
+        t("notifications.visa_type_added_success"),
         "success"
       );
       emit("visa-type-added");
@@ -173,12 +176,12 @@ const submitForm = async () => {
     if (error.response?.status === 422 || error.response?.status === 409) {
       errorStore.setErrors(error.response.data.errors);
       notificationStore.setNotification(
-        "Please fix the errors in the form.",
+        t("notifications.form_validation_error"),
         "error"
       );
     } else {
       notificationStore.setNotification(
-        "An unexpected error occurred.",
+        t("notifications.unexpected_error"),
         "error"
       );
     }
