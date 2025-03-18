@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-table class="table--customized mt-4">
+    <v-table class="table--customized mt-4" :loading="loading">
       <thead>
         <tr>
           <th v-for="header in tableHeaders" :key="header">
@@ -9,10 +9,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in data" :key="item.id">
+        <tr
+          v-for="item in data"
+          :key="item.id"
+          :class="{ 'faded-row': item.visible === false }"
+        >
           <td v-for="header in tableHeaders" :key="header">
             <template v-if="header === 'actions'">
-              <div class="d-flex align-center justify-space-around">
+              <div class="d-flex align-center justify-center">
                 <slot name="actions" :item="item"></slot>
               </div>
             </template>

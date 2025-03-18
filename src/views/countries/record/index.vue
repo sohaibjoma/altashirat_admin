@@ -17,9 +17,16 @@
     >
       <template #actions="{ item }">
         <ToggleVisibility
-          class="d-flex align-center"
+          class="d-flex align-center mx-2"
           :record="{ ...item, resource: 'countries' }"
           :payload="getCountryPayload"
+          @visibility-toggled="handleVisibilityToggled"
+        />
+        <DeleteDialog
+          :record="item"
+          :resource="'countries'"
+          class="mt-2"
+          @item-deleted="handleItemDeleted"
         />
       </template>
     </customTable>
@@ -28,6 +35,11 @@
 
 <script setup>
 import { ref } from "vue";
+import { useNotificationStore } from "../../../stores/notification";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+const notificationStore = useNotificationStore();
 
 let page = ref(1);
 
@@ -37,6 +49,20 @@ function getCountryPayload(responseData) {
   formData.append("visible", responseData.country.visible ? "0" : "1");
   return formData;
 }
+
+const handleVisibilityToggled = () => {
+  notificationStore.setNotification(
+    t("notifications.country_visibility_toggled"),
+    "success"
+  );
+};
+
+const handleItemDeleted = () => {
+  notificationStore.setNotification(
+    t("notifications.country_deleted_success"),
+    "success"
+  );
+};
 </script>
 
 <style scoped></style>

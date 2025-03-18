@@ -1,19 +1,40 @@
 import { createWebHistory, createRouter } from "vue-router";
-import routes from "./asyncRoutes";
+import asyncRoutes from "./asyncRoutes";
+import login from "../views/login/index.vue";
+
+const routes = [
+  ...asyncRoutes,
+  {
+    path: "/",
+    component: login,
+    meta: {
+      hidden: true,
+    },
+    name: "Login",
+  },
+
+  {
+    path: "/users",
+    component: () => import("../views/users/record/index.vue"),
+    meta: {
+      hidden: true,
+    },
+    name: "Dashboard",
+  },
+
+  {
+    path: "/:pathMatch(.*)*",
+    name: "NotFound",
+    component: () => import("../views/Errors/404/index.vue"),
+    meta: {
+      hidden: true,
+    },
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
 });
-
-//?global authentication middleware to be implemented
-
-// router.beforeEach((to, from, next) => {
-//   if (["/user", "/titles"].some(path => to.path.startsWith(path)) && !localStorage.getItem("userToken")) {
-//     next({ path: "/" });
-//   } else {
-//     next();
-//   }
-// });
 
 export default router;

@@ -6,11 +6,10 @@
         <h1 class="text-start border-s-xl ps-3 border-secondary">
           {{ $t("profile.title") }}
         </h1>
-        <EditProfileForm @submit="handleEditProfileSubmit"/>
-        </v-card>
-        <!-- Change Password Form -->
-        <v-card class="pb-8 w-75 ms-auto me-auto mt-12">
-
+        <EditProfileForm @submit="handleEditProfileSubmit" />
+      </v-card>
+      <!-- Change Password Form -->
+      <v-card class="pb-8 w-75 ms-auto me-auto mt-12">
         <h1 class="text-start border-s-xl ps-3 border-secondary mt-12">
           {{ $t("profile.change_password") }}
         </h1>
@@ -21,19 +20,19 @@
 </template>
 
 <script setup>
-import { useRouter } from "vue-router";
 import { useApi } from "../../composables/api";
 import { ref } from "vue";
 import { useNotificationStore } from "../../stores/notification";
 import EditProfileForm from "../../components/shared/Forms/EditProfile/index.vue";
 import ChangePasswordForm from "../../components/shared/Forms/ChangePassword/index.vue";
 import { useAuthStore } from "../../stores/auth";
+import { useI18n } from "vue-i18n";
 
 const { POST } = useApi();
-const router = useRouter();
 const notificationStore = useNotificationStore();
 const authStore = useAuthStore();
 const loading = ref(false);
+const { t } = useI18n();
 
 async function handleEditProfileSubmit(values, setErrors) {
   try {
@@ -45,17 +44,26 @@ async function handleEditProfileSubmit(values, setErrors) {
       const updatedUser = res.data.user || res.data;
       authStore.setUser(updatedUser);
 
-      notificationStore.setNotification("success");
+      notificationStore.setNotification(
+        t("notifications.profile_updated_success"),
+        "success"
+      );
     }
   } catch (error) {
     if (error.response) {
       if (error.response.status === 422 || error.response.status === 409) {
         console.log("backend errors:", error.response.data.errors);
         setErrors(error.response.data.errors);
-        notificationStore.setNotification("error");
+        notificationStore.setNotification(
+          t("notifications.profile_updated_error"),
+          "error"
+        );
       } else {
         console.error("Unexpected error:", error);
-        notificationStore.setNotification("error");
+        notificationStore.setNotification(
+          t("notifications.unexpected_error"),
+          "error"
+        );
       }
     }
   } finally {
@@ -70,17 +78,26 @@ async function handleChangePasswordSubmit(values, setErrors) {
     console.log("Change password response:", res);
 
     if (res.data) {
-      notificationStore.setNotification("success");
+      notificationStore.setNotification(
+        t("notifications.password_changed_success"),
+        "success"
+      );
     }
   } catch (error) {
     if (error.response) {
       if (error.response.status === 422 || error.response.status === 409) {
         console.log("backend errors:", error.response.data.errors);
         setErrors(error.response.data.errors);
-        notificationStore.setNotification("error");
+        notificationStore.setNotification(
+          t("notifications.password_changed_error"),
+          "error"
+        );
       } else {
         console.error("Unexpected error:", error);
-        notificationStore.setNotification("error");
+        notificationStore.setNotification(
+          t("notifications.unexpected_error"),
+          "error"
+        );
       }
     }
   } finally {

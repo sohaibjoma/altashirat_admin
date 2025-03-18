@@ -2,39 +2,26 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 
 export const useNotificationStore = defineStore("notification", () => {
-  const isSuccess = ref(false);
-  const isError = ref(false);
-  const visible = ref(false);
+  const message = ref(null);
+  const type = ref(null);
 
-  const setNotification = (type) => {
-    console.log("setNotification called with:", type); // Debug log
-  
-    if (type === "success") {
-      isSuccess.value = true;
-      isError.value = false;
-    } else if (type === "error") {
-      isError.value = true;
-      isSuccess.value = false;
-    }
-  
-    visible.value = true;
-  
+  const setNotification = (newMessage, newType = "success") => {
+    message.value = newMessage;
+    type.value = newType;
+
     setTimeout(() => {
       clearNotification();
     }, 3000);
   };
-  
 
   const clearNotification = () => {
-    isSuccess.value = false;
-    isError.value = false;
-    visible.value = false;
+    message.value = null;
+    type.value = null;
   };
 
   return {
-    visible,
-    isSuccess,
-    isError,
+    message,
+    type,
     setNotification,
     clearNotification,
   };

@@ -31,7 +31,8 @@ const props = defineProps({
   },
 });
 
-// Watch for changes in the record prop
+const emit = defineEmits(["visibility-toggled"]);
+
 watch(
   () => props.record,
   (newRecord) => {
@@ -63,13 +64,11 @@ async function visibilityToggle() {
     );
     console.log("Current record data:", response.data);
 
-    // Check if payload function exists before calling it
     if (typeof props.payload !== "function") {
       console.error("Payload is not a function");
       return;
     }
 
-    // Safely create form data from the response
     const formData = props.payload(response.data);
 
     if (!formData) {
@@ -83,6 +82,7 @@ async function visibilityToggle() {
     );
 
     emitter.emit("reload");
+    emit("visibility-toggled");
   } catch (error) {
     console.error("Error toggling visibility:", error);
   }

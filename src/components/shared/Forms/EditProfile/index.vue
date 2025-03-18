@@ -34,6 +34,13 @@
         name="email"
       />
 
+      <DateInput
+        v-model="formData.birthdate"
+        :label="$t('profile.birthDate')"
+        name="birth_date"
+        :hint="$t('inputs.birthdate.hint')"
+      />
+
       <div class="ms-4 mt-8 font-weight-bold">
         {{ $t("login.phone") }}
       </div>
@@ -82,6 +89,7 @@ const formData = reactive({
   email: "",
   phoneNumber: "",
   phoneCode: "",
+  birthdate: "",
 });
 
 const initialFormData = computed(() => {
@@ -93,6 +101,7 @@ const initialFormData = computed(() => {
     email: user.email || "",
     "phone.number": user.phone?.number || "",
     "phone[country_code]": user.phone?.country_code || "",
+    birthdate: user.birthdate || "",
   };
 });
 
@@ -108,6 +117,7 @@ watch(
       formData.email = user.email || "";
       formData.phoneNumber = user.phone?.number || "";
       formData.phoneCode = user.phone?.country_code || "";
+      formData.birthdate = user.birthdate || "";
     }
   },
   { immediate: true }
@@ -125,6 +135,7 @@ const retrievedData = () => {
       number: formData.phoneNumber,
       country_code: formData.phoneCode,
     },
+    birthdate: formData.birthdate,
   };
 };
 

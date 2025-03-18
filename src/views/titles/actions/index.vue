@@ -68,6 +68,9 @@ import { useApi } from "../../../composables/api";
 import { useErrorStore } from "../../../stores/errors";
 import { useNotificationStore } from "../../../stores/notification";
 import { useEventBus } from "../../../composables/eventBus";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const route = useRoute();
 const router = useRouter();
@@ -111,11 +114,17 @@ const fetchTitle = async (id) => {
       };
     } else {
       console.error("Invalid API response structure:", response);
-      notificationStore.setNotification("Failed to load title data.", "error");
+      notificationStore.setNotification(
+        t("notifications.title_load_error"),
+        "error"
+      );
     }
   } catch (error) {
     console.error("Failed to fetch title:", error);
-    notificationStore.setNotification("Failed to load title data.", "error");
+    notificationStore.setNotification(
+      t("notifications.title_load_error"),
+      "error"
+    );
   }
 };
 
@@ -144,13 +153,16 @@ const submitForm = async () => {
     if (isEdit.value) {
       await POST(`/admin-panel/titles/${route.params.id}`, updateFormData());
       notificationStore.setNotification(
-        "Title updated successfully!",
+        t("notifications.title_updated_success"),
         "success"
       );
       emit("title-updated");
     } else {
       await POST("/admin-panel/titles", createFormData());
-      notificationStore.setNotification("Title added successfully!", "success");
+      notificationStore.setNotification(
+        t("notifications.title_added_success"),
+        "success"
+      );
       emit("title-added");
     }
     router.push("/titles");
@@ -159,12 +171,12 @@ const submitForm = async () => {
     if (error.response?.status === 422 || error.response?.status === 409) {
       errorStore.setErrors(error.response.data.errors);
       notificationStore.setNotification(
-        "Please fix the errors in the form.",
+        t("notifications.form_validation_error"),
         "error"
       );
     } else {
       notificationStore.setNotification(
-        "An unexpected error occurred.",
+        t("notifications.unexpected_error"),
         "error"
       );
     }

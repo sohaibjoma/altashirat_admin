@@ -1,4 +1,3 @@
-<!-- login -->
 <template>
   <v-layout class="d-flex align-center bg-gray">
     <v-container class="mt-16">
@@ -60,13 +59,15 @@ import { useApi } from "../../composables/api";
 import { ref } from "vue";
 import { useNotificationStore } from "../../stores/notification";
 import { useAuthStore } from "../../stores/auth";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const { POST } = useApi();
 const router = useRouter();
 const notificationStore = useNotificationStore();
 const authStore = useAuthStore();
 
-// Reactive backend errors object
 const backendErrors = ref({});
 
 const data = {
@@ -89,25 +90,39 @@ async function formSubmitting({ setErrors }) {
     const res = await POST("/login", retrievedData());
     console.log("Response:", res);
 
-    localStorage.setItem("userToken", res.data.token);
-    authStore.fetchUser();
-    router.push("/profile");
+    if (!res.data || !res.data.token) {
+      throw new Error("Invalid login response: Token missing");
+    }
 
-    // Show success notification
-    notificationStore.setNotification("success");
+    localStorage.setItem("userToken", res.data.token);
+
+    await authStore.fetchUser();
+
+    router.push("/users");
+
+    notificationStore.setNotification(
+      t("notifications.login_success"),
+      "success"
+    );
   } catch (error) {
+    console.error("Login Error:", error);
     if (error.response) {
       if (error.response.status === 422 || error.response.status === 408) {
-        console.log("backend errors:", error.response.data.errors);
+        console.log("Backend errors:", error.response.data.errors);
 
-        // Store backend errors
         backendErrors.value = error.response.data.errors;
         setErrors(error.response.data.errors);
 
-        // Show error notification
-        notificationStore.setNotification("error");
+        notificationStore.setNotification(
+          t("notifications.login_error"),
+          "error"
+        );
       } else {
         console.error("Unexpected error:", error);
+        notificationStore.setNotification(
+          t("notifications.unexpected_error"),
+          "error"
+        );
       }
     }
   }

@@ -24,6 +24,8 @@
           :blocked="item.blocked"
           @update:blocked="(value) => (item.blocked = value)"
           url="/admin-panel/users"
+          @user-blocked="handleUserBlocked"
+          @user-unblocked="handleUserUnblocked"
         />
       </template>
     </customTable>
@@ -32,6 +34,11 @@
 
 <script setup>
 import { ref, onMounted, inject } from "vue";
+import { useNotificationStore } from "../../../stores/notification";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+const notificationStore = useNotificationStore();
 
 const page = ref(1);
 const emitter = inject("emitter");
@@ -43,6 +50,20 @@ function fetchData() {
 onMounted(() => {
   emitter.on("reload", fetchData);
 });
+
+const handleUserBlocked = () => {
+  notificationStore.setNotification(
+    t("notifications.user_blocked_success"),
+    "success"
+  );
+};
+
+const handleUserUnblocked = () => {
+  notificationStore.setNotification(
+    t("notifications.user_unblocked_success"),
+    "success"
+  );
+};
 </script>
 
 <style scoped></style>

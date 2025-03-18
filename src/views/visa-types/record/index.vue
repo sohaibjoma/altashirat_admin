@@ -22,6 +22,7 @@
       :URLEndpoint="`/admin-panel/visa-types?page=${page}`"
       :tableHeaders="['id', 'name', 'actions']"
       :page="page"
+      :loading="loading"
       @update:page="page = $event"
       class="rounded-lg"
     >
@@ -30,9 +31,15 @@
           class="d-flex align-center"
           :record="{ ...item, resource: 'visa-types' }"
           :payload="getVisaTypePayload"
+          @visibility-toggled="handleVisibilityToggled"
         />
-        <EditFiring :record="item" :resource="'visa-types'" class="mb-2" />
-        <DeleteDialog :record="item" :resource="'visa-types'" class="mt-3" />
+        <EditFiring :record="item" :resource="'visa-types'" class="ma-2" />
+        <DeleteDialog
+          :record="item"
+          :resource="'visa-types'"
+          class="mt-2"
+          @item-deleted="handleItemDeleted"
+        />
       </template>
     </customTable>
   </v-app>
@@ -41,6 +48,11 @@
 <script setup>
 import { ref, onUnmounted } from "vue";
 import { useEventBus } from "../../../composables/eventBus";
+import { useNotificationStore } from "../../../stores/notification";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+const notificationStore = useNotificationStore();
 
 const { on, off } = useEventBus();
 const page = ref(1);
@@ -65,6 +77,20 @@ function getVisaTypePayload(responseData) {
   formData.append("locale", responseData.visa_type.locale || "en");
   return formData;
 }
+
+const handleVisibilityToggled = () => {
+  notificationStore.setNotification(
+    t("notifications.visa_type_visibility_toggled"),
+    "success"
+  );
+};
+
+const handleItemDeleted = () => {
+  notificationStore.setNotification(
+    t("notifications.visa_type_deleted_success"),
+    "success"
+  );
+};
 </script>
 
 <style scoped></style>

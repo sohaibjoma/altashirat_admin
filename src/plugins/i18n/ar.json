@@ -1,5 +1,6 @@
 {
   "create": "انشاء",
+  "save": "حفظ",
 
   "login": {
     "title": "تسجيل الدخول",
@@ -11,6 +12,10 @@
   "inputs": {
     "phoneno": {
       "hint": "يرجى إدخال رقم الهاتف"
+    },
+
+    "birthdate": {
+      "hint": "يرجى إدخال تاريخ الميلاد"
     },
 
     "password": {
@@ -79,7 +84,13 @@
     "addVisaType": "اضافة نوع تأشيرة",
     "editVisaType": "تعديل نوع تأشيرة",
     "addEmploymentType": "اضافة نوع توظيف",
-    "editEmploymentType": "تعديل نوع توظيف"
+    "editEmploymentType": "تعديل نوع توظيف",
+    "unblock": "الغاء الحظر",
+    "block": "حظر",
+    "unblockUser": "الغاء حظر المستخدم",
+    "blockUser": "حظر المستخدم",
+    "areYouSure": "هل أنت متأكد من أنك تريد",
+    "thisUser": "هذا المستخدم"
   },
 
   "languages": {
@@ -115,7 +126,8 @@
     "change_password": "تغيير كلمة المرور",
     "old_password": "كلمة المرور القديمة",
     "new_password": "كلمة المرور الجديدة",
-    "new_password_confirmation": "تاكيد كلمة المرور الجديدة"
+    "new_password_confirmation": "تاكيد كلمة المرور الجديدة",
+    "birthDate": "تاريخ الميلاد"
   },
 
   "settings": {
@@ -147,6 +159,35 @@
     "text": "نص"
   },
 
-  "errorNotification": "خطأ في ادخال البيانات حاول مرة أخرى ",
-  "successNotification": "تم إدخال البيانات بنجاح!"
+  "notifications": {
+    "profile_updated_success": "تم تحديث البيانات بنجاح",
+    "profile_updated_error": "خطأ في ادخال البيانات حاول مره اخري",
+    "password_changed_success": "تم تغيير كلمة المرور بنجاح",
+    "password_changed_error": "خطأ في تغيير كلمة المرور، يرجى التحقق من البيانات المدخلة",
+    "unexpected_error": "حدث خطأ غير متوقع، يرجى المحاولة مرة أخرى",
+    "login_success": "تم تسجيل الدخول بنجاح",
+    "login_error": "خطأ في بيانات تسجيل الدخول، يرجى المحاولة مرة أخرى",
+    "employment_type_added_success": "تمت إضافة نوع التوظيف بنجاح!",
+    "employment_type_updated_success": "تم تحديث نوع التوظيف بنجاح!",
+    "employment_type_load_error": "فشل تحميل بيانات نوع التوظيف.",
+    "form_validation_error": "الرجاء إصلاح الأخطاء في النموذج.",
+    "setting_load_error": "فشل تحميل بيانات الإعدادات.",
+    "setting_update_success": "تم تحديث الإعدادات بنجاح.",
+    "setting_update_error": "فشل تحديث الإعدادات.",
+    "title_added_success": "تمت إضافة العنوان بنجاح!",
+    "title_updated_success": "تم تحديث العنوان بنجاح!",
+    "title_load_error": "فشل تحميل بيانات العنوان.",
+    "title_visibility_toggled": "تم تبديل رؤية العنوان بنجاح!",
+    "title_deleted_success": "تم حذف العنوان بنجاح!",
+    "country_visibility_toggled": "تم تبديل رؤية الدولة بنجاح!",
+    "country_deleted_success": "تم حذف الدولة بنجاح!",
+    "user_blocked_success": "تم حظر المستخدم بنجاح!",
+    "user_unblocked_success": "تم الغاء حظر المستخدم بنجاح!",
+    "user_block_status_update_error": "فشل تحديث حالة حظر المستخدم",
+    "visa_type_added_success": "تمت إضافة نوع التأشيرة بنجاح!",
+    "visa_type_updated_success": "تم تحديث نوع التأشيرة بنجاح!",
+    "visa_type_load_error": "فشل تحميل بيانات نوع التأشيرة.",
+    "visa_type_visibility_toggled": "تم تبديل رؤية نوع التأشيرة بنجاح!",
+    "visa_type_deleted_success": "تم حذف نوع التأشيرة بنجاح!"
+  }
 }

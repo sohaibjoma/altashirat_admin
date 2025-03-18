@@ -1,11 +1,12 @@
 import profile from "../../views/profile/index.vue";
-import {t} from "../../plugins/i18n"
+import { t } from "../../plugins/i18n";
 const profileRoute = {
-  path: '/profile', component: profile,
-   meta: {
+  path: "/profile",
+  component: profile,
+  meta: {
     hidden: true,
-    title: t("profile.title")
+    title: t("profile.title"),
   },
-}
+};
 
-export default profileRoute
+export default profileRoute;

@@ -55,6 +55,8 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(["item-deleted"]);
+
 const emitter = inject("emitter");
 const { DELETE } = useApi();
 
@@ -63,6 +65,7 @@ async function deleteRecord() {
     await DELETE(`/admin-panel/${props.resource}/${props.record.id}`);
     isActive.value = false;
     emitter.emit("reload");
+    emit("item-deleted");
   } catch (error) {
     console.error(`Error deleting ${props.resource}:`, error);
   }
