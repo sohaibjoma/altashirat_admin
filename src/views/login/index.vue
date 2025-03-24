@@ -5,8 +5,6 @@
         <h1 class="text-start border-s-xl ps-3 text-h4 border-secondary">
           {{ $t("login.title") }}
         </h1>
-        <!-- handleSubmit is the vee validate function that handles the validation before the submit happens 
-         we pass the submission function we created to it to make sure the validation happen then the logic we implemnted i sperformed -->
         <Form v-slot="{ handleSubmit }">
           <form @submit.prevent="handleSubmit(formSubmitting)">
             <div class="ms-4 mt-8 font-weight-bold">
