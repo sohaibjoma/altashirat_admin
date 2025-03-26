@@ -29,18 +29,11 @@
                     { text: $t('hidden'), value: 0 },
                   ]"
                   name="visible"
-                  :rules="
-                    (value) =>
-                      value !== null && value !== undefined
-                        ? true
-                        : $t('errorMsgs.required')
-                  "
                 />
 
                 <LocaleSelector
                   v-if="isEdit"
                   name="locale"
-                  rules="required"
                   v-model="form.locale"
                   :label="$t('actions.language')"
                 />

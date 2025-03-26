@@ -2,7 +2,7 @@
   <v-layout class="d-flex align-center bg-gray">
     <v-container class="mt-16">
       <v-card class="mt-64 pt-8 pb-8 w-75 ms-auto me-auto">
-        <h1 class="text-start border-s-xl ps-3 text-h4 border-secondary">
+        <h1 class="text-start border-s-xl ps-3 border-secondary">
           {{ $t("login.title") }}
         </h1>
         <Form v-slot="{ handleSubmit }">
@@ -91,17 +91,15 @@ async function formSubmitting({ setErrors }) {
     if (!res.data || !res.data.token) {
       throw new Error("Invalid login response: Token missing");
     }
-
-    localStorage.setItem("userToken", res.data.token);
-
-    await authStore.fetchUser();
-
-    router.push("/users");
-
-    notificationStore.setNotification(
-      t("notifications.login_success"),
-      "success"
-    );
+    if (res.data.token) {  
+      localStorage.setItem("userToken", res.data.token);
+      await authStore.fetchUser();
+      notificationStore.setNotification(
+        t("notifications.login_success"),
+        "success"
+      );
+      router.push("/users");
+    }
   } catch (error) {
     console.error("Login Error:", error);
     if (error.response) {

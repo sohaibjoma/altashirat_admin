@@ -144,14 +144,16 @@
     "about1": "القسم الأول عن الشركة",
     "about2": "القسم الثاني عن الشركة",
     "user_must_verify_email": "يجب على المستخدم تأكيد البريد الإلكتروني",
-    "email_verification_subject": "التشيرات | تأكيد البريد الإلكتروني",
-    "email_verification_body": "مرحبًا بك في التشيرات. يرجى استخدام الرابط أدناه لتأكيد بريدك الإلكتروني.",
-    "email_verified_successfully_subject": "التشيرات | تم تأكيد البريد الإلكتروني بنجاح",
-    "email_verified_successfully_body": "شكرًا لك على تأكيد عنوان بريدك الإلكتروني.",
-    "reset_password_email_subject": "التشيرات | إعادة تعيين كلمة المرور",
-    "reset_password_email_body": "يرجى النقر على الرابط التالي لإعادة تعيين كلمة المرور الخاصة بحسابك.",
-    "guest_set_password_email_subject": "التشيرات | تعيين كلمة المرور",
-    "guest_set_password_email_body": "يرجى النقر على الرابط التالي لتعيين كلمة المرور الخاصة بحسابك.",
+    "email_verification_subject": "عنوان بريد التأكيد الإلكتروني",
+    "email_verification_body": "محتوى بريد التأكيد الإلكتروني",
+    "email_verified_successfully_subject": "عنوان نجاح تأكيد البريد الإلكتروني",
+    "email_verified_successfully_body": "محتوى نجاح تأكيد البريد الإلكتروني",
+    "reset_password_email_subject": "عنوان إعادة تعيين كلمة المرور",
+    "reset_password_email_body": "محتوى إعادة تعيين كلمة المرور",
+    "guest_set_password_email_subject": " عنوان تعيين كلمة المرور للزوار",
+    "guest_set_password_email_body":  " محتوى تعيين كلمة المرور للزوار",
+    "resend_email_verification_subject": "عنوان اعادة ارسال بريد التاكيد الالكتروني",
+    "resend_email_verification_body": "محتوى اعادة ارسال بريد التاكيد الالكتروني",
     "edit": "قم بالتعديل هنا",
     "active": "نشط",
     "max_value": "القيمة القصوى",
@@ -189,5 +191,11 @@
     "visa_type_load_error": "فشل تحميل بيانات نوع التأشيرة.",
     "visa_type_visibility_toggled": "تم تبديل رؤية نوع التأشيرة بنجاح!",
     "visa_type_deleted_success": "تم حذف نوع التأشيرة بنجاح!"
+  },
+
+  "error404": {
+    "title": "الصفحة غير موجودة",
+    "description": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
+    "homeButton": "العودة إلى لوحة التحكم"
   }
 }

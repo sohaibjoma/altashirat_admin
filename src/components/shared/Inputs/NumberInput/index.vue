@@ -7,7 +7,7 @@
     :error="!!errorMessage"
     :error-messages="errorMessage"
     variant="outlined"
-    :type="type"
+    :type="number"
     :hint="hint"
     persistent-hint
     class="ms-5 me-5"

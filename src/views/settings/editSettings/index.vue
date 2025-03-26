@@ -10,7 +10,6 @@
           <form @submit.prevent="handleSubmit(updateSetting)">
             <LocaleSelector
               name="locale"
-              rules="required"
               v-model="data.locale"
               :label="t('actions.language')"
             />
@@ -18,7 +17,6 @@
             <TextArea
               v-if="setting?.layout === 'textarea'"
               name="textArea"
-              rules="required"
               v-model="data.value"
               :label="t('settings.edit')"
             />
@@ -33,7 +31,6 @@
             <RangeInput
               v-if="setting?.layout === 'range'"
               name="range"
-              rules="required"
               v-model="data.range"
               :label="t('settings.range')"
               :min="0"
@@ -44,7 +41,7 @@
             <NumberInput
               v-if="setting?.layout === 'number'"
               name="max_value"
-              rules="required"
+              rules="numberRule"
               v-model="data.max_value"
               :label="t('settings.max_value')"
             />
@@ -52,7 +49,6 @@
             <TextInput
               v-if="setting?.layout === 'text'"
               name="text"
-              rules="required"
               v-model="data.value"
               :label="t('settings.text')"
             />
@@ -89,7 +85,7 @@ const loading = ref(true);
 const data = ref({
   value: null,
   locale: "",
-  is_active: false,
+  is_active: null,
   max_value: null,
   range: null,
 });
@@ -97,7 +93,6 @@ const data = ref({
 const fetchSetting = async () => {
   try {
     const response = await GET(`admin-panel/settings/${settingID.value}`);
-    console.log("Full API Response:", response);
 
     if (response.data.setting) {
       setting.value = response.data.setting;
@@ -105,11 +100,9 @@ const fetchSetting = async () => {
         value:
           setting.value.value !== null ? String(setting.value.value) : null,
         locale: setting.value.locale || localStorage.getItem("locale") || "en",
-        is_active: Boolean(setting.value.is_active),
+        is_active: setting.value.value === 1 ? 1 : 0,
         max_value:
-          setting.value.max_value !== null
-            ? Number(setting.value.max_value)
-            : null,
+          setting.value.value !== null ? Number(setting.value.value) : null,
         range: setting.value.value !== null ? Number(setting.value.value) : 0,
       };
     } else {
@@ -118,10 +111,7 @@ const fetchSetting = async () => {
         "error"
       );
     }
-
-    console.log("data value", data.value);
   } catch (error) {
-    console.error("Error fetching setting:", error);
     notificationStore.setNotification(
       t("notifications.setting_load_error"),
       "error"
@@ -143,7 +133,7 @@ const updateSetting = async () => {
         payload.append("value", data.value.value || "");
         break;
       case "checkbox":
-        payload.append("value", data.value.is_active ? 1 : 0);
+        payload.append("value", data.value.is_active=== 1 ? 1 : 0);
         break;
       case "range":
         payload.append(
@@ -158,12 +148,10 @@ const updateSetting = async () => {
         break;
     }
 
-    console.log("Payload:", Object.fromEntries(payload));
     const response = await POST(
       `admin-panel/settings/${settingID.value}`,
       payload
     );
-    console.log("API Response:", response);
     router.push("/settings");
     notificationStore.setNotification(
       t("notifications.setting_update_success"),
@@ -191,5 +179,4 @@ onMounted(() => {
   }
 });
 </script>
-
 <style scoped></style>

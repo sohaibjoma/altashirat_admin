@@ -8,7 +8,7 @@ const settingsRoutes = [
     component: allSettings,
     name: "settings",
     meta: {
-      hidden: true,
+      hidden: false,
       title: t("settings.title"),
     },
   },

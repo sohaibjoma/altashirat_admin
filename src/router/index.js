@@ -14,15 +14,6 @@ const routes = [
   },
 
   {
-    path: "/users",
-    component: () => import("../views/users/record/index.vue"),
-    meta: {
-      hidden: true,
-    },
-    name: "Dashboard",
-  },
-
-  {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
     component: () => import("../views/Errors/404/index.vue"),
