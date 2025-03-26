@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
 import asyncRoutes from "./asyncRoutes";
 import login from "../views/login/index.vue";
+import authMiddleware from "../middleware/auth";
 
 const routes = [
   ...asyncRoutes,
@@ -9,25 +10,17 @@ const routes = [
     component: login,
     meta: {
       hidden: true,
+      public: true,
     },
     name: "Login",
   },
-
-  {
-    path: "/users",
-    component: () => import("../views/users/record/index.vue"),
-    meta: {
-      hidden: true,
-    },
-    name: "Dashboard",
-  },
-
   {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
     component: () => import("../views/Errors/404/index.vue"),
     meta: {
       hidden: true,
+      public: true,
     },
   },
 ];
@@ -36,5 +29,7 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+
+authMiddleware(router);
 
 export default router;

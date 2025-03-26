@@ -7,7 +7,7 @@
     :error="!!errorMessage"
     :error-messages="errorMessage"
     variant="outlined"
-    type="number"
+    type="text"
     :hint="hint"
     class="ms-5 w-75"
     persistent-hint
@@ -31,7 +31,11 @@ const emit = defineEmits(["update:modelValue"]);
 
 const { value, errorMessage, setTouched, validate } = useField(
   props.name,
-  props.rules
+  props.rules,
+  {
+    validateOnValueUpdate: false, // Don't validate on value changes
+    validateOnMount: false        // Don't validate on component mount
+  }
 );
 
 const internalValue = computed({

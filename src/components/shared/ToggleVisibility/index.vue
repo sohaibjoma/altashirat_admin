@@ -62,7 +62,6 @@ async function visibilityToggle() {
     const response = await GET(
       `/admin-panel/${props.record.resource}/${props.record.id}`
     );
-    console.log("Current record data:", response.data);
 
     if (typeof props.payload !== "function") {
       console.error("Payload is not a function");

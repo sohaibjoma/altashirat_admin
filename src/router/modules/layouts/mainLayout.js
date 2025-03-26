@@ -13,11 +13,11 @@ const mainLayoutRoute = {
   children: [
     ...UsersRoutes,
     profileRoute,
-    ...settingsRoutes,
     ...TitlesRoutes,
     ...CountriesRoutes,
     ...visaTypesRoutes,
     ...EmploymentTypesRoutes,
+    ...settingsRoutes,
   ],
 };
 

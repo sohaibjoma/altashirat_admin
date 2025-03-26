@@ -24,11 +24,13 @@
       "newPassword": "Please enter your new password",
       "confirmPassword": "Confirm Password"
     },
+
     "names": {
       "firstHint": "Please enter your first name",
       "middleHint": "Please enter your middle name",
       "lastHint": "Please enter your last name"
     },
+
     "email": "Enter a valid email"
   },
 
@@ -142,14 +144,16 @@
     "about1": "About Section 1",
     "about2": "About Section 2",
     "user_must_verify_email": "User Must Verify Email",
-    "email_verification_subject": "Altashirat | Email Verification",
-    "email_verification_body": "Welcome to Altashirat. Please use the link below to verify your email.",
-    "email_verified_successfully_subject": "Altashirat | Email Verified Successfully",
-    "email_verified_successfully_body": "Thanks for verifying your email address.",
-    "reset_password_email_subject": "Altashirat | Reset Account Password",
-    "reset_password_email_body": "Please click the following link in order to reset your account password.",
-    "guest_set_password_email_subject": "Altashirat | Set Account Password",
-    "guest_set_password_email_body": "Please click the following link in order to set your account password.",
+    "email_verification_subject": "Email Verification Subject",
+    "email_verification_body": "Email_verification_body",
+    "email_verified_successfully_subject": "Email verified successfully subject",
+    "email_verified_successfully_body": "Email verified successfully body",
+    "reset_password_email_subject": "Reset password email subject",
+    "reset_password_email_body": "Reset password email body",
+    "guest_set_password_email_subject":  "Guest set password email subject",
+    "guest_set_password_email_body": "guest set password email body",
+    "resend_email_verification_subject": "Resend email verification subject",
+    "resend_email_verification_body": "Resend email verification body",
     "edit": "Edit here",
     "active": "Active",
     "max_value": "Maximum Value",
@@ -186,6 +190,14 @@
     "visa_type_updated_success": "Visa Type updated successfully!",
     "visa_type_load_error": "Failed to load visa type data.",
     "visa_type_visibility_toggled": "Visa type visibility toggled successfully!",
-    "visa_type_deleted_success": "Visa type deleted successfully!"
+    "visa_type_deleted_success": "Visa type deleted successfully!",
+    "employment_type_visibility_toggled": "Employment type visibility toggled successfully!",
+    "employment_type_deleted_success": "Employment type deleted successfully!"
+  },
+
+  "error404": {
+    "title": "Page Not Found",
+    "description": "The page you're looking for doesn't exist or has been moved.",
+    "homeButton": "Return to Dashboard"
   }
 }

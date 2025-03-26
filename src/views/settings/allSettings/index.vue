@@ -21,7 +21,7 @@
             <h3>{{ t(`settings.${setting.key}`) }}</h3>
           </div>
           <v-btn class="bg-primary-2" icon @click="editSetting(setting.id)">
-            <v-icon>mdi-pencil</v-icon>
+            <v-icon color="secondary">mdi-pencil</v-icon>
           </v-btn>
         </v-card>
       </v-col>

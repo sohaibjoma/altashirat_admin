@@ -1,7 +1,6 @@
-export default function authMiddleware(router, authStore) {
+export default function authMiddleware(router) {
   router.beforeEach((to, from, next) => {
-    const isAuthenticated = !!authStore.token;
-
+    const isAuthenticated = !!localStorage.getItem("userToken");
     if (isAuthenticated && to.path === "/") {
       return next("/users");
     }
@@ -10,6 +9,6 @@ export default function authMiddleware(router, authStore) {
       return next("/");
     }
 
-    return next();
+    next();
   });
 }

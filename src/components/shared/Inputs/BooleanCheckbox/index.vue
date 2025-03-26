@@ -1,19 +1,21 @@
 <template>
   <div>
-    <label class="input__label mr-2" :for="id">{{ label }}</label>
-    <Field 
-      :name="name" 
-      :rules="rules" 
-      v-slot="{ field, errorMessage }" 
-      :validateOnInput="true" 
-      :initialValue="modelValue"
+    <Field
+      :name="name"
+      :rules="rules"
+      v-slot="{ field, errorMessage }"
+      :validateOnInput="true"
     >
-      <input
-        type="checkbox"
-        v-model="field.value"
-        :id="id"
-        @change="$emit('update:modelValue', !!field.value)"
-      />
+      <v-checkbox
+        v-bind="field"
+        :model-value="modelValue"
+        @update:modelValue="handleInput"
+        color="secondary"
+        :label="label"
+        hide-details
+        :true-value="1"
+        :false-value="0"
+      ></v-checkbox>
       <span v-if="errorMessage || apiError" class="error-message">
         {{ errorMessage || backendErrors[0] }}
       </span>
@@ -41,12 +43,16 @@ const props = defineProps({
     type: String,
   },
   modelValue: {
-    type: Boolean,
-    default: false,
+    type: [Number],
+    default: 0,
   },
 });
 
 const emit = defineEmits(["update:modelValue"]);
 
 const backendErrors = computed(() => errorStore.getErrorsForField(props.name));
+
+const handleInput = (value) => {
+  emit("update:modelValue", value);
+};
 </script>
