@@ -27,6 +27,7 @@
     >
       <template #actions="{ item }">
         <ToggleVisibility
+          @visibility-toggled="handleVisibilityToggled"
           class="d-flex align-center"
           :record="{ ...item, resource: 'employment-types' }"
           :payload="getEmploymentTypePayload"
@@ -37,6 +38,7 @@
           class="mb-2"
         />
         <DeleteDialog
+          @item-deleted="handleItemDeleted"
           :record="item"
           :resource="'employment-types'"
           class="mt-3"
@@ -48,6 +50,11 @@
 
 <script setup>
 import { ref } from "vue";
+import { useNotificationStore } from "../../../stores/notification";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+const notificationStore = useNotificationStore();
 
 const page = ref(1);
 
@@ -59,6 +66,20 @@ function getEmploymentTypePayload(responseData) {
   formData.append("locale", "en");
   return formData;
 }
+
+const handleVisibilityToggled = () => {
+  notificationStore.setNotification(
+    t("notifications.employment_type_visibility_toggled"),
+    "success"
+  );
+};
+
+const handleItemDeleted = () => {
+  notificationStore.setNotification(
+    t("notifications.employment_type_deleted_success"),
+    "success"
+  );
+};
 </script>
 
 <style scoped></style>

@@ -190,7 +190,9 @@
     "visa_type_updated_success": "Visa Type updated successfully!",
     "visa_type_load_error": "Failed to load visa type data.",
     "visa_type_visibility_toggled": "Visa type visibility toggled successfully!",
-    "visa_type_deleted_success": "Visa type deleted successfully!"
+    "visa_type_deleted_success": "Visa type deleted successfully!",
+    "employment_type_visibility_toggled": "Employment type visibility toggled successfully!",
+    "employment_type_deleted_success": "Employment type deleted successfully!"
   },
 
   "error404": {

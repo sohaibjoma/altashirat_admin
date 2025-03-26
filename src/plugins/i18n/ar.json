@@ -190,7 +190,9 @@
     "visa_type_updated_success": "تم تحديث نوع التأشيرة بنجاح!",
     "visa_type_load_error": "فشل تحميل بيانات نوع التأشيرة.",
     "visa_type_visibility_toggled": "تم تبديل رؤية نوع التأشيرة بنجاح!",
-    "visa_type_deleted_success": "تم حذف نوع التأشيرة بنجاح!"
+    "visa_type_deleted_success": "تم حذف نوع التأشيرة بنجاح!",
+    "employment_type_visibility_toggled": "تم تبديل رؤية نوع التوظيف بنجاح!",
+    "employment_type_deleted_success": "تم حذف نوع التوظيف بنجاح!"
   },
 
   "error404": {
