@@ -6,13 +6,13 @@
         class="dashboard__breadcrumb me-3 rounded-te-lg rounded-be-lg"
       />
       <div>
-        <mainButton class="me-auto" color="secondary" width="135px">
-          <router-link
-            to="/visa-types/add"
-            class="text-decoration-none text-white"
-          >
-            {{ $t("create") }}
-          </router-link>
+        <mainButton
+          class="me-auto"
+          color="secondary"
+          width="135px"
+          @click="$router.push('/visa-types/add')"
+        >
+          {{ $t("create") }}
         </mainButton>
       </div>
     </div>

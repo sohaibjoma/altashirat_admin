@@ -5,11 +5,14 @@
         :items="[$t('drawer.titles')]"
         class="dashboard__breadcrumb me-3 rounded-te-lg rounded-be-lg"
       />
-      <div>
-        <mainButton class="me-auto" color="secondary" width="135px">
-          <router-link to="/titles/add" class="text-decoration-none text-white">
-            {{ $t("create") }}
-          </router-link>
+        <div>
+        <mainButton
+          class="me-auto"
+          color="secondary"
+          width="135px"
+          @click="$router.push('/titles/add')"
+        >
+          {{ $t("create") }}
         </mainButton>
       </div>
     </div>
