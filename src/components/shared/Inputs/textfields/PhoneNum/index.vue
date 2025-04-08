@@ -1,7 +1,4 @@
 <template>
-  <div>
-    {{ label }}
-  </div>
   <v-text-field
     v-model="internalValue"
     :error="!!errorMessage"
@@ -12,7 +9,7 @@
     class="ms-5 w-75"
     persistent-hint
     @blur="validateOnImmediate"
-  ></v-text-field>
+  />
 </template>
 
 <script setup>
@@ -34,7 +31,7 @@ const { value, errorMessage, setTouched, validate } = useField(
   props.rules,
   {
     validateOnValueUpdate: false, // Don't validate on value changes
-    validateOnMount: false        // Don't validate on component mount
+    validateOnMount: false, // Don't validate on component mount
   }
 );
 

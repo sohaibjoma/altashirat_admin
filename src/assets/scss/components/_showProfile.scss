@@ -1,0 +1,47 @@
+.profile-btn {
+  transition: transform 0.2s ease;
+}
+
+.profile-btn:hover {
+  transform: scale(1.1);
+}
+
+.profile-dialog .v-overlay__content {
+  border-radius: 50px;
+}
+
+.profile-card {
+  border-radius: 50px;
+  overflow: hidden;
+  transition: all 0.3s ease;  
+}
+
+.profile-header {
+    background: var(--primary-2);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.profile-content {
+  animation: fadeIn 0.3s ease-in;
+}
+
+.transparent-bg {
+  background: transparent !important;
+}
+
+.v-list-item-subtitle {
+  color: var(--gray-3) !important;
+  font-size: 1rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -3,26 +3,32 @@
     <v-table class="table--customized mt-4" :loading="loading">
       <thead>
         <tr>
-          <th v-for="header in tableHeaders" :key="header">
-            {{ $t(`table.${header}`) }}
+          <th v-for="header in tableHeaders" :key="header" class="py-3">
+            {{ $t(`table.${header}`) || header }}
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="item in data"
-          :key="item.id"
-          :class="{ 'faded-row': item.visible === false }"
-        >
-          <td v-for="header in tableHeaders" :key="header">
-            <template v-if="header === 'actions'">
+        <tr v-for="item in data" :key="item.id" class="table-row">
+          <td v-for="header in tableHeaders" :key="header" class="py-2">
+            <template v-if="header === 'visibility'">
+              <div class="d-flex justify-center">
+                <slot name="visibility" :item="item"></slot>
+              </div>
+            </template>
+            <template v-else-if="header === 'actions'">
               <div class="d-flex align-center justify-center">
                 <slot name="actions" :item="item"></slot>
               </div>
             </template>
+            <template v-else-if="header === 'profile'">
+              <div class="d-flex align-center justify-center">
+                <slot name="profile" :item="item"></slot>
+              </div>
+            </template>
             <template v-else>
               <span>
-                {{ getCellValue(item, header) }}
+                {{ getCellValue(item, header) || "N/A" }}
               </span>
             </template>
           </td>
@@ -33,22 +39,33 @@
       :length="pageCount"
       :page="page"
       @update:page="$emit('update:page', $event)"
-      class="text-center"
+      class="text-center mt-4"
     ></pagination>
   </v-container>
 </template>
 
 <script setup>
 import { useApi } from "../../../composables/api";
-import { inject, onMounted, ref, watch } from "vue";
+import { onMounted, onUnmounted, ref, watch } from "vue";
+import { useEventBus } from "../../../composables/eventBus";
 
 const data = ref([]);
 const pageCount = ref(0);
+const loading = ref(false);
 
 const props = defineProps({
-  URLEndpoint: String,
-  tableHeaders: Array,
-  page: Number,
+  URLEndpoint: {
+    type: String,
+    required: true,
+  },
+  tableHeaders: {
+    type: Array,
+    required: true,
+  },
+  page: {
+    type: Number,
+    default: 1,
+  },
   headerFieldMapping: {
     type: Object,
     default: () => ({}),
@@ -56,25 +73,22 @@ const props = defineProps({
 });
 
 const { GET } = useApi();
+const eventBus = useEventBus();
 
 async function getData() {
   if (!props.URLEndpoint) return;
+  loading.value = true;
   try {
     const response = await GET(props.URLEndpoint);
-    data.value = response.data.data;
-    pageCount.value = response.data.meta.last_page;
+    data.value = response.data.data || [];
+    pageCount.value = response.data.meta?.last_page || 1;
   } catch (error) {
     console.error("Error fetching data:", error);
+    data.value = [];
+  } finally {
+    loading.value = false;
   }
 }
-
-const emitter = inject("emitter");
-
-onMounted(() => {
-  emitter.on("reload", getData);
-});
-
-watch(() => props.page, getData, { immediate: true });
 
 function getCellValue(item, header) {
   const fieldPath = props.headerFieldMapping[header] || header;
@@ -82,8 +96,20 @@ function getCellValue(item, header) {
 }
 
 function getNestedValue(obj, path) {
+  if (!obj || !path) return null;
   return path.split(".").reduce((acc, part) => acc && acc[part], obj);
 }
+
+onMounted(() => {
+  eventBus.on("table-refresh", getData);
+  getData();
+});
+
+onUnmounted(() => {
+  eventBus.off("table-refresh", getData);
+});
+
+watch(() => props.page, getData);
 </script>
 
 <style scoped></style>
