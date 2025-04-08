@@ -76,11 +76,12 @@
 
 <script setup>
 import { Form } from "vee-validate";
-import { reactive, computed, watch } from "vue";
+import { reactive, computed, watch, ref } from "vue";
 import { useAuthStore } from "../../../../stores/auth";
 
 const authStore = useAuthStore();
 const userData = computed(() => authStore.user);
+const loading = ref(false);
 
 const formData = reactive({
   firstname: "",
@@ -89,11 +90,13 @@ const formData = reactive({
   email: "",
   phoneNumber: "",
   phoneCode: "",
-  birthdate: "",
+  birthdate: null,
 });
 
 const initialFormData = computed(() => {
   const user = userData.value?.user || userData.value || {};
+  const birthdate = user.birthdate ? new Date(user.birthdate) : null;
+
   return {
     firstname: user.firstname || "",
     middlename: user.middlename || "",
@@ -101,7 +104,7 @@ const initialFormData = computed(() => {
     email: user.email || "",
     "phone.number": user.phone?.number || "",
     "phone[country_code]": user.phone?.country_code || "",
-    birthdate: user.birthdate || "",
+    birthdate: birthdate,
   };
 });
 
@@ -110,6 +113,7 @@ watch(
   (newUserData) => {
     if (newUserData) {
       const user = newUserData.user || newUserData;
+      const birthdate = user.birthdate ? new Date(user.birthdate) : null;
 
       formData.firstname = user.firstname || "";
       formData.middlename = user.middlename || "";
@@ -117,7 +121,7 @@ watch(
       formData.email = user.email || "";
       formData.phoneNumber = user.phone?.number || "";
       formData.phoneCode = user.phone?.country_code || "";
-      formData.birthdate = user.birthdate || "";
+      formData.birthdate = birthdate;
     }
   },
   { immediate: true }
@@ -126,6 +130,12 @@ watch(
 const emit = defineEmits(["submit"]);
 
 const retrievedData = () => {
+  let formattedBirthdate = formData.birthdate;
+
+  if (formData.birthdate instanceof Date) {
+    formattedBirthdate = formData.birthdate.toISOString().split("T")[0];
+  }
+
   return {
     firstname: formData.firstname,
     middlename: formData.middlename,
@@ -135,14 +145,21 @@ const retrievedData = () => {
       number: formData.phoneNumber,
       country_code: formData.phoneCode,
     },
-    birthdate: formData.birthdate,
+    birthdate: formattedBirthdate,
   };
 };
 
 async function formSubmitting(values, { setErrors }) {
-  const payload = retrievedData();
-  console.log("Payload:", payload);
-  emit("submit", payload, setErrors);
+  loading.value = true;
+  try {
+    const payload = retrievedData();
+    console.log("Payload:", payload);
+    emit("submit", payload, setErrors);
+  } catch (error) {
+    console.error("Form submission error:", error);
+  } finally {
+    loading.value = false;
+  }
 }
 </script>
 

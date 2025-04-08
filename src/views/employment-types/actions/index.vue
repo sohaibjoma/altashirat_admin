@@ -15,7 +15,7 @@
               <v-form @submit.prevent="handleSubmit(submitForm)">
                 <TextInput
                   v-model="form.name"
-                  :label="$t('name')"
+                  :label="$t('table.name')"
                   :placeholder="$t('enterName')"
                   name="name"
                   rules="alpha"
@@ -31,29 +31,36 @@
                     { text: $t('hidden'), value: 0 },
                   ]"
                   name="visible"
-                  :rules="
-                    (value) =>
-                      value !== null && value !== undefined
-                        ? true
-                        : $t('errorMsgs.required')
-                  "
                 />
 
                 <LocaleSelector
                   v-if="isEdit"
                   name="locale"
-                  rules="required"
                   v-model="form.locale"
                   :label="$t('actions.language')"
                 />
 
-                <div class="d-flex mt-5 align-center justify-space-around">
-                  <OutlinedButton @click="goBack">
-                    {{ $t("cancel") }}
-                  </OutlinedButton>
-                  <MainButton type="submit" color="primary" :loading="loading">
-                    {{ isEdit ? $t("update") : $t("add") }}
+                <div class="d-flex mt-5 align-center">
+                  <MainButton
+                    type="submit"
+                    color="primary"
+                    width="100"
+                    height="40"
+                    rounded
+                    class="mx-2"
+                    :loading="loading"
+                  >
+                    {{ isEdit ? $t("actions.update") : $t("actions.add") }}
                   </MainButton>
+                  <OutlinedButton
+                    @click="goBack"
+                    rounded
+                    width="100"
+                    height="40"
+                    class="mx-2"
+                  >
+                    {{ $t("actions.cancel") }}
+                  </OutlinedButton>
                 </div>
               </v-form>
             </Form>
@@ -66,7 +73,7 @@
 
 <script setup>
 import { Form } from "vee-validate";
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useApi } from "../../../composables/api";
 import { useErrorStore } from "../../../stores/errors";
@@ -75,19 +82,26 @@ import { useEventBus } from "../../../composables/eventBus";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-
 const route = useRoute();
 const router = useRouter();
 const { POST, GET, loading } = useApi();
 const errorStore = useErrorStore();
 const notificationStore = useNotificationStore();
-const { emit } = useEventBus();
+const eventBus = useEventBus();
 
 const isEdit = ref(false);
 const form = ref({
   name: "",
   visible: 1,
   locale: "en",
+});
+
+onMounted(() => {
+  if (isEdit.value) {
+    eventBus.emit("edit-employment-type-started", { id: route.params.id });
+  } else {
+    eventBus.emit("create-employment-type-started");
+  }
 });
 
 const createFormData = () => {
@@ -116,15 +130,8 @@ const fetchEmploymentType = async (id) => {
         visible: response.data.employment_type.visible ? 1 : 0,
         locale: response.data.employment_type.locale || "en",
       };
-    } else {
-      console.error("Invalid API response structure:", response);
-      notificationStore.setNotification(
-        t("notifications.employment_type_load_error"),
-        "error"
-      );
     }
   } catch (error) {
-    console.error("Failed to fetch employment type:", error);
     notificationStore.setNotification(
       t("notifications.employment_type_load_error"),
       "error"
@@ -163,18 +170,17 @@ const submitForm = async () => {
         t("notifications.employment_type_updated_success"),
         "success"
       );
-      emit("employment-type-updated");
+      eventBus.emit("employment-type-updated");
     } else {
       await POST("/admin-panel/employment-types", createFormData());
       notificationStore.setNotification(
         t("notifications.employment_type_added_success"),
         "success"
       );
-      emit("employment-type-added");
+      eventBus.emit("employment-type-added");
     }
     router.push("/employment-types");
   } catch (error) {
-    console.error("Form submission error:", error);
     if (error.response?.status === 422 || error.response?.status === 409) {
       errorStore.setErrors(error.response.data.errors);
       notificationStore.setNotification(

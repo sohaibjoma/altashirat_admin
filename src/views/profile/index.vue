@@ -3,16 +3,16 @@
     <v-container class="d-flex flex-column">
       <v-card class="mt-64 pt-8 pb-8 w-75 ms-auto me-auto">
         <!-- Edit Profile Form -->
-        <h1 class="text-start border-s-xl ps-3 border-secondary">
+        <h2 class="text-start border-s-xl ps-3 border-primary">
           {{ $t("profile.title") }}
-        </h1>
+        </h2>
         <EditProfileForm @submit="handleEditProfileSubmit" />
       </v-card>
       <!-- Change Password Form -->
       <v-card class="pb-8 w-75 ms-auto me-auto mt-12">
-        <h1 class="text-start border-s-xl ps-3 border-secondary mt-12">
+        <h2 class="text-start border-s-xl ps-3 border-primary mt-12">
           {{ $t("profile.change_password") }}
-        </h1>
+        </h2>
         <ChangePasswordForm @submit="handleChangePasswordSubmit" />
       </v-card>
     </v-container>

@@ -1,30 +1,51 @@
 <template>
-  <div class="ms-4 mt-8 font-weight-bold">
-    {{ label }}
+  <div>
+    <div v-if="label" class="ms-4 mt-8 mb-2 font-weight-bold">
+      {{ label }}
+    </div>
+    <v-date-input
+      v-model="dateModel"
+      prepend-icon=""
+      prepend-inner-icon="$calendar"
+      :error="!!errorMessage"
+      :error-messages="errorMessage"
+      :hint="hint"
+      persistent-hint
+      variant="outlined"
+      class="ms-5 me-5"
+      :menu-props="{ contentClass: 'date-picker-menu' }"
+      @blur="validateOnImmediate"
+      @update:model-value="updateDate"
+      open-on-click
+    ></v-date-input>
   </div>
-  <v-text-field
-    v-model="internalValue"
-    :error="!!errorMessage"
-    :error-messages="errorMessage"
-    variant="outlined"
-    type="date"
-    :hint="hint"
-    persistent-hint
-    class="ms-5 me-5"
-    @blur="validateOnImmediate"
-  ></v-text-field>
 </template>
 
 <script setup>
 import { useField } from "vee-validate";
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 
 const props = defineProps({
-  rules: [Array, Function],
-  hint: String,
-  name: String,
-  label: String,
-  modelValue: String,
+  rules: {
+    type: [Array, Function, String],
+    default: () => [],
+  },
+  hint: {
+    type: String,
+    default: "",
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  label: {
+    type: String,
+    default: "",
+  },
+  modelValue: {
+    type: [String, Date, Number, null],
+    default: null,
+  },
 });
 
 const emit = defineEmits(["update:modelValue"]);
@@ -34,13 +55,29 @@ const { value, errorMessage, setTouched, validate } = useField(
   props.rules
 );
 
-const internalValue = computed({
-  get: () => props.modelValue,
+const internalDate = ref(props.modelValue);
+
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    internalDate.value = newVal;
+  },
+  { immediate: true }
+);
+
+const dateModel = computed({
+  get: () => {
+    return internalDate.value;
+  },
   set: (newValue) => {
-    value.value = newValue;
-    emit("update:modelValue", newValue);
+    internalDate.value = newValue;
   },
 });
+
+const updateDate = (newDate) => {
+  value.value = newDate;
+  emit("update:modelValue", newDate);
+};
 
 const validateOnImmediate = () => {
   setTouched(true);
@@ -48,4 +85,8 @@ const validateOnImmediate = () => {
 };
 </script>
 
-<style scoped></style>
+<style>
+.date-picker-menu {
+  z-index: 1000;
+}
+</style>
