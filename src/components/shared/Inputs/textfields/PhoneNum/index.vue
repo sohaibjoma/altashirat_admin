@@ -1,29 +1,25 @@
 <template>
-  <div class="ms-4 mt-8 mb-2 font-weight-bold">
-    {{ label }}
-  </div>
   <v-text-field
     v-model="internalValue"
     :error="!!errorMessage"
     :error-messages="errorMessage"
     variant="outlined"
-    :type="number"
+    type="text"
     :hint="hint"
+    class="ms-5 w-75"
     persistent-hint
-    class="ms-5 me-5"
     @blur="validateOnImmediate"
-  ></v-text-field>
+  />
 </template>
 
 <script setup>
 import { useField } from "vee-validate";
-import { computed } from "vue";
+import { computed, watch } from "vue";
 
 const props = defineProps({
   rules: [Array, Function],
   hint: String,
   name: String,
-  type: String,
   label: String,
   modelValue: [String, Number],
 });
@@ -32,17 +28,30 @@ const emit = defineEmits(["update:modelValue"]);
 
 const { value, errorMessage, setTouched, validate } = useField(
   props.name,
-  props.rules
+  props.rules,
+  {
+    validateOnValueUpdate: false, // Don't validate on value changes
+    validateOnMount: false, // Don't validate on component mount
+  }
 );
 
 const internalValue = computed({
-  get: () => props.modelValue?.toString() || '',
+  get: () => props.modelValue || value.value,
   set: (newValue) => {
-    const numericValue = newValue === '' ? null : Number(newValue);
-    value.value = numericValue;
-    emit("update:modelValue", numericValue);
+    value.value = newValue;
+    emit("update:modelValue", newValue);
   },
 });
+
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    if (newVal !== undefined && newVal !== value.value) {
+      value.value = newVal;
+    }
+  },
+  { immediate: true }
+);
 
 const validateOnImmediate = () => {
   setTouched(true);

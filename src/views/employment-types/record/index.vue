@@ -6,36 +6,33 @@
         class="dashboard__breadcrumb me-3 rounded-te-lg rounded-be-lg"
       />
       <div>
-        <mainButton
-          class="me-auto"
-          color="primary"
-          width="135px"
-          @click="$router.push('/employment-types/add')"
-        >
+        <mainButton color="primary" width="135px" @click="handleCreate">
           {{ $t("create") }}
         </mainButton>
       </div>
     </div>
     <customTable
-      max-width="800px"
       width="100%"
       :URLEndpoint="`/admin-panel/employment-types?page=${page}`"
-      :tableHeaders="['id', 'name', 'actions']"
+      :tableHeaders="['id', 'name', 'visibility', 'actions']"
       :page="page"
       @update:page="page = $event"
       class="rounded-lg"
     >
-      <template #actions="{ item }">
+      <template #visibility="{ item }">
         <ToggleVisibility
           @visibility-toggled="handleVisibilityToggled"
           class="d-flex align-center"
           :record="{ ...item, resource: 'employment-types' }"
           :payload="getEmploymentTypePayload"
         />
+      </template>
+      <template #actions="{ item }">
         <EditFiring
           :record="item"
           :resource="'employment-types'"
           class="mb-2"
+          @edit-clicked="handleEdit(item.id)"
         />
         <DeleteDialog
           @item-deleted="handleItemDeleted"
@@ -49,12 +46,16 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
+import { useEventBus } from "../../../composables/eventBus";
 import { useNotificationStore } from "../../../stores/notification";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
 const { t } = useI18n();
 const notificationStore = useNotificationStore();
+const eventBus = useEventBus();
+const router = useRouter();
 
 const page = ref(1);
 
@@ -67,11 +68,22 @@ function getEmploymentTypePayload(responseData) {
   return formData;
 }
 
+const handleCreate = () => {
+  eventBus.emit("create-employment-type");
+  router.push("/employment-types/add");
+};
+
+const handleEdit = (id) => {
+  eventBus.emit("edit-employment-type", { id });
+  router.push(`/employment-types/edit/${id}`);
+};
+
 const handleVisibilityToggled = () => {
   notificationStore.setNotification(
     t("notifications.employment_type_visibility_toggled"),
     "success"
   );
+  eventBus.emit("employment-type-updated");
 };
 
 const handleItemDeleted = () => {
@@ -79,6 +91,21 @@ const handleItemDeleted = () => {
     t("notifications.employment_type_deleted_success"),
     "success"
   );
+  eventBus.emit("employment-type-deleted");
+};
+
+onMounted(() => {
+  eventBus.on("employment-type-updated", refreshData);
+  eventBus.on("employment-type-deleted", refreshData);
+});
+
+onUnmounted(() => {
+  eventBus.off("employment-type-updated", refreshData);
+  eventBus.off("employment-type-deleted", refreshData);
+});
+
+const refreshData = () => {
+  page.value = 1;
 };
 </script>
 

@@ -1,0 +1,64 @@
+.block-btn {
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  padding: 6px 12px;
+  text-transform: capitalize;
+  font-weight: 500;
+}
+
+.block-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.blocked-state {
+  border-color: var(--error-text);
+  background: var(--error-bg);
+}
+
+.unblocked-state {
+  border-color: var(--correct-text);
+  background: var(--correct-bg);
+}
+
+.block-dialog-card {
+  background: var(--white);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.block-dialog-header {
+  background: var(--primary-2);
+  color: var(--white);
+  padding: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.cancel-btn {
+  transition: all 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background-color: var(--gray-2);
+}
+
+.action-btn {
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  filter: brightness(110%);
+  transform: scale(1.05);
+}
+
+.v-card-text {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.v-card-text strong {
+  color: var(--black);
+}

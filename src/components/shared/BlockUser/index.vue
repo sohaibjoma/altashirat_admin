@@ -3,27 +3,53 @@
     <OutlinedButton
       :color="isBlocked ? 'error' : 'success'"
       @click="openDialog"
-      class="me-2"
+      class="block-btn me-2"
+      :class="{ 'blocked-state': isBlocked, 'unblocked-state': !isBlocked }"
     >
-      <v-icon :color="isBlocked ? 'error' : 'success'">
+      <v-icon :color="isBlocked ? 'error' : 'success'" class="mr-2">
         {{ isBlocked ? "mdi-account-cancel" : "mdi-account-check" }}
       </v-icon>
       {{ isBlocked ? $t("actions.unblock") : $t("actions.block") }}
     </OutlinedButton>
 
-    <v-dialog v-model="dialog" max-width="400">
-      <v-card>
-        <v-card-title>
+    <v-dialog
+      v-model="dialog"
+      max-width="450"
+      transition="dialog-bottom-transition"
+    >
+      <v-card class="block-dialog-card">
+        <v-card-title class="block-dialog-header pa-3">
+          <v-icon :color="isBlocked ? 'success' : 'error'" class="mr-2">
+            {{ isBlocked ? "mdi-account-check" : "mdi-account-cancel" }}
+          </v-icon>
           {{ isBlocked ? $t("actions.unblockUser") : $t("actions.blockUser") }}
         </v-card-title>
-        <v-card-text>
+        <v-card-text class="pt-4 text-grey-darken-1">
           {{ $t("actions.areYouSure") }}
-          {{ isBlocked ? $t("actions.unblock") : $t("actions.block") }}
+          <strong>{{
+            isBlocked ? $t("actions.unblock") : $t("actions.block")
+          }}</strong>
           {{ $t("actions.thisUser") }}?
         </v-card-text>
-        <v-card-actions>
-          <v-btn @click="closeDialog">{{ $t("cancel") }}</v-btn>
-          <v-btn :color="isBlocked ? 'success' : 'error'" @click="confirmBlock">
+        <v-card-actions class="pa-4">
+          <v-spacer></v-spacer>
+          <OutlinedButton
+            color="grey"
+            rounded
+            width="100"
+            @click="closeDialog"
+            class="cancel-btn"
+          >
+            {{ $t("actions.cancel") }}
+          </OutlinedButton>
+          <v-btn
+            :color="isBlocked ? 'success' : 'error'"
+            rounded
+            width="100"
+            variant="flat"
+            @click="confirmBlock"
+            class="action-btn"
+          >
             {{ isBlocked ? $t("actions.unblock") : $t("actions.block") }}
           </v-btn>
         </v-card-actions>
@@ -108,4 +134,27 @@ const confirmBlock = async () => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.block-btn {
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  padding: 6px 12px;
+  text-transform: capitalize;
+  font-weight: 500;
+}
+
+.block-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.blocked-state {
+  border-color: var(--error-text);
+  background: var(--error-bg);
+}
+
+.unblocked-state {
+  border-color: var(--correct-text);
+  background: var(--correct-bg);
+}
+</style>

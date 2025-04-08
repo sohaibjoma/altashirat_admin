@@ -2,6 +2,7 @@ import 'vuetify/styles';
 import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
+import * as labsComponents from 'vuetify/labs/components'
 import '@mdi/font/css/materialdesignicons.css';
 
 // Get locale from localStorage or default to "ar"
@@ -13,7 +14,10 @@ document.documentElement.setAttribute("dir", isRTL ? "rtl" : "ltr");
 
 // Vuetify setup
 const vuetify = createVuetify({
-  components,
+  components: {
+    ...components,
+    ...labsComponents,
+  },
   directives,
   locale: {
     locale,

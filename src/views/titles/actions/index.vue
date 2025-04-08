@@ -11,7 +11,7 @@
               <v-form @submit.prevent="handleSubmit(submitForm)">
                 <TextInput
                   v-model="form.name"
-                  :label="$t('name')"
+                  :label="$t('table.name')"
                   :placeholder="$t('enterName')"
                   name="name"
                   rules="alpha"
@@ -36,13 +36,27 @@
                   :label="$t('actions.language')"
                 />
 
-                <div class="d-flex mt-5 align-center justify-space-around">
-                  <OutlinedButton @click="goBack">
-                    {{ $t("cancel") }}
-                  </OutlinedButton>
-                  <MainButton type="submit" color="primary" :loading="loading">
+                <div class="d-flex mt-5 align-center">
+                  <MainButton
+                    type="submit"
+                    color="primary"
+                    width="100"
+                    height="40"
+                    rounded
+                    class="mx-2"
+                    :loading="loading"
+                  >
                     {{ isEdit ? $t("update") : $t("add") }}
                   </MainButton>
+                  <OutlinedButton
+                    @click="goBack"
+                    rounded
+                    width="100"
+                    height="40"
+                    class="mx-2"
+                  >
+                    {{ $t("cancel") }}
+                  </OutlinedButton>
                 </div>
               </v-form>
             </Form>
@@ -55,7 +69,7 @@
 
 <script setup>
 import { Form } from "vee-validate";
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useApi } from "../../../composables/api";
 import { useErrorStore } from "../../../stores/errors";
@@ -64,19 +78,26 @@ import { useEventBus } from "../../../composables/eventBus";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-
 const route = useRoute();
 const router = useRouter();
 const { POST, GET, loading } = useApi();
 const errorStore = useErrorStore();
 const notificationStore = useNotificationStore();
-const { emit } = useEventBus();
+const eventBus = useEventBus();
 
 const isEdit = ref(false);
 const form = ref({
   name: "",
   visible: 1,
   locale: "en",
+});
+
+onMounted(() => {
+  if (isEdit.value) {
+    eventBus.emit("edit-title-started", { id: route.params.id });
+  } else {
+    eventBus.emit("create-title-started");
+  }
 });
 
 const createFormData = () => {
@@ -106,14 +127,12 @@ const fetchTitle = async (id) => {
         locale: response.data.title.locale || "en",
       };
     } else {
-      console.error("Invalid API response structure:", response);
       notificationStore.setNotification(
         t("notifications.title_load_error"),
         "error"
       );
     }
   } catch (error) {
-    console.error("Failed to fetch title:", error);
     notificationStore.setNotification(
       t("notifications.title_load_error"),
       "error"
@@ -149,18 +168,17 @@ const submitForm = async () => {
         t("notifications.title_updated_success"),
         "success"
       );
-      emit("title-updated");
+      eventBus.emit("title-updated");
     } else {
       await POST("/admin-panel/titles", createFormData());
       notificationStore.setNotification(
         t("notifications.title_added_success"),
         "success"
       );
-      emit("title-added");
+      eventBus.emit("title-added");
     }
     router.push("/titles");
   } catch (error) {
-    console.error("Form submission error:", error);
     if (error.response?.status === 422 || error.response?.status === 409) {
       errorStore.setErrors(error.response.data.errors);
       notificationStore.setNotification(

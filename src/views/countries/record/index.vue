@@ -8,20 +8,21 @@
     </div>
     <customTable
       :URLEndpoint="`/admin-panel/countries?page=${page}`"
-      :tableHeaders="['id', 'name', 'actions']"
-      max-width="800px"
+      :tableHeaders="['id', 'name', 'visibility', 'actions']"
       width="100%"
       :page="page"
       @update:page="page = $event"
       class="rounded-lg"
     >
-      <template #actions="{ item }">
+      <template #visibility="{ item }">
         <ToggleVisibility
           class="d-flex align-center mx-2"
           :record="{ ...item, resource: 'countries' }"
           :payload="getCountryPayload"
           @visibility-toggled="handleVisibilityToggled"
         />
+      </template>
+      <template #actions="{ item }">
         <DeleteDialog
           :record="item"
           :resource="'countries'"
@@ -34,14 +35,16 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useNotificationStore } from "../../../stores/notification";
 import { useI18n } from "vue-i18n";
+import { useEventBus } from "../../../composables/eventBus";
 
 const { t } = useI18n();
 const notificationStore = useNotificationStore();
+const eventBus = useEventBus();
 
-let page = ref(1);
+const page = ref(1);
 
 function getCountryPayload(responseData) {
   const formData = new FormData();
@@ -55,6 +58,7 @@ const handleVisibilityToggled = () => {
     t("notifications.country_visibility_toggled"),
     "success"
   );
+  eventBus.emit("country-updated");
 };
 
 const handleItemDeleted = () => {
@@ -62,6 +66,21 @@ const handleItemDeleted = () => {
     t("notifications.country_deleted_success"),
     "success"
   );
+  eventBus.emit("country-deleted");
+};
+
+onMounted(() => {
+  eventBus.on("country-updated", refreshData);
+  eventBus.on("country-deleted", refreshData);
+});
+
+onUnmounted(() => {
+  eventBus.off("country-updated", refreshData);
+  eventBus.off("country-deleted", refreshData);
+});
+
+const refreshData = () => {
+  page.value = 1;
 };
 </script>
 
