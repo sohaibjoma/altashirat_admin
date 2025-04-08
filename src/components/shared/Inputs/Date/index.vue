@@ -86,7 +86,4 @@ const validateOnImmediate = () => {
 </script>
 
 <style>
-.date-picker-menu {
-  z-index: 1000;
-}
 </style>
