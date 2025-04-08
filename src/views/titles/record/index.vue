@@ -5,34 +5,39 @@
         :items="[$t('drawer.titles')]"
         class="dashboard__breadcrumb me-3 rounded-te-lg rounded-be-lg"
       />
-        <div>
+      <div>
         <mainButton
-          class="me-auto"
-          color="secondary"
+          color="primary"
           width="135px"
-          @click="$router.push('/titles/add')"
+          @click="handleCreate"
         >
           {{ $t("create") }}
         </mainButton>
       </div>
     </div>
     <customTable
-      max-width="800px"
       width="100%"
       :URLEndpoint="`/admin-panel/titles?page=${page}`"
-      :tableHeaders="['id', 'name', 'actions']"
+      :tableHeaders="['id', 'name', 'visibility', 'actions']"
       :page="page"
       @update:page="page = $event"
       class="rounded-lg"
     >
-      <template #actions="{ item }">
+      <template #visibility="{ item }">
         <ToggleVisibility
-          class="d-flex align-center"
+          class="d-flex justify-center"
           :record="{ ...item, resource: 'titles' }"
           :payload="getTitlePayload"
           @visibility-toggled="handleVisibilityToggled"
         />
-        <EditFiring :record="item" :resource="'titles'" class="mb-2" />
+      </template>
+      <template #actions="{ item }">
+        <EditFiring
+          :record="item"
+          :resource="'titles'"
+          class="mb-2"
+          @edit-clicked="handleEdit(item.id)"
+        />
         <DeleteDialog
           :record="item"
           :resource="'titles'"
@@ -45,12 +50,16 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useNotificationStore } from "../../../stores/notification";
 import { useI18n } from "vue-i18n";
+import { useEventBus } from "../../../composables/eventBus";
+import { useRouter } from "vue-router";
 
 const { t } = useI18n();
 const notificationStore = useNotificationStore();
+const eventBus = useEventBus();
+const router = useRouter();
 
 const page = ref(1);
 
@@ -63,11 +72,22 @@ function getTitlePayload(responseData) {
   return formData;
 }
 
+const handleCreate = () => {
+  eventBus.emit("create-title");
+  router.push("/titles/add");
+};
+
+const handleEdit = (id) => {
+  eventBus.emit("edit-title", { id });
+  router.push(`/titles/edit/${id}`);
+};
+
 const handleVisibilityToggled = () => {
   notificationStore.setNotification(
     t("notifications.title_visibility_toggled"),
     "success"
   );
+  eventBus.emit("title-updated");
 };
 
 const handleItemDeleted = () => {
@@ -75,6 +95,23 @@ const handleItemDeleted = () => {
     t("notifications.title_deleted_success"),
     "success"
   );
+  eventBus.emit("title-deleted");
+};
+
+onMounted(() => {
+  eventBus.on("title-added", refreshData);
+  eventBus.on("title-updated", refreshData);
+  eventBus.on("title-deleted", refreshData);
+});
+
+onUnmounted(() => {
+  eventBus.off("title-added", refreshData);
+  eventBus.off("title-updated", refreshData);
+  eventBus.off("title-deleted", refreshData);
+});
+
+const refreshData = () => {
+  page.value = 1;
 };
 </script>
 

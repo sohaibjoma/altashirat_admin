@@ -7,7 +7,7 @@
     <customTable
       width="100%"
       :URLEndpoint="`/admin-panel/users?page=${page}`"
-      :tableHeaders="['name', 'phone', 'email', 'role', 'actions']"
+      :tableHeaders="['name', 'phone', 'email', 'role', 'profile', 'actions']"
       :page="page"
       @update:page="page = $event"
       class="rounded-lg"
@@ -16,8 +16,12 @@
         phone: 'phone.number',
         email: 'email',
         role: 'roles.0.name',
+        profile: '',
       }"
     >
+      <template #profile="{ item }">
+        <ShowProfile :userId="item.id" />
+      </template>
       <template #actions="{ item }">
         <BlockUser
           :userId="item.id"
@@ -33,29 +37,24 @@
 </template>
 
 <script setup>
-import { ref, onMounted, inject } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useNotificationStore } from "../../../stores/notification";
 import { useI18n } from "vue-i18n";
+import { useEventBus } from "../../../composables/eventBus";
+import ShowProfile from "../../../components/shared/ShowProfile/index.vue";
 
 const { t } = useI18n();
 const notificationStore = useNotificationStore();
+const eventBus = useEventBus();
 
 const page = ref(1);
-const emitter = inject("emitter");
-
-function fetchData() {
-  emitter.emit("reload");
-}
-
-onMounted(() => {
-  emitter.on("reload", fetchData);
-});
 
 const handleUserBlocked = () => {
   notificationStore.setNotification(
     t("notifications.user_blocked_success"),
     "success"
   );
+  eventBus.emit("user-blocked");
 };
 
 const handleUserUnblocked = () => {
@@ -63,6 +62,21 @@ const handleUserUnblocked = () => {
     t("notifications.user_unblocked_success"),
     "success"
   );
+  eventBus.emit("user-unblocked");
+};
+
+onMounted(() => {
+  eventBus.on("user-blocked", refreshData);
+  eventBus.on("user-unblocked", refreshData);
+});
+
+onUnmounted(() => {
+  eventBus.off("user-blocked", refreshData);
+  eventBus.off("user-unblocked", refreshData);
+});
+
+const refreshData = () => {
+  console.log("refreshing data");
 };
 </script>
 

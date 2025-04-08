@@ -1,5 +1,5 @@
 <template>
-  <div class="ms-4 mt-8 font-weight-bold">
+  <div class="ms-4 mt-8 mb-2 font-weight-bold">
     {{ label }}
   </div>
   <v-text-field
@@ -12,7 +12,7 @@
     persistent-hint
     class="ms-5 me-5"
     @blur="validateOnImmediate"
-  ></v-text-field>
+  />
 </template>
 
 <script setup>
