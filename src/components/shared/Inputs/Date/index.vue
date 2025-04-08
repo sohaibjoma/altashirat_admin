@@ -85,5 +85,4 @@ const validateOnImmediate = () => {
 };
 </script>
 
-<style>
-</style>
+<style></style>
