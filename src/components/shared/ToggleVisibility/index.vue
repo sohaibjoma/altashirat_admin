@@ -3,13 +3,7 @@
     v-model="switcher"
     base-color="primary"
     @update:modelValue="visibilityToggle"
-  >
-    <template v-slot:append>
-      <v-icon color="primary">
-        {{ switcher ? "mdi-eye" : "mdi-eye-off" }}
-      </v-icon>
-    </template>
-  </v-switch>
+  />
 </template>
 
 <script setup>

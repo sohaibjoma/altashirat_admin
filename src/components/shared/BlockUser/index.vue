@@ -42,7 +42,7 @@
           >
             {{ $t("actions.cancel") }}
           </OutlinedButton>
-          <v-btn
+          <OutlinedButton
             :color="isBlocked ? 'success' : 'error'"
             rounded
             width="100"
@@ -51,7 +51,7 @@
             class="action-btn"
           >
             {{ isBlocked ? $t("actions.unblock") : $t("actions.block") }}
-          </v-btn>
+          </OutlinedButton>
         </v-card-actions>
       </v-card>
     </v-dialog>
