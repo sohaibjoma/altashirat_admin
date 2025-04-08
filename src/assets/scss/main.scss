@@ -1,13 +1,21 @@
 @use 'variables';
-@use 'components/phonecode';
+@use 'components/phoneinput';
 @use 'components/notifications';
 @use 'components/drawer';
 @use 'components/customtable';
+@use 'components/login';
 
 @font-face {
   font-family: 'Tajawal';
   src: url('../fonts/Tajawal-Regular.ttf') format('truetype');
   font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Noto Color Emoji';
+  src: url('../fonts/NotoColorEmoji-Regular.ttf') format('truetype');
+  font-weight: 400;
   font-style: normal;
 }
 
@@ -17,7 +25,7 @@ body{
 }
 
 .dashboard__breadcrumb{
-  height: 50px;
+  height: 40px;
   background-color: var(--white);
   width: 100%;
 }

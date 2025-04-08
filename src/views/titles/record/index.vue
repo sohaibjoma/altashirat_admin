@@ -8,7 +8,7 @@
         <div>
         <mainButton
           class="me-auto"
-          color="secondary"
+          color="primary"
           width="135px"
           @click="$router.push('/titles/add')"
         >

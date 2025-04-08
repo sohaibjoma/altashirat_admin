@@ -1,8 +1,8 @@
 <template>
   <v-layout class="d-flex align-center bg-gray">
     <v-container class="mt-16">
-      <v-card class="mt-64 pt-8 pb-8 w-75 ms-auto me-auto">
-        <h1 class="text-start border-s-xl ps-3 border-secondary">
+      <v-card class="mt-64 pt-8 pt-lg-4 pb-8 w-75 w-lg-50 ms-auto me-auto">
+        <h1 class="text-start pink-border ps-3">
           {{ $t("login.title") }}
         </h1>
         <Form v-slot="{ handleSubmit }">
@@ -11,19 +11,18 @@
               {{ $t("login.phone") }}
             </div>
 
-            <div class="d-flex gap-0">
-              <PhoneNum
-                v-model="data.phoneNumber"
-                rules="required|phoneno"
-                :hint="$t('inputs.phoneno.hint')"
-                name="phone.number"
-              />
-              <PhoneCode
-                v-model="data.phoneCode"
-                rules="required"
-                name="phone[country_code]"
-              />
-            </div>
+            <PhoneInput
+              :phoneNumberModelValue="data.phoneNumber"
+              @update:phoneNumberModelValue="data.phoneNumber = $event"
+              phoneNumberName="phone.number"
+              phoneNumberRules="required|phoneno"
+              :countryCodeModelValue="data.phoneCode"
+              @update:countryCodeModelValue="data.phoneCode = $event"
+              countryCodeName="phone[country_code]"
+              countryCodeRules="required"
+              :hint="$t('inputs.phoneno.hint')"
+              class="mx-4"
+            />
 
             <Password
               v-model="data.password"
@@ -91,7 +90,7 @@ async function formSubmitting({ setErrors }) {
     if (!res.data || !res.data.token) {
       throw new Error("Invalid login response: Token missing");
     }
-    if (res.data.token) {  
+    if (res.data.token) {
       localStorage.setItem("userToken", res.data.token);
       await authStore.fetchUser();
       notificationStore.setNotification(
