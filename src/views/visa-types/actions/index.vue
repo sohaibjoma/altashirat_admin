@@ -4,26 +4,31 @@
       <v-col cols="12" md="10" lg="8" xl="7">
         <v-card class="mt-5 py-4">
           <v-card-title
-            class="pt-4 pb-2 text-start border-s-xl border-primary font-weight-bold"
+            class="pt-4 pb-2 pink-border font-weight-bold"
           >
             {{
               isEdit ? $t("actions.editVisaType") : $t("actions.addVisaType")
             }}
           </v-card-title>
           <v-card-text>
-            <Form v-slot="{ handleSubmit }">
+            <Form 
+              v-if="!loading && visaType"
+              v-slot="{ handleSubmit }"
+              :initial-values="formValues"
+              ref="form"
+            >
               <v-form @submit.prevent="handleSubmit(submitForm)">
                 <TextInput
-                  v-model="form.name"
+                  v-model="formValues.name"
                   :label="$t('table.name')"
                   :placeholder="$t('enterName')"
                   name="name"
-                  rules="alpha"
+                  rules="required"
                   class="mb-3"
                 />
 
                 <Select
-                  v-model="form.visible"
+                  v-model="formValues.visible"
                   :label="$t('visible')"
                   :placeholder="$t('selectVisibility')"
                   :items="[
@@ -36,7 +41,7 @@
                 <LocaleSelector
                   v-if="isEdit"
                   name="locale"
-                  v-model="form.locale"
+                  v-model="formValues.locale"
                   :label="$t('actions.language')"
                 />
 
@@ -63,6 +68,11 @@
                 </div>
               </v-form>
             </Form>
+            <v-skeleton-loader 
+              v-else
+              type="article, actions" 
+              class="mt-4"
+            />
           </v-card-text>
         </v-card>
       </v-col>
@@ -89,33 +99,46 @@ const notificationStore = useNotificationStore();
 const eventBus = useEventBus();
 
 const isEdit = ref(false);
-const form = ref({
+const visaType = ref(null);
+const form = ref(null);
+
+// Form values structure
+const formValues = ref({
   name: "",
   visible: 1,
   locale: "en",
 });
 
 onMounted(() => {
-  if (isEdit.value) {
+  if (route.params.id) {
+    isEdit.value = true;
+    fetchVisaType(route.params.id);
     eventBus.emit("edit-visa-type-started", { id: route.params.id });
   } else {
+    isEdit.value = false;
+    visaType.value = {}; // Set an empty object to indicate the form is ready
+    formValues.value = {
+      name: "",
+      visible: 1,
+      locale: "en",
+    };
     eventBus.emit("create-visa-type-started");
   }
 });
 
 const createFormData = () => {
   const formData = new FormData();
-  formData.append("name", form.value.name);
-  formData.append("visible", form.value.visible.toString());
-  formData.append("locale", form.value.locale);
+  formData.append("name", formValues.value.name);
+  formData.append("visible", formValues.value.visible.toString());
+  formData.append("locale", formValues.value.locale);
   return formData;
 };
 
 const updateFormData = () => {
   const formData = new FormData();
-  formData.append("name", form.value.name);
-  formData.append("visible", form.value.visible.toString());
-  formData.append("locale", form.value.locale);
+  formData.append("name", formValues.value.name);
+  formData.append("visible", formValues.value.visible.toString());
+  formData.append("locale", formValues.value.locale);
   formData.append("_method", "put");
   return formData;
 };
@@ -124,7 +147,8 @@ const fetchVisaType = async (id) => {
   try {
     const response = await GET(`/admin-panel/visa-types/${id}`);
     if (response.data && response.data.visa_type) {
-      form.value = {
+      visaType.value = response.data.visa_type;
+      formValues.value = {
         name: response.data.visa_type.name || "",
         visible: response.data.visa_type.visible ? 1 : 0,
         locale: response.data.visa_type.locale || "en",
@@ -142,24 +166,6 @@ const fetchVisaType = async (id) => {
     );
   }
 };
-
-watch(
-  () => route.params.id,
-  async (newId) => {
-    if (newId) {
-      isEdit.value = true;
-      await fetchVisaType(newId);
-    } else {
-      isEdit.value = false;
-      form.value = {
-        name: "",
-        visible: 1,
-        locale: "en",
-      };
-    }
-  },
-  { immediate: true }
-);
 
 const submitForm = async () => {
   errorStore.clearErrors();

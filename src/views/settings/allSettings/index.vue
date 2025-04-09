@@ -1,14 +1,16 @@
 <template>
-  <v-container
-    class="bg-white rounded-te-lg rounded-ts-lg border-sm w-75 ms-auto me-auto"
-    fluid
-  >
-    <h1 class="text-start ps-3 border-s-xl border-primary">
+  <v-container>
+    <v-row justify="center">
+      <v-col cols="12" md="10" lg="8" xl="7">
+        <v-card class="mt-5 py-4">
+  <v-card-title
+            class="pt-4 pb-2 pink-border font-weight-bold"
+          >
       {{ $t("settings.title") }}
-    </h1>
+    </v-card-title>
     <hr />
 
-    <v-row class="mt-4">
+    <v-row class="mt-4 mx-4">
       <v-col
         v-for="setting in settingsStore.settings"
         :key="setting.id"
@@ -24,6 +26,9 @@
             <v-icon color="secondary">mdi-pencil</v-icon>
           </v-btn>
         </v-card>
+      </v-col>
+    </v-row>
+    </v-card>
       </v-col>
     </v-row>
   </v-container>

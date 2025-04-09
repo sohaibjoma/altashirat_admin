@@ -13,19 +13,24 @@
             }}
           </v-card-title>
           <v-card-text>
-            <Form v-slot="{ handleSubmit }">
+            <Form 
+              v-if="!loading && employmentType"
+              v-slot="{ handleSubmit }"
+              :initial-values="formValues"
+              ref="form"
+            >
               <v-form @submit.prevent="handleSubmit(submitForm)">
                 <TextInput
-                  v-model="form.name"
+                  v-model="formValues.name"
                   :label="$t('table.name')"
                   :placeholder="$t('enterName')"
                   name="name"
-                  rules="alpha"
+                  rules="required"
                   class="mb-3"
                 />
 
                 <Select
-                  v-model="form.visible"
+                  v-model="formValues.visible"
                   :label="$t('visible')"
                   :placeholder="$t('selectVisibility')"
                   :items="[
@@ -38,7 +43,7 @@
                 <LocaleSelector
                   v-if="isEdit"
                   name="locale"
-                  v-model="form.locale"
+                  v-model="formValues.locale"
                   :label="$t('actions.language')"
                 />
 
@@ -65,6 +70,11 @@
                 </div>
               </v-form>
             </Form>
+            <v-skeleton-loader 
+              v-else
+              type="article, actions" 
+              class="mt-4"
+            />
           </v-card-text>
         </v-card>
       </v-col>
@@ -91,33 +101,46 @@ const notificationStore = useNotificationStore();
 const eventBus = useEventBus();
 
 const isEdit = ref(false);
-const form = ref({
+const employmentType = ref(null);
+const form = ref(null);
+
+// Form values structure
+const formValues = ref({
   name: "",
   visible: 1,
   locale: "en",
 });
 
 onMounted(() => {
-  if (isEdit.value) {
+  if (route.params.id) {
+    isEdit.value = true;
+    fetchEmploymentType(route.params.id);
     eventBus.emit("edit-employment-type-started", { id: route.params.id });
   } else {
+    isEdit.value = false;
+    employmentType.value = {}; // Set an empty object to indicate the form is ready
+    formValues.value = {
+      name: "",
+      visible: 1,
+      locale: "en",
+    };
     eventBus.emit("create-employment-type-started");
   }
 });
 
 const createFormData = () => {
   const formData = new FormData();
-  formData.append("name", form.value.name);
-  formData.append("visible", form.value.visible.toString());
-  formData.append("locale", form.value.locale);
+  formData.append("name", formValues.value.name);
+  formData.append("visible", formValues.value.visible.toString());
+  formData.append("locale", formValues.value.locale);
   return formData;
 };
 
 const updateFormData = () => {
   const formData = new FormData();
-  formData.append("name", form.value.name);
-  formData.append("visible", form.value.visible.toString());
-  formData.append("locale", form.value.locale);
+  formData.append("name", formValues.value.name);
+  formData.append("visible", formValues.value.visible.toString());
+  formData.append("locale", formValues.value.locale);
   formData.append("_method", "put");
   return formData;
 };
@@ -126,11 +149,17 @@ const fetchEmploymentType = async (id) => {
   try {
     const response = await GET(`/admin-panel/employment-types/${id}`);
     if (response.data && response.data.employment_type) {
-      form.value = {
+      employmentType.value = response.data.employment_type;
+      formValues.value = {
         name: response.data.employment_type.name || "",
         visible: response.data.employment_type.visible ? 1 : 0,
         locale: response.data.employment_type.locale || "en",
       };
+    } else {
+      notificationStore.setNotification(
+        t("notifications.employment_type_load_error"),
+        "error"
+      );
     }
   } catch (error) {
     notificationStore.setNotification(
@@ -139,24 +168,6 @@ const fetchEmploymentType = async (id) => {
     );
   }
 };
-
-watch(
-  () => route.params.id,
-  async (newId) => {
-    if (newId) {
-      isEdit.value = true;
-      await fetchEmploymentType(newId);
-    } else {
-      isEdit.value = false;
-      form.value = {
-        name: "",
-        visible: 1,
-        locale: "en",
-      };
-    }
-  },
-  { immediate: true }
-);
 
 const submitForm = async () => {
   errorStore.clearErrors();
