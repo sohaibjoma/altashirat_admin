@@ -41,23 +41,21 @@
         :hint="$t('inputs.birthdate.hint')"
       />
 
-      <div class="ms-4 mt-8 font-weight-bold">
+      <div class="ms-4 mt-8 mb-3 font-weight-bold">
         {{ $t("login.phone") }}
       </div>
 
-      <div class="d-flex gap-0">
-        <PhoneNum
-          v-model="formData.phoneNumber"
-          rules="required|phoneno"
-          :hint="$t('inputs.phoneno.hint')"
-          name="phone.number"
-        />
-        <PhoneCode
-          v-model="formData.phoneCode"
-          rules="required"
-          name="phone[country_code]"
-        />
-      </div>
+      <div class="px-5">
+      <PhoneInput
+        v-model:phoneNumberModelValue="formData.phoneNumber"
+        v-model:countryCodeModelValue="formData.phoneCode"
+        :phoneNumberName="'phone.number'"
+        :countryCodeName="'phone.country_code'"
+        phoneNumberRules="required|phoneno"
+        countryCodeRules="required"
+        :hint="$t('inputs.phoneno.hint')"
+      />
+    </div>
 
       <div class="text-end mt-8 ps-8">
         <MainButton

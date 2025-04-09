@@ -6,7 +6,7 @@ import CountriesRoutes from "../countries";
 import visaTypesRoutes from "../visa-types";
 import UsersRoutes from "../users";
 import EmploymentTypesRoutes from "../employment-types";
-
+  
 const mainLayoutRoute = {
   path: "/dashboard",
   component: mainLayout,

@@ -13,6 +13,7 @@ body {
 .active-class {
   background-color: var(--primary-2) !important;
   font-weight: bolder !important;
+  border-inline-start: 4px solid var(--primary) !important;
 }
 
 .tool-bar {
@@ -46,8 +47,8 @@ body {
 }
 
 .v-toolbar__avatar {
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
 }
 

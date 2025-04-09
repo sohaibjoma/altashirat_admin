@@ -3,12 +3,12 @@
     v-model="visible"
     :class="['notification-snackbar', snackbarColor]"
     location="bottom right"
-    :timeout="3000"
+    :timeout="8000"
     elevation="10"
     rounded="lg"
     content-class="snackbar-content"
   >
-    <div class="d-flex align-center">
+    <div class="d-flex align-center justify-center px-15">
       <v-icon
         :icon="type === 'success' ? 'mdi-check-circle' : 'mdi-close-circle'"
         class="me-3"
@@ -45,7 +45,7 @@ watch(message, (newMessage) => {
     timeoutId = setTimeout(() => {
       visible.value = false;
       notificationStore.clearNotification();
-    }, 3000);
+    }, 8000);
   }
 });
 </script>

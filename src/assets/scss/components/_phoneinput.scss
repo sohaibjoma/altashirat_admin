@@ -1,0 +1,45 @@
+.v-select :deep(.v-input__control) {
+  background-color: var(--primary);
+  border-radius: inherit;
+  color: white;
+  width: 100%;
+}
+
+.phone-input-container {
+  position: relative;
+}
+
+.phone-field {
+  width: 100%;
+}
+
+.country-code-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  z-index: 1;
+}
+
+.country-code-container-en {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  z-index: 1;
+}
+
+.country-code-select {
+  max-width: 100px;
+  min-width: 50px;
+  background-color: var(--primary);
+  color: white;
+  border-radius: 4px !important;
+}
+
+.country-code-select :deep(.v-field) {
+  border: none !important;
+  box-shadow: none !important;
+  background-color: var(--primary) !important;
+  color: white;
+}

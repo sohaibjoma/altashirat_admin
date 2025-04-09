@@ -11,7 +11,7 @@ export const useNotificationStore = defineStore("notification", () => {
 
     setTimeout(() => {
       clearNotification();
-    }, 3000);
+    }, 8000);
   };
 
   const clearNotification = () => {
