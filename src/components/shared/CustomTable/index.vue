@@ -12,12 +12,12 @@
         <tr v-for="item in data" :key="item.id" class="table-row">
           <td v-for="header in tableHeaders" :key="header" class="py-2">
             <template v-if="header === 'visibility'">
-              <div class="d-flex justify-center">
+              <div class="d-flex align-center justify-center">
                 <slot name="visibility" :item="item"></slot>
               </div>
             </template>
             <template v-else-if="header === 'actions'">
-              <div class="d-flex align-center justify-center">
+              <div class="d-flex align-center justify-start">
                 <slot name="actions" :item="item"></slot>
               </div>
             </template>
@@ -35,12 +35,11 @@
         </tr>
       </tbody>
     </v-table>
-    <pagination
+    <Pagination
       :length="pageCount"
       :page="page"
       @update:page="$emit('update:page', $event)"
-      class="text-center mt-4"
-    ></pagination>
+    />
   </v-container>
 </template>
 

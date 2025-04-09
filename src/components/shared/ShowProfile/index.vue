@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn
+    <OutlinedButton
       icon
       color="primary"
       variant="text"
@@ -8,7 +8,7 @@
       @click="openDialog"
     >
       <v-icon>mdi-eye</v-icon>
-    </v-btn>
+    </OutlinedButton>
 
     <v-dialog
       v-model="dialog"
@@ -194,7 +194,12 @@
 
         <v-card-actions class="pa-4">
           <v-spacer></v-spacer>
-          <OutlinedButton color="primary" rounded width="100" @click="dialog = false">
+          <OutlinedButton
+            color="primary"
+            rounded
+            width="100"
+            @click="dialog = false"
+          >
             {{ $t("users.close", "Close") }}
           </OutlinedButton>
         </v-card-actions>
