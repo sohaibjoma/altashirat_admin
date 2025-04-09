@@ -1,5 +1,5 @@
 <template>
-  <div class="ms-4 mt-8 font-weight-bold">
+  <div class="mt-8 mb-2 font-weight-bold">
     {{ label }}
   </div>
   <v-textarea

@@ -1,37 +1,31 @@
 <template>
-  <v-container>
-    <v-row justify="center">
-      <v-col cols="12" md="10" lg="8" xl="7">
-        <v-card class="mt-5 py-4">
-  <v-card-title
-            class="pt-4 pb-2 pink-border font-weight-bold"
-          >
-      {{ $t("settings.title") }}
-    </v-card-title>
-    <hr />
+  <div class="mx-4">
+    <v-card class="mt-5 py-4">
+      <v-card-title class="pt-4 pb-2 pink-border font-weight-bold">
+        {{ $t("settings.title") }}
+      </v-card-title>
+      <hr />
 
-    <v-row class="mt-4 mx-4">
-      <v-col
-        v-for="setting in settingsStore.settings"
-        :key="setting.id"
-        cols="12"
-      >
-        <v-card
-          class="pa-3 d-flex align-center justify-space-between mb-2 bg-gray"
+      <v-row class="mt-4 mx-4">
+        <v-col
+          v-for="setting in settingsStore.settings"
+          :key="setting.id"
+          cols="12"
         >
-          <div>
-            <h3>{{ t(`settings.${setting.key}`) }}</h3>
-          </div>
-          <v-btn class="bg-primary-2" icon @click="editSetting(setting.id)">
-            <v-icon color="secondary">mdi-pencil</v-icon>
-          </v-btn>
-        </v-card>
-      </v-col>
-    </v-row>
+          <v-card
+            class="pa-3 d-flex align-center justify-space-between mb-2 bg-gray"
+          >
+            <div>
+              <h3>{{ t(`settings.${setting.key}`) }}</h3>
+            </div>
+            <v-btn class="bg-primary-2" icon @click="editSetting(setting.id)">
+              <v-icon color="secondary">mdi-pencil</v-icon>
+            </v-btn>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script setup>

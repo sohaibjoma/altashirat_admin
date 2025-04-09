@@ -20,15 +20,20 @@
               v-model="formValues.locale"
               :label="t('actions.language')"
               @update:modelValue="handleLocaleChange"
+
             />
 
-            <TextArea
+            <div class="px-4">
+              <TextArea
               v-if="setting.layout === 'textarea'"
               name="value"
               v-model="formValues.value"
               :label="t('settings.edit')"
               rules="required"
             />
+            </div>
+
+
 
             <BooleanCheckbox
               v-if="setting.layout === 'checkbox'"
@@ -61,7 +66,7 @@
               v-if="setting.layout === 'text'"
               name="text"
               v-model="formValues.value"
-              :label="t('settings.text')"
+              :label="t('settings.edit')"
               rules="required"
             />
 

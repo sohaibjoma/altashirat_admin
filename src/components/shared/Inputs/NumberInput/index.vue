@@ -1,5 +1,5 @@
 <template>
-  <div class="ms-4 mt-8 mb-2 font-weight-bold">
+  <div class="ms-4 mt-6 mb-2 font-weight-bold">
     {{ label }}
   </div>
   <v-text-field
@@ -38,7 +38,7 @@ const { value, errorMessage, setTouched, validate } = useField(
 const internalValue = computed({
   get: () => props.modelValue?.toString() || '',
   set: (newValue) => {
-    const numericValue = newValue === '' ? null : Number(newValue);
+    const numericValue = newValue === '' ? null : newValue;
     value.value = numericValue;
     emit("update:modelValue", numericValue);
   },

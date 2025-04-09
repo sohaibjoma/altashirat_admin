@@ -46,7 +46,8 @@
     "alphaWithSpaces": "Enter a valid name",
     "textArea": "Number of digits should not eeceed 40000",
     "rangeError": "Number should not exceed 100",
-    "numberError": "Number should not exceed 999999"
+    "numberError": "Number should not exceed 999999",
+    "numeric": "Enter a valid number"
   },
 
   "drawer": {
