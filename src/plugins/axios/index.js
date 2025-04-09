@@ -15,9 +15,11 @@ axiosInstance.interceptors.request.use((config) => {
     config.headers["Authorization"] = `Bearer ${token}`;
   }
 
-  if (xlocale) {
+  // Only set x-locale if it's NOT already in headers
+  if (xlocale && !config.headers["x-locale"]) {
     config.headers["x-locale"] = xlocale;
   }
+
   return config;
 });
 
