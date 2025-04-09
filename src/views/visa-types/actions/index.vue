@@ -2,8 +2,10 @@
   <v-container>
     <v-row justify="center">
       <v-col cols="12" md="10" lg="8" xl="7">
-        <v-card class="mt-5 pa-4 w-100">
-          <v-card-title class="text-h5 pt-4 pb-2">
+        <v-card class="mt-5 py-4">
+          <v-card-title
+            class="pt-4 pb-2 text-start border-s-xl border-primary font-weight-bold"
+          >
             {{
               isEdit ? $t("actions.editVisaType") : $t("actions.addVisaType")
             }}
@@ -38,26 +40,25 @@
                   :label="$t('actions.language')"
                 />
 
-                <div class="d-flex mt-5 align-center">
+                <div class="d-flex mt-5 align-center justify-end">
                   <MainButton
                     type="submit"
-                    color="primary"
-                    width="100"
+                    color="secondary"
+                    width="120"
                     height="40"
-                    rounded
                     class="mx-2"
                     :loading="loading"
                   >
-                    {{ isEdit ? $t("update") : $t("add") }}
+                    {{ isEdit ? $t("actions.update") : $t("actions.add") }}
                   </MainButton>
                   <OutlinedButton
                     @click="goBack"
-                    rounded
-                    width="100"
+                    color="secondary"
+                    width="120"
                     height="40"
                     class="mx-2"
                   >
-                    {{ $t("cancel") }}
+                    {{ $t("actions.cancel") }}
                   </OutlinedButton>
                 </div>
               </v-form>

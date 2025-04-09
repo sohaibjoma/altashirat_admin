@@ -1,29 +1,46 @@
 <template>
-  <div class="text-center">
+  <v-container class="pa-0">
     <v-pagination
       v-model="page"
-      rounded="lg"
-      class="mt-5"
       :length="length"
-      @update:modelValue="$emit('update:page', page)" 
-    ></v-pagination>
-  </div>
+      :total-visible="5"
+      color="primary"
+      rounded="circle"
+      class="mt-6"
+      @update:modelValue="$emit('update:page', page)"
+    />
+  </v-container>
 </template>
 
 <script setup>
 import { ref, watch } from "vue";
 
 const props = defineProps({
-  length: Number,
-  page: Number
+  length: {
+    type: Number,
+    required: true,
+  },
+  page: {
+    type: Number,
+    required: true,
+  },
 });
 
 const emit = defineEmits(["update:page"]);
 
-let page = ref(props.page);
+const page = ref(props.page);
 
-// Sync changes when parent updates `page`
-watch(() => props.page, (newPage) => {
-  page.value = newPage;
-});
+watch(
+  () => props.page,
+  (newPage) => {
+    page.value = newPage;
+  }
+);
 </script>
+
+<style scoped>
+.v-pagination .v-btn:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+</style>
