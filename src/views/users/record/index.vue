@@ -1,15 +1,18 @@
 <template>
   <v-app class="bg-gray">
-    <v-breadcrumbs
-      :items="[$t('drawer.users')]"
-      class="dashboard__breadcrumb me-3 rounded-te-lg rounded-be-lg"
-    />
+    <div class="d-flex pe-4 justify-space-between align-center">
+      <v-breadcrumbs
+        :items="[$t('drawer.users')]"
+        class="dashboard__breadcrumb me-3 rounded-te-lg rounded-be-lg"
+      />
+    </div>
     <customTable
       width="100%"
       :URLEndpoint="`/admin-panel/users?page=${page}`"
       :tableHeaders="['name', 'phone', 'email', 'role', 'profile', 'actions']"
       :page="page"
       @update:page="page = $event"
+      :refreshEvent="'user-updated'"
       class="rounded-lg"
       :headerFieldMapping="{
         name: 'username',
@@ -37,7 +40,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref } from "vue";
 import { useNotificationStore } from "../../../stores/notification";
 import { useI18n } from "vue-i18n";
 import { useEventBus } from "../../../composables/eventBus";
@@ -54,7 +57,7 @@ const handleUserBlocked = () => {
     t("notifications.user_blocked_success"),
     "success"
   );
-  eventBus.emit("user-blocked");
+  eventBus.emit("user-updated");
 };
 
 const handleUserUnblocked = () => {
@@ -62,21 +65,7 @@ const handleUserUnblocked = () => {
     t("notifications.user_unblocked_success"),
     "success"
   );
-  eventBus.emit("user-unblocked");
-};
-
-onMounted(() => {
-  eventBus.on("user-blocked", refreshData);
-  eventBus.on("user-unblocked", refreshData);
-});
-
-onUnmounted(() => {
-  eventBus.off("user-blocked", refreshData);
-  eventBus.off("user-unblocked", refreshData);
-});
-
-const refreshData = () => {
-  console.log("refreshing data");
+  eventBus.emit("user-updated");
 };
 </script>
 

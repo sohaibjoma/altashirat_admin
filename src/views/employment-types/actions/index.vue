@@ -56,7 +56,7 @@
                     class="mx-2"
                     :loading="loading"
                   >
-                    {{ isEdit ? $t("actions.update") : $t("actions.add") }}
+                    {{ isEdit ? $t("update") : $t("add") }}
                   </MainButton>
                   <OutlinedButton
                     @click="goBack"
@@ -65,7 +65,7 @@
                     height="40"
                     class="mx-2"
                   >
-                    {{ $t("actions.cancel") }}
+                    {{ $t("cancel") }}
                   </OutlinedButton>
                 </div>
               </v-form>
@@ -118,7 +118,7 @@ onMounted(() => {
     eventBus.emit("edit-employment-type-started", { id: route.params.id });
   } else {
     isEdit.value = false;
-    employmentType.value = {}; // Set an empty object to indicate the form is ready
+    employmentType.value = {};
     formValues.value = {
       name: "",
       visible: 1,
@@ -148,7 +148,7 @@ const updateFormData = () => {
 const fetchEmploymentType = async (id) => {
   try {
     const response = await GET(`/admin-panel/employment-types/${id}`);
-    if (response.data && response.data.employment_type) {
+    if (response.data?.employment_type) {
       employmentType.value = response.data.employment_type;
       formValues.value = {
         name: response.data.employment_type.name || "",
@@ -168,6 +168,28 @@ const fetchEmploymentType = async (id) => {
     );
   }
 };
+
+const resetForm = () => {
+  formValues.value = {
+    name: "",
+    visible: 1,
+    locale: "en",
+  };
+};
+
+watch(
+  () => route.params.id,
+  async (newId) => {
+    if (newId) {
+      isEdit.value = true;
+      await fetchEmploymentType(newId);
+    } else {
+      isEdit.value = false;
+      resetForm();
+    }
+  },
+  { immediate: true }
+);
 
 const submitForm = async () => {
   errorStore.clearErrors();
@@ -189,7 +211,7 @@ const submitForm = async () => {
         t("notifications.employment_type_added_success"),
         "success"
       );
-      eventBus.emit("employment-type-added");
+      eventBus.emit("employment-type-updated");
     }
     router.push("/employment-types");
   } catch (error) {
@@ -212,3 +234,5 @@ const goBack = () => {
   router.push("/employment-types");
 };
 </script>
+
+<style scoped></style>

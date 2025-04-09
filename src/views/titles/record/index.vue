@@ -6,11 +6,7 @@
         class="dashboard__breadcrumb me-3 rounded-te-lg rounded-be-lg"
       />
       <div>
-        <mainButton
-          color="primary"
-          width="135px"
-          @click="handleCreate"
-        >
+        <mainButton color="primary" width="135px" @click="handleCreate">
           {{ $t("create") }}
         </mainButton>
       </div>
@@ -21,6 +17,7 @@
       :tableHeaders="['id', 'name', 'visibility', 'actions']"
       :page="page"
       @update:page="page = $event"
+      :refreshEvent="'title-updated'"
       class="rounded-lg"
     >
       <template #visibility="{ item }">
@@ -50,7 +47,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref } from "vue";
 import { useNotificationStore } from "../../../stores/notification";
 import { useI18n } from "vue-i18n";
 import { useEventBus } from "../../../composables/eventBus";
@@ -95,23 +92,7 @@ const handleItemDeleted = () => {
     t("notifications.title_deleted_success"),
     "success"
   );
-  eventBus.emit("title-deleted");
-};
-
-onMounted(() => {
-  eventBus.on("title-added", refreshData);
-  eventBus.on("title-updated", refreshData);
-  eventBus.on("title-deleted", refreshData);
-});
-
-onUnmounted(() => {
-  eventBus.off("title-added", refreshData);
-  eventBus.off("title-updated", refreshData);
-  eventBus.off("title-deleted", refreshData);
-});
-
-const refreshData = () => {
-  page.value = 1;
+  eventBus.emit("title-updated");
 };
 </script>
 

@@ -3,15 +3,13 @@
     <v-row justify="center">
       <v-col cols="12" md="10" lg="8" xl="7">
         <v-card class="mt-5 py-4">
-          <v-card-title
-            class="pt-4 pb-2 pink-border font-weight-bold"
-          >
+          <v-card-title class="pt-4 pb-2 pink-border font-weight-bold">
             {{
               isEdit ? $t("actions.editVisaType") : $t("actions.addVisaType")
             }}
           </v-card-title>
           <v-card-text>
-            <Form 
+            <Form
               v-if="!loading && visaType"
               v-slot="{ handleSubmit }"
               :initial-values="formValues"
@@ -68,11 +66,7 @@
                 </div>
               </v-form>
             </Form>
-            <v-skeleton-loader 
-              v-else
-              type="article, actions" 
-              class="mt-4"
-            />
+            <v-skeleton-loader v-else type="article, actions" class="mt-4" />
           </v-card-text>
         </v-card>
       </v-col>
@@ -116,7 +110,7 @@ onMounted(() => {
     eventBus.emit("edit-visa-type-started", { id: route.params.id });
   } else {
     isEdit.value = false;
-    visaType.value = {}; // Set an empty object to indicate the form is ready
+    visaType.value = {};
     formValues.value = {
       name: "",
       visible: 1,
@@ -146,7 +140,7 @@ const updateFormData = () => {
 const fetchVisaType = async (id) => {
   try {
     const response = await GET(`/admin-panel/visa-types/${id}`);
-    if (response.data && response.data.visa_type) {
+    if (response.data?.visa_type) {
       visaType.value = response.data.visa_type;
       formValues.value = {
         name: response.data.visa_type.name || "",
@@ -166,6 +160,28 @@ const fetchVisaType = async (id) => {
     );
   }
 };
+
+const resetForm = () => {
+  formValues.value = {
+    name: "",
+    visible: 1,
+    locale: "en",
+  };
+};
+
+watch(
+  () => route.params.id,
+  async (newId) => {
+    if (newId) {
+      isEdit.value = true;
+      await fetchVisaType(newId);
+    } else {
+      isEdit.value = false;
+      resetForm();
+    }
+  },
+  { immediate: true }
+);
 
 const submitForm = async () => {
   errorStore.clearErrors();
@@ -187,7 +203,7 @@ const submitForm = async () => {
         t("notifications.visa_type_added_success"),
         "success"
       );
-      eventBus.emit("visa-type-added");
+      eventBus.emit("visa-type-updated");
     }
     router.push("/visa-types");
   } catch (error) {

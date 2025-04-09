@@ -3,13 +3,11 @@
     <v-row justify="center">
       <v-col cols="12" md="10" lg="8" xl="7">
         <v-card class="mt-5 py-4">
-          <v-card-title
-            class="pt-4 pb-2 pink-border font-weight-bold"
-          >
+          <v-card-title class="pt-4 pb-2 pink-border font-weight-bold">
             {{ isEdit ? $t("actions.editTitle") : $t("actions.addTitle") }}
           </v-card-title>
           <v-card-text>
-            <Form 
+            <Form
               v-if="!loading && setting"
               v-slot="{ handleSubmit }"
               :initial-values="formValues"
@@ -66,11 +64,7 @@
                 </div>
               </v-form>
             </Form>
-            <v-skeleton-loader 
-              v-else
-              type="article, actions" 
-              class="mt-4"
-            />
+            <v-skeleton-loader v-else type="article, actions" class="mt-4" />
           </v-card-text>
         </v-card>
       </v-col>
@@ -100,7 +94,7 @@ const isEdit = ref(false);
 const setting = ref(null);
 const form = ref(null);
 
-// Form values structure - similar to the settings example
+// Form values structure
 const formValues = ref({
   name: "",
   visible: 1,
@@ -114,7 +108,7 @@ onMounted(() => {
     eventBus.emit("edit-title-started", { id: route.params.id });
   } else {
     isEdit.value = false;
-    setting.value = {}; // Set an empty object to indicate the form is ready
+    setting.value = {};
     formValues.value = {
       name: "",
       visible: 1,
@@ -144,7 +138,7 @@ const updateFormData = () => {
 const fetchTitle = async (id) => {
   try {
     const response = await GET(`/admin-panel/titles/${id}`);
-    if (response.data && response.data.title) {
+    if (response.data?.title) {
       setting.value = response.data.title;
       formValues.value = {
         name: response.data.title.name || "",
@@ -164,6 +158,28 @@ const fetchTitle = async (id) => {
     );
   }
 };
+
+const resetForm = () => {
+  formValues.value = {
+    name: "",
+    visible: 1,
+    locale: "en",
+  };
+};
+
+watch(
+  () => route.params.id,
+  async (newId) => {
+    if (newId) {
+      isEdit.value = true;
+      await fetchTitle(newId);
+    } else {
+      isEdit.value = false;
+      resetForm();
+    }
+  },
+  { immediate: true }
+);
 
 const submitForm = async () => {
   errorStore.clearErrors();
@@ -205,3 +221,5 @@ const goBack = () => {
   router.push("/titles");
 };
 </script>
+
+<style scoped></style>
