@@ -6,11 +6,7 @@
         class="dashboard__breadcrumb me-3 rounded-te-lg rounded-be-lg"
       />
       <div>
-        <mainButton
-          color="primary"
-          width="135px"
-          @click="handleCreate"
-        >
+        <mainButton color="primary" width="135px" @click="handleCreate">
           {{ $t("create") }}
         </mainButton>
       </div>
@@ -22,6 +18,7 @@
       :page="page"
       :loading="loading"
       @update:page="page = $event"
+      :refreshEvent="'visa-type-updated'"
       class="rounded-lg"
     >
       <template #visibility="{ item }">
@@ -51,7 +48,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref } from "vue";
 import { useEventBus } from "../../../composables/eventBus";
 import { useNotificationStore } from "../../../stores/notification";
 import { useI18n } from "vue-i18n";
@@ -74,12 +71,10 @@ function getVisaTypePayload(responseData) {
 }
 
 const handleCreate = () => {
-  eventBus.emit("create-visa-type");
   router.push("/visa-types/add");
 };
 
 const handleEdit = (id) => {
-  eventBus.emit("edit-visa-type", { id });
   router.push(`/visa-types/edit/${id}`);
 };
 
@@ -96,23 +91,7 @@ const handleItemDeleted = () => {
     t("notifications.visa_type_deleted_success"),
     "success"
   );
-  eventBus.emit("visa-type-deleted");
-};
-
-onMounted(() => {
-  eventBus.on("visa-type-added", refreshData);
-  eventBus.on("visa-type-updated", refreshData);
-  eventBus.on("visa-type-deleted", refreshData);
-});
-
-onUnmounted(() => {
-  eventBus.off("visa-type-added", refreshData);
-  eventBus.off("visa-type-updated", refreshData);
-  eventBus.off("visa-type-deleted", refreshData);
-});
-
-const refreshData = () => {
-  page.value = 1;
+  eventBus.emit("visa-type-updated");
 };
 </script>
 

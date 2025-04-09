@@ -12,6 +12,7 @@
       width="100%"
       :page="page"
       @update:page="page = $event"
+      :refreshEvent="'country-updated'"
       class="rounded-lg"
     >
       <template #visibility="{ item }">
@@ -35,7 +36,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref } from "vue";
 import { useNotificationStore } from "../../../stores/notification";
 import { useI18n } from "vue-i18n";
 import { useEventBus } from "../../../composables/eventBus";
@@ -66,21 +67,7 @@ const handleItemDeleted = () => {
     t("notifications.country_deleted_success"),
     "success"
   );
-  eventBus.emit("country-deleted");
-};
-
-onMounted(() => {
-  eventBus.on("country-updated", refreshData);
-  eventBus.on("country-deleted", refreshData);
-});
-
-onUnmounted(() => {
-  eventBus.off("country-updated", refreshData);
-  eventBus.off("country-deleted", refreshData);
-});
-
-const refreshData = () => {
-  page.value = 1;
+  eventBus.emit("country-updated");
 };
 </script>
 

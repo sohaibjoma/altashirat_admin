@@ -50,7 +50,7 @@
                     class="mx-2"
                     :loading="loading"
                   >
-                    {{ isEdit ? $t("actions.update") : $t("actions.add") }}
+                    {{ isEdit ? $t("update") : $t("add") }}
                   </MainButton>
                   <OutlinedButton
                     @click="goBack"
@@ -59,7 +59,7 @@
                     height="40"
                     class="mx-2"
                   >
-                    {{ $t("actions.cancel") }}
+                    {{ $t("cancel") }}
                   </OutlinedButton>
                 </div>
               </v-form>
@@ -73,7 +73,7 @@
 
 <script setup>
 import { Form } from "vee-validate";
-import { ref, watch, onMounted } from "vue";
+import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useApi } from "../../../composables/api";
 import { useErrorStore } from "../../../stores/errors";
@@ -96,14 +96,6 @@ const form = ref({
   locale: "en",
 });
 
-onMounted(() => {
-  if (isEdit.value) {
-    eventBus.emit("edit-employment-type-started", { id: route.params.id });
-  } else {
-    eventBus.emit("create-employment-type-started");
-  }
-});
-
 const createFormData = () => {
   const formData = new FormData();
   formData.append("name", form.value.name);
@@ -124,7 +116,7 @@ const updateFormData = () => {
 const fetchEmploymentType = async (id) => {
   try {
     const response = await GET(`/admin-panel/employment-types/${id}`);
-    if (response.data && response.data.employment_type) {
+    if (response.data?.employment_type) {
       form.value = {
         name: response.data.employment_type.name || "",
         visible: response.data.employment_type.visible ? 1 : 0,
@@ -139,6 +131,14 @@ const fetchEmploymentType = async (id) => {
   }
 };
 
+const resetForm = () => {
+  form.value = {
+    name: "",
+    visible: 1,
+    locale: "en",
+  };
+};
+
 watch(
   () => route.params.id,
   async (newId) => {
@@ -147,11 +147,7 @@ watch(
       await fetchEmploymentType(newId);
     } else {
       isEdit.value = false;
-      form.value = {
-        name: "",
-        visible: 1,
-        locale: "en",
-      };
+      resetForm();
     }
   },
   { immediate: true }
@@ -177,7 +173,7 @@ const submitForm = async () => {
         t("notifications.employment_type_added_success"),
         "success"
       );
-      eventBus.emit("employment-type-added");
+      eventBus.emit("employment-type-updated");
     }
     router.push("/employment-types");
   } catch (error) {
@@ -200,3 +196,5 @@ const goBack = () => {
   router.push("/employment-types");
 };
 </script>
+
+<style scoped></style>

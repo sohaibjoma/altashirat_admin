@@ -92,14 +92,6 @@ const form = ref({
   locale: "en",
 });
 
-onMounted(() => {
-  if (isEdit.value) {
-    eventBus.emit("edit-title-started", { id: route.params.id });
-  } else {
-    eventBus.emit("create-title-started");
-  }
-});
-
 const createFormData = () => {
   const formData = new FormData();
   formData.append("name", form.value.name);
@@ -120,17 +112,12 @@ const updateFormData = () => {
 const fetchTitle = async (id) => {
   try {
     const response = await GET(`/admin-panel/titles/${id}`);
-    if (response.data && response.data.title) {
+    if (response.data?.title) {
       form.value = {
         name: response.data.title.name || "",
         visible: response.data.title.visible ? 1 : 0,
         locale: response.data.title.locale || "en",
       };
-    } else {
-      notificationStore.setNotification(
-        t("notifications.title_load_error"),
-        "error"
-      );
     }
   } catch (error) {
     notificationStore.setNotification(
@@ -138,6 +125,14 @@ const fetchTitle = async (id) => {
       "error"
     );
   }
+};
+
+const resetForm = () => {
+  form.value = {
+    name: "",
+    visible: 1,
+    locale: "en",
+  };
 };
 
 watch(
@@ -148,11 +143,7 @@ watch(
       await fetchTitle(newId);
     } else {
       isEdit.value = false;
-      form.value = {
-        name: "",
-        visible: 1,
-        locale: "en",
-      };
+      resetForm();
     }
   },
   { immediate: true }
@@ -198,3 +189,5 @@ const goBack = () => {
   router.push("/titles");
 };
 </script>
+
+<style scoped></style>

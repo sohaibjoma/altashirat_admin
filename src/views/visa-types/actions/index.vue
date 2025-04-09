@@ -71,7 +71,7 @@
 
 <script setup>
 import { Form } from "vee-validate";
-import { ref, watch, onMounted } from "vue";
+import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useApi } from "../../../composables/api";
 import { useErrorStore } from "../../../stores/errors";
@@ -94,14 +94,6 @@ const form = ref({
   locale: "en",
 });
 
-onMounted(() => {
-  if (isEdit.value) {
-    eventBus.emit("edit-visa-type-started", { id: route.params.id });
-  } else {
-    eventBus.emit("create-visa-type-started");
-  }
-});
-
 const createFormData = () => {
   const formData = new FormData();
   formData.append("name", form.value.name);
@@ -122,17 +114,12 @@ const updateFormData = () => {
 const fetchVisaType = async (id) => {
   try {
     const response = await GET(`/admin-panel/visa-types/${id}`);
-    if (response.data && response.data.visa_type) {
+    if (response.data?.visa_type) {
       form.value = {
         name: response.data.visa_type.name || "",
         visible: response.data.visa_type.visible ? 1 : 0,
         locale: response.data.visa_type.locale || "en",
       };
-    } else {
-      notificationStore.setNotification(
-        t("notifications.visa_type_load_error"),
-        "error"
-      );
     }
   } catch (error) {
     notificationStore.setNotification(
@@ -140,6 +127,14 @@ const fetchVisaType = async (id) => {
       "error"
     );
   }
+};
+
+const resetForm = () => {
+  form.value = {
+    name: "",
+    visible: 1,
+    locale: "en",
+  };
 };
 
 watch(
@@ -150,11 +145,7 @@ watch(
       await fetchVisaType(newId);
     } else {
       isEdit.value = false;
-      form.value = {
-        name: "",
-        visible: 1,
-        locale: "en",
-      };
+      resetForm();
     }
   },
   { immediate: true }
@@ -180,7 +171,7 @@ const submitForm = async () => {
         t("notifications.visa_type_added_success"),
         "success"
       );
-      eventBus.emit("visa-type-added");
+      eventBus.emit("visa-type-updated");
     }
     router.push("/visa-types");
   } catch (error) {
