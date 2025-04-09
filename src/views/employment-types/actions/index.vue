@@ -57,6 +57,7 @@
                     :loading="loading"
                   >
                     {{ isEdit ? $t("update") : $t("add") }}
+                    {{ isEdit ? $t("update") : $t("add") }}
                   </MainButton>
                   <OutlinedButton
                     @click="goBack"
@@ -118,7 +119,7 @@ onMounted(() => {
     eventBus.emit("edit-employment-type-started", { id: route.params.id });
   } else {
     isEdit.value = false;
-    employmentType.value = {}; // Set an empty object to indicate the form is ready
+    employmentType.value = {};
     formValues.value = {
       name: "",
       visible: 1,
@@ -148,7 +149,7 @@ const updateFormData = () => {
 const fetchEmploymentType = async (id) => {
   try {
     const response = await GET(`/admin-panel/employment-types/${id}`);
-    if (response.data && response.data.employment_type) {
+    if (response.data?.employment_type) {
       employmentType.value = response.data.employment_type;
       formValues.value = {
         name: response.data.employment_type.name || "",
@@ -170,7 +171,7 @@ const fetchEmploymentType = async (id) => {
 };
 
 const resetForm = () => {
-  form.value = {
+  formValues.value = {
     name: "",
     visible: 1,
     locale: "en",

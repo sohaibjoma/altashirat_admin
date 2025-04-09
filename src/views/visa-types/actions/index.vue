@@ -3,15 +3,13 @@
     <v-row justify="center">
       <v-col cols="12" md="10" lg="8" xl="7">
         <v-card class="mt-5 py-4">
-          <v-card-title
-            class="pt-4 pb-2 pink-border font-weight-bold"
-          >
+          <v-card-title class="pt-4 pb-2 pink-border font-weight-bold">
             {{
               isEdit ? $t("actions.editVisaType") : $t("actions.addVisaType")
             }}
           </v-card-title>
           <v-card-text>
-            <Form 
+            <Form
               v-if="!loading && visaType"
               v-slot="{ handleSubmit }"
               :initial-values="formValues"
@@ -68,11 +66,7 @@
                 </div>
               </v-form>
             </Form>
-            <v-skeleton-loader 
-              v-else
-              type="article, actions" 
-              class="mt-4"
-            />
+            <v-skeleton-loader v-else type="article, actions" class="mt-4" />
           </v-card-text>
         </v-card>
       </v-col>
@@ -113,6 +107,13 @@ onMounted(() => {
   if (isEdit.value) {
     eventBus.emit("edit-visa-type-started", { id: route.params.id });
   } else {
+    isEdit.value = false;
+    visaType.value = {};
+    formValues.value = {
+      name: "",
+      visible: 1,
+      locale: "en",
+    };
     eventBus.emit("create-visa-type-started");
   }
 });
@@ -137,8 +138,9 @@ const updateFormData = () => {
 const fetchVisaType = async (id) => {
   try {
     const response = await GET(`/admin-panel/visa-types/${id}`);
-    if (response.data && response.data.visa_type) {
-      form.value = {
+    if (response.data?.visa_type) {
+      visaType.value = response.data.visa_type;
+      formValues.value = {
         name: response.data.visa_type.name || "",
         visible: response.data.visa_type.visible ? 1 : 0,
         locale: response.data.visa_type.locale || "en",
@@ -152,6 +154,14 @@ const fetchVisaType = async (id) => {
   }
 };
 
+const resetForm = () => {
+  formValues.value = {
+    name: "",
+    visible: 1,
+    locale: "en",
+  };
+};
+
 watch(
   () => route.params.id,
   async (newId) => {
@@ -160,11 +170,7 @@ watch(
       await fetchVisaType(newId);
     } else {
       isEdit.value = false;
-      form.value = {
-        name: "",
-        visible: 1,
-        locale: "en",
-      };
+      resetForm();
     }
   },
   { immediate: true }

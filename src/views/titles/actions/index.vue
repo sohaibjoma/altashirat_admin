@@ -3,13 +3,11 @@
     <v-row justify="center">
       <v-col cols="12" md="10" lg="8" xl="7">
         <v-card class="mt-5 py-4">
-          <v-card-title
-            class="pt-4 pb-2 pink-border font-weight-bold"
-          >
+          <v-card-title class="pt-4 pb-2 pink-border font-weight-bold">
             {{ isEdit ? $t("actions.editTitle") : $t("actions.addTitle") }}
           </v-card-title>
           <v-card-text>
-            <Form 
+            <Form
               v-if="!loading && setting"
               v-slot="{ handleSubmit }"
               :initial-values="formValues"
@@ -66,11 +64,7 @@
                 </div>
               </v-form>
             </Form>
-            <v-skeleton-loader 
-              v-else
-              type="article, actions" 
-              class="mt-4"
-            />
+            <v-skeleton-loader v-else type="article, actions" class="mt-4" />
           </v-card-text>
         </v-card>
       </v-col>
@@ -100,7 +94,7 @@ const isEdit = ref(false);
 const setting = ref(null);
 const form = ref(null);
 
-// Form values structure - similar to the settings example
+// Form values structure
 const formValues = ref({
   name: "",
   visible: 1,
@@ -111,6 +105,13 @@ onMounted(() => {
   if (isEdit.value) {
     eventBus.emit("edit-title-started", { id: route.params.id });
   } else {
+    isEdit.value = false;
+    setting.value = {};
+    formValues.value = {
+      name: "",
+      visible: 1,
+      locale: "en",
+    };
     eventBus.emit("create-title-started");
   }
 });
@@ -135,8 +136,9 @@ const updateFormData = () => {
 const fetchTitle = async (id) => {
   try {
     const response = await GET(`/admin-panel/titles/${id}`);
-    if (response.data && response.data.title) {
-      form.value = {
+    if (response.data?.title) {
+      setting.value = response.data.title;
+      formValues.value = {
         name: response.data.title.name || "",
         visible: response.data.title.visible ? 1 : 0,
         locale: response.data.title.locale || "en",
@@ -150,6 +152,14 @@ const fetchTitle = async (id) => {
   }
 };
 
+const resetForm = () => {
+  formValues.value = {
+    name: "",
+    visible: 1,
+    locale: "en",
+  };
+};
+
 watch(
   () => route.params.id,
   async (newId) => {
@@ -158,11 +168,7 @@ watch(
       await fetchTitle(newId);
     } else {
       isEdit.value = false;
-      form.value = {
-        name: "",
-        visible: 1,
-        locale: "en",
-      };
+      resetForm();
     }
   },
   { immediate: true }
@@ -208,3 +214,5 @@ const goBack = () => {
   router.push("/titles");
 };
 </script>
+
+<style scoped></style>
