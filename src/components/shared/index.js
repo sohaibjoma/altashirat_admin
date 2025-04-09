@@ -2,8 +2,7 @@ import { app } from "../../myApp/index.js"
 
 //text inputs imports
 import TextInput from "./Inputs/textfields/TextInput/index.vue"
-import PhoneNum from "./Inputs/textfields/PhoneNum/index.vue"
-import PhoneCode from "./Inputs/textfields/PhoneCode/index.vue"
+import PhoneInput from "./Inputs/textfields/PhoneInput/index.vue"
 import Password from "./Inputs/textfields/Password/index.vue"
 import ConfirmPassword from "./Inputs/textfields/ConfirmPassword/index.vue"
 import Select from "./Inputs/Select/index.vue"
@@ -12,8 +11,7 @@ import BlockUser from "./BlockUser/index.vue"
 import DateInput from "./Inputs/Date/index.vue"
 
 app.component("TextInput",TextInput);
-app.component("PhoneNum",PhoneNum);
-app.component("PhoneCode",PhoneCode);
+app.component("PhoneInput",PhoneInput);
 app.component("Password",Password);
 app.component("ConfirmPassword",ConfirmPassword);
 app.component("Select", Select);

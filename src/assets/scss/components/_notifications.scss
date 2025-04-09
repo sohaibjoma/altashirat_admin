@@ -1,7 +1,7 @@
 .v-snackbar.success-bg {
   .v-snackbar__wrapper {
     background-color: var(--correct-bg) !important;
-    border: 1px solid rgba(75, 174, 79, 0.2) !important;
+    border: 1px solid var(--correct-text) !important;
   }
 
   .v-snackbar__content {
@@ -17,7 +17,7 @@
 .v-snackbar.error-bg {
   .v-snackbar__wrapper {
     background-color: var(--error-bg) !important;
-    border: 1px solid rgba(208, 44, 71, 0.2) !important;
+    border: 1px solid var(--error-text) !important;
   }
 
   .v-snackbar__content {

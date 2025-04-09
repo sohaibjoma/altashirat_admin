@@ -36,16 +36,14 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useDrawerStore } from "../../../../stores/drawer";
 import { storeToRefs } from "pinia";
 import mainLayoutRoute from "../../../../router/modules/layouts/mainLayout";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
-
 const displayedRoutes = ref([]);
-
 const ACTIVE_ITEM_KEY = "activeDrawerItem";
 
 onMounted(() => {
@@ -53,13 +51,7 @@ onMounted(() => {
     (route) => route.meta && !route.meta.hidden
   );
 
-  const storedActiveItem = localStorage.getItem(ACTIVE_ITEM_KEY);
-  if (storedActiveItem) {
-    activeItem.value = storedActiveItem;
-  } else if (displayedRoutes.value.length > 0) {
-    activeItem.value = displayedRoutes.value[0].meta.title;
-    localStorage.setItem(ACTIVE_ITEM_KEY, activeItem.value);
-  }
+  updateActiveItemBasedOnRoute();
 });
 
 const drawerStore = useDrawerStore();
@@ -72,16 +64,57 @@ const setActive = (item) => {
   localStorage.setItem(ACTIVE_ITEM_KEY, item);
 };
 
-onMounted(() => {
-  const currentRouteName = route.name;
-  if (currentRouteName) {
-    const foundRoute = displayedRoutes.value.find(
-      (r) => r.name === currentRouteName
-    );
-    if (foundRoute) {
-      setActive(foundRoute.meta.title);
+// Function to update active item based on current route
+const updateActiveItemBasedOnRoute = () => {
+  const currentRoutePath = route.path;
+  
+  // Handle profile route specifically - clear selection
+  if (currentRoutePath === '/profile') {
+    activeItem.value = '';
+    localStorage.removeItem(ACTIVE_ITEM_KEY);
+    return;
+  }
+  
+  // Handle settings route - ensure it's selected when navigated to from anywhere
+  if (currentRoutePath === '/settings') {
+    const settingsRoute = displayedRoutes.value.find(r => r.path === '/settings');
+    if (settingsRoute) {
+      setActive(settingsRoute.meta.title);
+      return;
     }
   }
+  
+  // For other routes, find matching route from displayed routes
+  const foundRoute = displayedRoutes.value.find(
+    (r) => r.path === currentRoutePath || currentRoutePath.startsWith(r.path + '/')
+  );
+  
+  if (foundRoute) {
+    setActive(foundRoute.meta.title);
+  } else {
+    // If no matching route found, try to restore from localStorage
+    const storedActiveItem = localStorage.getItem(ACTIVE_ITEM_KEY);
+    if (storedActiveItem) {
+      activeItem.value = storedActiveItem;
+    } else if (displayedRoutes.value.length > 0) {
+      // Default to first item if nothing stored and not on profile
+      activeItem.value = displayedRoutes.value[0].meta.title;
+      localStorage.setItem(ACTIVE_ITEM_KEY, activeItem.value);
+    }
+  }
+};
+
+// Watch for route changes to update the active item
+watch(
+  () => route.path,
+  () => {
+    updateActiveItemBasedOnRoute();
+  }
+);
+
+onMounted(() => {
+  // Initial update based on current route
+  updateActiveItemBasedOnRoute();
 });
 </script>
 
