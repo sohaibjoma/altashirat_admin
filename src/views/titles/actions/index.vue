@@ -108,18 +108,9 @@ const formValues = ref({
 });
 
 onMounted(() => {
-  if (route.params.id) {
-    isEdit.value = true;
-    fetchTitle(route.params.id);
+  if (isEdit.value) {
     eventBus.emit("edit-title-started", { id: route.params.id });
   } else {
-    isEdit.value = false;
-    setting.value = {}; // Set an empty object to indicate the form is ready
-    formValues.value = {
-      name: "",
-      visible: 1,
-      locale: "en",
-    };
     eventBus.emit("create-title-started");
   }
 });
@@ -145,17 +136,11 @@ const fetchTitle = async (id) => {
   try {
     const response = await GET(`/admin-panel/titles/${id}`);
     if (response.data && response.data.title) {
-      setting.value = response.data.title;
-      formValues.value = {
+      form.value = {
         name: response.data.title.name || "",
         visible: response.data.title.visible ? 1 : 0,
         locale: response.data.title.locale || "en",
       };
-    } else {
-      notificationStore.setNotification(
-        t("notifications.title_load_error"),
-        "error"
-      );
     }
   } catch (error) {
     notificationStore.setNotification(
@@ -164,6 +149,24 @@ const fetchTitle = async (id) => {
     );
   }
 };
+
+watch(
+  () => route.params.id,
+  async (newId) => {
+    if (newId) {
+      isEdit.value = true;
+      await fetchTitle(newId);
+    } else {
+      isEdit.value = false;
+      form.value = {
+        name: "",
+        visible: 1,
+        locale: "en",
+      };
+    }
+  },
+  { immediate: true }
+);
 
 const submitForm = async () => {
   errorStore.clearErrors();

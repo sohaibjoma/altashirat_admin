@@ -17,14 +17,15 @@
       :tableHeaders="['id', 'name', 'visibility', 'actions']"
       :page="page"
       @update:page="page = $event"
+      :refreshEvent="'employment-type-updated'"
       class="rounded-lg"
     >
       <template #visibility="{ item }">
         <ToggleVisibility
-          @visibility-toggled="handleVisibilityToggled"
           class="d-flex align-center"
           :record="{ ...item, resource: 'employment-types' }"
           :payload="getEmploymentTypePayload"
+          @visibility-toggled="handleVisibilityToggled"
         />
       </template>
       <template #actions="{ item }">
@@ -35,10 +36,10 @@
           @edit-clicked="handleEdit(item.id)"
         />
         <DeleteDialog
-          @item-deleted="handleItemDeleted"
           :record="item"
           :resource="'employment-types'"
           class="mt-3"
+          @item-deleted="handleItemDeleted"
         />
       </template>
     </customTable>
@@ -46,10 +47,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
-import { useEventBus } from "../../../composables/eventBus";
+import { ref } from "vue";
 import { useNotificationStore } from "../../../stores/notification";
 import { useI18n } from "vue-i18n";
+import { useEventBus } from "../../../composables/eventBus";
 import { useRouter } from "vue-router";
 
 const { t } = useI18n();
@@ -69,12 +70,10 @@ function getEmploymentTypePayload(responseData) {
 }
 
 const handleCreate = () => {
-  eventBus.emit("create-employment-type");
   router.push("/employment-types/add");
 };
 
 const handleEdit = (id) => {
-  eventBus.emit("edit-employment-type", { id });
   router.push(`/employment-types/edit/${id}`);
 };
 
@@ -91,21 +90,7 @@ const handleItemDeleted = () => {
     t("notifications.employment_type_deleted_success"),
     "success"
   );
-  eventBus.emit("employment-type-deleted");
-};
-
-onMounted(() => {
-  eventBus.on("employment-type-updated", refreshData);
-  eventBus.on("employment-type-deleted", refreshData);
-});
-
-onUnmounted(() => {
-  eventBus.off("employment-type-updated", refreshData);
-  eventBus.off("employment-type-deleted", refreshData);
-});
-
-const refreshData = () => {
-  page.value = 1;
+  eventBus.emit("employment-type-updated");
 };
 </script>
 

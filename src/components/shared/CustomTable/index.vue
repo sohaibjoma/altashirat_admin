@@ -69,6 +69,10 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
+  refreshEvent: {
+    type: String,
+    default: 'table-refresh'
+  }
 });
 
 const { GET } = useApi();
@@ -100,15 +104,15 @@ function getNestedValue(obj, path) {
 }
 
 onMounted(() => {
-  eventBus.on("table-refresh", getData);
+  eventBus.on(props.refreshEvent, getData);
   getData();
 });
 
 onUnmounted(() => {
-  eventBus.off("table-refresh", getData);
+  eventBus.off(props.refreshEvent, getData);
 });
 
-watch(() => props.page, getData);
+watch(() => props.page, getData, { immediate: false });
 </script>
 
 <style scoped></style>

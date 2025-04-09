@@ -82,7 +82,7 @@
 
 <script setup>
 import { Form } from "vee-validate";
-import { ref, watch, onMounted } from "vue";
+import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useApi } from "../../../composables/api";
 import { useErrorStore } from "../../../stores/errors";
@@ -110,18 +110,9 @@ const formValues = ref({
 });
 
 onMounted(() => {
-  if (route.params.id) {
-    isEdit.value = true;
-    fetchVisaType(route.params.id);
+  if (isEdit.value) {
     eventBus.emit("edit-visa-type-started", { id: route.params.id });
   } else {
-    isEdit.value = false;
-    visaType.value = {}; // Set an empty object to indicate the form is ready
-    formValues.value = {
-      name: "",
-      visible: 1,
-      locale: "en",
-    };
     eventBus.emit("create-visa-type-started");
   }
 });
@@ -147,17 +138,11 @@ const fetchVisaType = async (id) => {
   try {
     const response = await GET(`/admin-panel/visa-types/${id}`);
     if (response.data && response.data.visa_type) {
-      visaType.value = response.data.visa_type;
-      formValues.value = {
+      form.value = {
         name: response.data.visa_type.name || "",
         visible: response.data.visa_type.visible ? 1 : 0,
         locale: response.data.visa_type.locale || "en",
       };
-    } else {
-      notificationStore.setNotification(
-        t("notifications.visa_type_load_error"),
-        "error"
-      );
     }
   } catch (error) {
     notificationStore.setNotification(
@@ -166,6 +151,24 @@ const fetchVisaType = async (id) => {
     );
   }
 };
+
+watch(
+  () => route.params.id,
+  async (newId) => {
+    if (newId) {
+      isEdit.value = true;
+      await fetchVisaType(newId);
+    } else {
+      isEdit.value = false;
+      form.value = {
+        name: "",
+        visible: 1,
+        locale: "en",
+      };
+    }
+  },
+  { immediate: true }
+);
 
 const submitForm = async () => {
   errorStore.clearErrors();
@@ -187,7 +190,7 @@ const submitForm = async () => {
         t("notifications.visa_type_added_success"),
         "success"
       );
-      eventBus.emit("visa-type-added");
+      eventBus.emit("visa-type-updated");
     }
     router.push("/visa-types");
   } catch (error) {

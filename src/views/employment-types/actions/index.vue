@@ -56,7 +56,7 @@
                     class="mx-2"
                     :loading="loading"
                   >
-                    {{ isEdit ? $t("actions.update") : $t("actions.add") }}
+                    {{ isEdit ? $t("update") : $t("add") }}
                   </MainButton>
                   <OutlinedButton
                     @click="goBack"
@@ -65,7 +65,7 @@
                     height="40"
                     class="mx-2"
                   >
-                    {{ $t("actions.cancel") }}
+                    {{ $t("cancel") }}
                   </OutlinedButton>
                 </div>
               </v-form>
@@ -84,7 +84,7 @@
 
 <script setup>
 import { Form } from "vee-validate";
-import { ref, watch, onMounted } from "vue";
+import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useApi } from "../../../composables/api";
 import { useErrorStore } from "../../../stores/errors";
@@ -169,6 +169,28 @@ const fetchEmploymentType = async (id) => {
   }
 };
 
+const resetForm = () => {
+  form.value = {
+    name: "",
+    visible: 1,
+    locale: "en",
+  };
+};
+
+watch(
+  () => route.params.id,
+  async (newId) => {
+    if (newId) {
+      isEdit.value = true;
+      await fetchEmploymentType(newId);
+    } else {
+      isEdit.value = false;
+      resetForm();
+    }
+  },
+  { immediate: true }
+);
+
 const submitForm = async () => {
   errorStore.clearErrors();
 
@@ -189,7 +211,7 @@ const submitForm = async () => {
         t("notifications.employment_type_added_success"),
         "success"
       );
-      eventBus.emit("employment-type-added");
+      eventBus.emit("employment-type-updated");
     }
     router.push("/employment-types");
   } catch (error) {
@@ -212,3 +234,5 @@ const goBack = () => {
   router.push("/employment-types");
 };
 </script>
+
+<style scoped></style>
