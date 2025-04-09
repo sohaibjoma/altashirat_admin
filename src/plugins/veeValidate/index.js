@@ -23,6 +23,20 @@ defineRule("alpha", (value) => {
   return alpha(value) || t("errorMsgs.alpha");
 });
 
+// Define a custom alpha rule that allows spaces
+defineRule("alphaWithSpaces", (value) => {
+  // If value is empty, return true (this can be handled by required rule if needed)
+  if (!value || !value.length) {
+    return true;
+  }
+  
+  // Test for alpha characters and spaces only
+  // This regex allows alphabetic characters (both cases) and spaces
+  const alphaWithSpacesRegex = /^[A-Za-z\s]+$/;
+  
+  return alphaWithSpacesRegex.test(value) || t("errorMsgs.alphaWithSpaces");
+});
+
 // First name validation (2 to 30 characters, only letters)
 defineRule("firstname", (value) => {
   if (!value || typeof value !== "string" || !alpha(value) || value.length < 2 || value.length > 30) {

@@ -2,7 +2,7 @@
   <img
     src="../../../assets/imgs/rename.png"
     alt="Edit"
-    class="v-toolbar__avatar me-2 cursor-pointer mt-3"
+    class=" me-2 cursor-pointer mt-3"
     @click="editRecord(props.record.id)"
   />
 </template>
