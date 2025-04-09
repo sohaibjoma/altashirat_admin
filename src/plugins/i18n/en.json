@@ -43,6 +43,7 @@
     "email": "Enter a valid email",
     "confirmed": "It doesn't match the password",
     "alpha": "Enter a valid name",
+    "alphaWithSpaces": "Enter a valid name",
     "textArea": "Number of digits should not eeceed 40000",
     "rangeError": "Number should not exceed 100",
     "numberError": "Number should not exceed 999999"

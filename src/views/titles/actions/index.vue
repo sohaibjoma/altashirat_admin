@@ -2,24 +2,29 @@
   <v-container>
     <v-row justify="center">
       <v-col cols="12" md="10" lg="8" xl="7">
-        <v-card class="mt-5 pa-4">
-          <v-card-title class="text-h5 pt-4 pb-2">
+        <v-card class="mt-5 py-4">
+          <v-card-title class="pt-4 pb-2 pink-border font-weight-bold">
             {{ isEdit ? $t("actions.editTitle") : $t("actions.addTitle") }}
           </v-card-title>
           <v-card-text>
-            <Form v-slot="{ handleSubmit }">
+            <Form
+              v-if="!loading && setting"
+              v-slot="{ handleSubmit }"
+              :initial-values="formValues"
+              ref="form"
+            >
               <v-form @submit.prevent="handleSubmit(submitForm)">
                 <TextInput
-                  v-model="form.name"
+                  v-model="formValues.name"
                   :label="$t('table.name')"
                   :placeholder="$t('enterName')"
                   name="name"
-                  rules="alpha"
+                  rules="required"
                   class="mb-3"
                 />
 
                 <Select
-                  v-model="form.visible"
+                  v-model="formValues.visible"
                   :label="$t('visible')"
                   :placeholder="$t('selectVisibility')"
                   :items="[
@@ -32,34 +37,34 @@
                 <LocaleSelector
                   v-if="isEdit"
                   name="locale"
-                  v-model="form.locale"
+                  v-model="formValues.locale"
                   :label="$t('actions.language')"
                 />
 
-                <div class="d-flex mt-5 align-center">
+                <div class="d-flex mt-5 align-center justify-end">
                   <MainButton
                     type="submit"
-                    color="primary"
-                    width="100"
+                    color="secondary"
+                    width="120"
                     height="40"
-                    rounded
                     class="mx-2"
                     :loading="loading"
                   >
-                    {{ isEdit ? $t("update") : $t("add") }}
+                    {{ isEdit ? $t("actions.update") : $t("actions.add") }}
                   </MainButton>
                   <OutlinedButton
                     @click="goBack"
-                    rounded
-                    width="100"
+                    color="secondary"
+                    width="120"
                     height="40"
                     class="mx-2"
                   >
-                    {{ $t("cancel") }}
+                    {{ $t("actions.cancel") }}
                   </OutlinedButton>
                 </div>
               </v-form>
             </Form>
+            <v-skeleton-loader v-else type="article, actions" class="mt-4" />
           </v-card-text>
         </v-card>
       </v-col>
@@ -86,25 +91,46 @@ const notificationStore = useNotificationStore();
 const eventBus = useEventBus();
 
 const isEdit = ref(false);
-const form = ref({
+const setting = ref(null);
+const form = ref(null);
+
+// Form values structure
+const formValues = ref({
   name: "",
   visible: 1,
   locale: "en",
 });
 
+onMounted(() => {
+  if (route.params.id) {
+    isEdit.value = true;
+    fetchTitle(route.params.id);
+    eventBus.emit("edit-title-started", { id: route.params.id });
+  } else {
+    isEdit.value = false;
+    setting.value = {};
+    formValues.value = {
+      name: "",
+      visible: 1,
+      locale: "en",
+    };
+    eventBus.emit("create-title-started");
+  }
+});
+
 const createFormData = () => {
   const formData = new FormData();
-  formData.append("name", form.value.name);
-  formData.append("visible", form.value.visible.toString());
-  formData.append("locale", form.value.locale);
+  formData.append("name", formValues.value.name);
+  formData.append("visible", formValues.value.visible.toString());
+  formData.append("locale", formValues.value.locale);
   return formData;
 };
 
 const updateFormData = () => {
   const formData = new FormData();
-  formData.append("name", form.value.name);
-  formData.append("visible", form.value.visible.toString());
-  formData.append("locale", form.value.locale);
+  formData.append("name", formValues.value.name);
+  formData.append("visible", formValues.value.visible.toString());
+  formData.append("locale", formValues.value.locale);
   formData.append("_method", "put");
   return formData;
 };
@@ -113,11 +139,17 @@ const fetchTitle = async (id) => {
   try {
     const response = await GET(`/admin-panel/titles/${id}`);
     if (response.data?.title) {
-      form.value = {
+      setting.value = response.data.title;
+      formValues.value = {
         name: response.data.title.name || "",
         visible: response.data.title.visible ? 1 : 0,
         locale: response.data.title.locale || "en",
       };
+    } else {
+      notificationStore.setNotification(
+        t("notifications.title_load_error"),
+        "error"
+      );
     }
   } catch (error) {
     notificationStore.setNotification(
@@ -128,7 +160,7 @@ const fetchTitle = async (id) => {
 };
 
 const resetForm = () => {
-  form.value = {
+  formValues.value = {
     name: "",
     visible: 1,
     locale: "en",

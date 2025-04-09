@@ -4,7 +4,7 @@
       <!-- Edit Profile Fields -->
       <TextInput
         v-model="formData.firstname"
-        rules="required|alpha"
+        rules="required|alphaWithSpaces"
         :label="$t('profile.firstname')"
         :hint="$t('inputs.names.firstHint')"
         name="firstname"
@@ -12,7 +12,7 @@
 
       <TextInput
         v-model="formData.middlename"
-        rules="required|alpha"
+        rules="required|alphaWithSpaces"
         :label="$t('profile.middlename')"
         :hint="$t('inputs.names.middleHint')"
         name="middlename"
@@ -20,7 +20,7 @@
 
       <TextInput
         v-model="formData.lastname"
-        rules="required|alpha"
+        rules="required|alphaWithSpaces"
         :label="$t('profile.lastname')"
         :hint="$t('inputs.names.lastHint')"
         name="lastname"
@@ -52,7 +52,6 @@
         :phoneNumberName="'phone.number'"
         :countryCodeName="'phone.country_code'"
         phoneNumberRules="required|phoneno"
-        countryCodeRules="required"
         :hint="$t('inputs.phoneno.hint')"
       />
     </div>
