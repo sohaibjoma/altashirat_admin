@@ -28,7 +28,7 @@
             </template>
             <template v-else>
               <span>
-                {{ getCellValue(item, header) || "N/A" }}
+                {{ getCellValue(item, header) || t('profile.N/A') }}
               </span>
             </template>
           </td>
@@ -47,6 +47,9 @@
 import { useApi } from "../../../composables/api";
 import { onMounted, onUnmounted, ref, watch } from "vue";
 import { useEventBus } from "../../../composables/eventBus";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const data = ref([]);
 const pageCount = ref(0);

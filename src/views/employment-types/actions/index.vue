@@ -4,16 +4,16 @@
       <v-col cols="12" md="10" lg="8" xl="7">
         <v-card class="mt-5 py-4">
           <v-card-title
-            class="pt-4 pb-2 text-start border-s-xl border-primary font-weight-bold"
+            class="pt-4 pb-2 text-start pink-border font-weight-bold"
           >
             {{
               isEdit
-                ? $t("actions.editEmploymentType")
-                : $t("actions.addEmploymentType")
+                ? t("actions.editEmploymentType")
+                : t("actions.addEmploymentType")
             }}
           </v-card-title>
           <v-card-text>
-            <Form 
+            <Form
               v-if="!loading && employmentType"
               v-slot="{ handleSubmit }"
               :initial-values="formValues"
@@ -45,6 +45,7 @@
                   name="locale"
                   v-model="formValues.locale"
                   :label="$t('actions.language')"
+                  @update:modelValue="handleLocaleChange"
                 />
 
                 <div class="d-flex mt-5 align-center justify-end">
@@ -56,8 +57,7 @@
                     class="mx-2"
                     :loading="loading"
                   >
-                    {{ isEdit ? $t("update") : $t("add") }}
-                    {{ isEdit ? $t("update") : $t("add") }}
+                    {{ isEdit ? t("actions.update") : t("actions.add") }}
                   </MainButton>
                   <OutlinedButton
                     @click="goBack"
@@ -66,16 +66,12 @@
                     height="40"
                     class="mx-2"
                   >
-                    {{ $t("cancel") }}
+                    {{ t("actions.cancel") }}
                   </OutlinedButton>
                 </div>
               </v-form>
             </Form>
-            <v-skeleton-loader 
-              v-else
-              type="article, actions" 
-              class="mt-4"
-            />
+            <v-skeleton-loader v-else type="article, actions" class="mt-4" />
           </v-card-text>
         </v-card>
       </v-col>
@@ -85,7 +81,7 @@
 
 <script setup>
 import { Form } from "vee-validate";
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useApi } from "../../../composables/api";
 import { useErrorStore } from "../../../stores/errors";
@@ -105,12 +101,67 @@ const isEdit = ref(false);
 const employmentType = ref(null);
 const form = ref(null);
 
-// Form values structure
 const formValues = ref({
   name: "",
   visible: 1,
-  locale: "en",
+  locale: localStorage.getItem("locale") || "en",
 });
+
+const fetchEmploymentType = async (id) => {
+  try {
+    const response = await GET(`/admin-panel/employment-types/${id}`, {
+      headers: { "x-locale": formValues.value.locale },
+    });
+
+    if (response.data?.employment_type) {
+      employmentType.value = response.data.employment_type;
+      formValues.value = {
+        name: response.data.employment_type.name || "",
+        visible: response.data.employment_type.visible ? 1 : 0,
+        locale:
+          response.data.employment_type.locale ||
+          localStorage.getItem("locale") ||
+          "en",
+      };
+    } else {
+      showError("notifications.employment_type_load_error");
+    }
+  } catch (error) {
+    showError("notifications.employment_type_load_error");
+  }
+};
+
+const handleLocaleChange = async (newLocale) => {
+  if (!newLocale || !employmentType.value) return;
+
+  try {
+    loading.value = true;
+    localStorage.setItem("locale", newLocale);
+
+    const response = await GET(
+      `/admin-panel/employment-types/${route.params.id}`,
+      {
+        headers: { "x-locale": newLocale },
+      }
+    );
+
+    if (response?.data?.employment_type) {
+      formValues.value = {
+        name: response.data.employment_type.name || "",
+        visible: response.data.employment_type.visible ? 1 : 0,
+        locale: newLocale,
+      };
+    }
+  } catch (error) {
+    showError("notifications.locale_data_load_error");
+  } finally {
+    loading.value = false;
+  }
+};
+
+const showError = (messageKey) => {
+  notificationStore.setNotification(t(messageKey), "error");
+};
 
 onMounted(() => {
   if (route.params.id) {
@@ -120,11 +171,7 @@ onMounted(() => {
   } else {
     isEdit.value = false;
     employmentType.value = {};
-    formValues.value = {
-      name: "",
-      visible: 1,
-      locale: "en",
-    };
+    resetForm();
     eventBus.emit("create-employment-type-started");
   }
 });
@@ -138,43 +185,16 @@ const createFormData = () => {
 };
 
 const updateFormData = () => {
-  const formData = new FormData();
-  formData.append("name", formValues.value.name);
-  formData.append("visible", formValues.value.visible.toString());
-  formData.append("locale", formValues.value.locale);
+  const formData = createFormData();
   formData.append("_method", "put");
   return formData;
-};
-
-const fetchEmploymentType = async (id) => {
-  try {
-    const response = await GET(`/admin-panel/employment-types/${id}`);
-    if (response.data?.employment_type) {
-      employmentType.value = response.data.employment_type;
-      formValues.value = {
-        name: response.data.employment_type.name || "",
-        visible: response.data.employment_type.visible ? 1 : 0,
-        locale: response.data.employment_type.locale || "en",
-      };
-    } else {
-      notificationStore.setNotification(
-        t("notifications.employment_type_load_error"),
-        "error"
-      );
-    }
-  } catch (error) {
-    notificationStore.setNotification(
-      t("notifications.employment_type_load_error"),
-      "error"
-    );
-  }
 };
 
 const resetForm = () => {
   formValues.value = {
     name: "",
     visible: 1,
-    locale: "en",
+    locale: localStorage.getItem("locale") || "en",
   };
 };
 
@@ -196,37 +216,31 @@ const submitForm = async () => {
   errorStore.clearErrors();
 
   try {
-    if (isEdit.value) {
-      await POST(
-        `/admin-panel/employment-types/${route.params.id}`,
-        updateFormData()
-      );
-      notificationStore.setNotification(
-        t("notifications.employment_type_updated_success"),
-        "success"
-      );
-      eventBus.emit("employment-type-updated");
-    } else {
-      await POST("/admin-panel/employment-types", createFormData());
-      notificationStore.setNotification(
-        t("notifications.employment_type_added_success"),
-        "success"
-      );
-      eventBus.emit("employment-type-updated");
-    }
+    const endpoint = isEdit.value
+      ? `/admin-panel/employment-types/${route.params.id}`
+      : "/admin-panel/employment-types";
+
+    const formData = isEdit.value ? updateFormData() : createFormData();
+
+    await POST(endpoint, formData);
+
+    notificationStore.setNotification(
+      t(
+        `notifications.employment_type_${
+          isEdit.value ? "updated" : "added"
+        }_success`
+      ),
+      "success"
+    );
+
+    eventBus.emit("employment-type-updated");
     router.push("/employment-types");
   } catch (error) {
     if (error.response?.status === 422 || error.response?.status === 409) {
       errorStore.setErrors(error.response.data.errors);
-      notificationStore.setNotification(
-        t("notifications.form_validation_error"),
-        "error"
-      );
+      showError("notifications.form_validation_error");
     } else {
-      notificationStore.setNotification(
-        t("notifications.unexpected_error"),
-        "error"
-      );
+      showError("notifications.unexpected_error");
     }
   }
 };

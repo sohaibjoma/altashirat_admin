@@ -6,10 +6,18 @@
     >
       <v-toolbar class="bg-white">
         <v-app-bar-nav-icon @click.stop="toggleDrawer">
-          <svg width="22" height="25" viewBox="0 0 30 24" xmlns="http://www.w3.org/2000/svg">
-    <path d="M30 2c0-.53-.22-1.04-.614-1.414A2.147 2.147 0 0 0 27.905 0H2.762C2.206 0 1.673.21 1.28.586A1.955 1.955 0 0 0 .667 2c0 .53.22 1.04.613 1.414.393.375.926.586 1.482.586h25.143c.555 0 1.088-.21 1.481-.586C29.78 3.04 30 2.53 30 2zm0 10c0-.53-.22-1.04-.614-1.414A2.147 2.147 0 0 0 27.905 10H15.333c-.555 0-1.088.21-1.481.586A1.955 1.955 0 0 0 13.238 12c0 .53.22 1.04.614 1.414.393.375.926.586 1.481.586h12.572c.555 0 1.088-.21 1.481-.586C29.78 13.04 30 12.53 30 12zm0 10c0-.53-.22-1.04-.614-1.414A2.147 2.147 0 0 0 27.905 20H2.762c-.556 0-1.089.21-1.482.586A1.955 1.955 0 0 0 .667 22c0 .53.22 1.04.613 1.414.393.375.926.586 1.482.586h25.143c.555 0 1.088-.21 1.481-.586C29.78 23.04 30 22.53 30 22z" fill="#DE1D9D" fill-rule="evenodd"/>
-</svg>
-
+          <svg
+            width="22"
+            height="25"
+            viewBox="0 0 30 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M30 2c0-.53-.22-1.04-.614-1.414A2.147 2.147 0 0 0 27.905 0H2.762C2.206 0 1.673.21 1.28.586A1.955 1.955 0 0 0 .667 2c0 .53.22 1.04.613 1.414.393.375.926.586 1.482.586h25.143c.555 0 1.088-.21 1.481-.586C29.78 3.04 30 2.53 30 2zm0 10c0-.53-.22-1.04-.614-1.414A2.147 2.147 0 0 0 27.905 10H15.333c-.555 0-1.088.21-1.481.586A1.955 1.955 0 0 0 13.238 12c0 .53.22 1.04.614 1.414.393.375.926.586 1.481.586h12.572c.555 0 1.088-.21 1.481-.586C29.78 13.04 30 12.53 30 12zm0 10c0-.53-.22-1.04-.614-1.414A2.147 2.147 0 0 0 27.905 20H2.762c-.556 0-1.089.21-1.482.586A1.955 1.955 0 0 0 .667 22c0 .53.22 1.04.613 1.414.393.375.926.586 1.482.586h25.143c.555 0 1.088-.21 1.481-.586C29.78 23.04 30 22.53 30 22z"
+              fill="#DE1D9D"
+              fill-rule="evenodd"
+            />
+          </svg>
         </v-app-bar-nav-icon>
 
         <router-link
@@ -46,16 +54,8 @@
             </div>
           </template>
         </v-select>
-        <div
-          class="ms-3 me-3 bg-error-bg pt-2 ps-2 pe-2 rounded-lg cursor-pointer logout-icon"
-          @click="logout"
-        >
-          <Image
-            name="logout.png"
-            alt="logout"
-            class="header__icon icon-hover"
-          />
-        </div>
+
+        <LogoutDialog />
 
         <div
           class="ps-3 border-s-sm cursor-pointer settings-icon"
@@ -80,7 +80,7 @@ import { useRouter } from "vue-router";
 import { useAuthStore } from "../../../../stores/auth";
 import { useDrawerStore } from "../../../../stores/drawer";
 import { useAppLocale } from "../../../../stores/appLocale";
-import i18n from "../../../../plugins/I18n";
+import i18n from "../../../../plugins/i18n";
 import vuetify from "../../../../plugins/vuetify";
 
 const localeOptions = [
@@ -111,7 +111,6 @@ watch(localed, (newLocale) => {
 });
 
 const authStore = useAuthStore();
-const logout = () => authStore.logout();
 
 const router = useRouter();
 const goToSettings = () => router.push("/settings");
@@ -119,5 +118,3 @@ const goToSettings = () => router.push("/settings");
 const user = computed(() => authStore.user?.user || authStore.user || {});
 const userName = computed(() => user.value?.firstname || "Guest");
 </script>
-
-

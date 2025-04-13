@@ -3,12 +3,12 @@
     <v-container class="mt-16">
       <v-card class="mt-64 pt-8 pt-lg-4 pb-8 w-75 w-lg-50 ms-auto me-auto">
         <h1 class="text-start pink-border ps-3">
-          {{ $t("login.title") }}
+          {{ t("login.title") }}
         </h1>
         <Form v-slot="{ handleSubmit }">
           <form @submit.prevent="handleSubmit(formSubmitting)">
             <div class="ms-4 mt-8 font-weight-bold">
-              {{ $t("login.phone") }}
+              {{ t("login.phone") }}
             </div>
 
             <PhoneInput
@@ -39,7 +39,7 @@
                 class="me-5"
                 type="submit"
               >
-                {{ $t("login.login") }}
+                {{ t("login.login") }}
               </MainButton>
             </div>
           </form>
