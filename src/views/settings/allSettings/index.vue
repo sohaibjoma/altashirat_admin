@@ -2,7 +2,7 @@
   <div class="mx-4">
     <v-card class="mt-5 py-4">
       <v-card-title class="pt-4 pb-2 pink-border font-weight-bold">
-        {{ $t("settings.title") }}
+        {{ t("settings.title") }}
       </v-card-title>
       <hr />
 

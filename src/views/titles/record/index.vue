@@ -2,12 +2,12 @@
   <v-app class="bg-gray">
     <div class="d-flex pe-4 justify-space-between align-center">
       <v-breadcrumbs
-        :items="[$t('drawer.titles')]"
+        :items="[t('drawer.titles')]"
         class="dashboard__breadcrumb me-3 rounded-te-lg rounded-be-lg"
       />
       <div>
         <mainButton color="primary" width="135px" @click="handleCreate">
-          {{ $t("create") }}
+          {{ t("create") }}
         </mainButton>
       </div>
     </div>

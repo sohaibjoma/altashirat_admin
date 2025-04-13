@@ -6,10 +6,10 @@
       class="block-btn me-2"
       :class="{ 'blocked-state': isBlocked, 'unblocked-state': !isBlocked }"
     >
-      <v-icon :color="isBlocked ? 'error' : 'success'" class="mr-2">
+      <v-icon :color="isBlocked ? 'error' : 'success'" class="me-2">
         {{ isBlocked ? "mdi-account-cancel" : "mdi-account-check" }}
       </v-icon>
-      {{ isBlocked ? $t("actions.unblock") : $t("actions.block") }}
+      {{ isBlocked ? t("actions.unblock") : t("actions.block") }}
     </OutlinedButton>
 
     <v-dialog
@@ -22,14 +22,14 @@
           <v-icon :color="isBlocked ? 'success' : 'error'" class="mr-2">
             {{ isBlocked ? "mdi-account-check" : "mdi-account-cancel" }}
           </v-icon>
-          {{ isBlocked ? $t("actions.unblockUser") : $t("actions.blockUser") }}
+          {{ isBlocked ? t("actions.unblockUser") : t("actions.blockUser") }}
         </v-card-title>
         <v-card-text class="pt-4 text-grey-darken-1">
-          {{ $t("actions.areYouSure") }}
-          <strong>{{
-            isBlocked ? $t("actions.unblock") : $t("actions.block")
+          {{ t("actions.areYouSure") }}
+          <strong :class="isBlocked ? 'text-success' : 'text-error'">{{
+            isBlocked ? t("actions.unblock") : t("actions.block")
           }}</strong>
-          {{ $t("actions.thisUser") }}?
+          {{ t("actions.thisUser") }}?
         </v-card-text>
         <v-card-actions class="pa-4">
           <v-spacer></v-spacer>
@@ -40,7 +40,7 @@
             @click="closeDialog"
             class="cancel-btn"
           >
-            {{ $t("actions.cancel") }}
+            {{ t("actions.cancel") }}
           </OutlinedButton>
           <OutlinedButton
             :color="isBlocked ? 'success' : 'error'"

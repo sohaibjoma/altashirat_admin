@@ -1,206 +1,282 @@
 <template>
   <div>
-    <OutlinedButton
-      icon
-      color="primary"
-      variant="text"
-      class="profile-btn"
-      @click="openDialog"
-    >
-      <v-icon>mdi-eye</v-icon>
+    <OutlinedButton icon color="primary" variant="text" @click="openDialog">
+      <v-icon>mdi-account-box-outline</v-icon>
     </OutlinedButton>
 
     <v-dialog
       v-model="dialog"
-      max-width="700px"
+      max-width="800px"
       transition="dialog-bottom-transition"
-      class="profile-dialog"
     >
       <v-card class="profile-card">
-        <v-card-title class="profile-header">
-          <v-avatar size="50" color="primary" class="mr-3">
-            <span class="white--text text-h5">
-              {{ userData?.username?.charAt(0).toUpperCase() || "?" }}
-            </span>
-          </v-avatar>
-          <span class="font-weight-bold text-h5 ma-2">
-            {{
-              userData?.username || $t("users.profile_title", "User Profile")
-            }}
-          </span>
-        </v-card-title>
+        <div class="profile-header-wrapper">
+          <div class="profile-header-bg"></div>
+          <v-card-title class="profile-header text-center pa-0">
+            <OutlinedButton
+              icon
+              variant="text"
+              color="white"
+              class="profile-close-btn"
+              @click="dialog = false"
+              :aria-label="t('users.close')"
+            >
+              <v-icon>mdi-close</v-icon>
+            </OutlinedButton>
 
-        <v-card-text class="pt-6">
-          <div v-if="loading" class="text-center">
-            <v-progress-circular
-              indeterminate
-              color="primary"
-              size="40"
-            ></v-progress-circular>
+            <v-avatar size="100" color="primary" class="profile-avatar">
+              <span class="white--text text-h4 font-weight-bold">
+                {{ getInitial(userData?.username) }}
+              </span>
+            </v-avatar>
+
+            <h2 class="text-white">
+              {{ userData?.username || t("users.profile_title") }}
+            </h2>
+
+            <div v-if="userData?.roles?.length">
+              <v-chip
+                v-for="(role, i) in visibleRoles"
+                :key="i"
+                size="small"
+                color="white"
+                class="ma-1"
+              >
+                <v-icon start size="x-small">mdi-shield</v-icon>
+                {{ role.name }}
+              </v-chip>
+              <v-chip
+                v-if="additionalRolesCount > 0"
+                size="small"
+                color="grey-lighten-3"
+                text-color="primary"
+                class="ma-1"
+              >
+                +{{ additionalRolesCount }}
+              </v-chip>
+            </div>
+          </v-card-title>
+        </div>
+
+        <v-card-text class="profile-body pt-2 pb-0">
+          <div v-if="loading" class="profile-loader">
+            <div class="loader-animation">
+              <div class="loader-circle"></div>
+              <div class="loader-circle"></div>
+              <div class="loader-circle"></div>
+            </div>
+            <p class="mt-4 text-body-1 text-medium-emphasis">
+              {{ t("users.loading_profile") }}
+            </p>
           </div>
-          <div v-else-if="userData" class="profile-content">
-            <v-row>
-              <v-col cols="12" md="6">
-                <v-list dense class="transparent-bg">
-                  <v-list-item>
-                    <v-list-item-icon>
-                      <v-icon color="primary">mdi-account</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                      <v-list-item-title>{{
-                        $t("actions.fullName")
-                      }}</v-list-item-title>
-                      <v-list-item-subtitle>
-                        {{
-                          `${userData.firstname || ""} ${
-                            userData.middlename || ""
-                          } ${userData.lastname || ""}`.trim() || "N/A"
-                        }}
-                      </v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
 
-                  <v-list-item>
-                    <v-list-item-icon>
-                      <v-icon color="primary">mdi-email</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                      <v-list-item-title>{{
-                        $t("actions.email")
-                      }}</v-list-item-title>
-                      <v-list-item-subtitle>
-                        {{ userData.email || "N/A" }}
-                        <v-chip
-                          v-if="userData.email"
-                          :color="
-                            userData.email_verified ? 'success' : 'warning'
-                          "
-                          size="small"
-                          class="ml-2"
-                        >
-                          {{
-                            userData.email_verified
-                              ? $t("users.verified", "Verified")
-                              : $t("users.not_verified", "Not Verified")
-                          }}
-                        </v-chip>
-                      </v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list>
-              </v-col>
-
-              <v-col cols="12" md="6">
-                <v-list dense class="transparent-bg">
-                  <v-list-item>
-                    <v-list-item-icon>
-                      <v-icon color="primary">mdi-phone</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                      <v-list-item-title>{{
-                        $t("actions.phoneno")
-                      }}</v-list-item-title>
-                      <v-list-item-subtitle>
-                        {{
-                          userData.phone
-                            ? `${userData.phone.country_code} ${userData.phone.number}`
-                            : "N/A"
-                        }}
-                        <v-chip
-                          v-if="userData.phone"
-                          :color="
-                            userData.phone_verified ? 'success' : 'warning'
-                          "
-                          size="small"
-                          class="ml-2"
-                        >
-                          {{
-                            userData.phone_verified
-                              ? $t("users.verified", "Verified")
-                              : $t("users.not_verified", "Not Verified")
-                          }}
-                        </v-chip>
-                      </v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
-
-                  <v-list-item>
-                    <v-list-item-icon>
-                      <v-icon color="primary">mdi-flag</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                      <v-list-item-title>{{
-                        $t("users.country")
-                      }}</v-list-item-title>
-                      <v-list-item-subtitle>
-                        {{
-                          userData.country
-                            ? `${userData.country.flag} ${userData.country.name}`
-                            : "N/A"
-                        }}
-                      </v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list>
-              </v-col>
-            </v-row>
-
-            <v-row class="mt-2">
-              <v-col cols="12">
-                <v-divider class="my-4"></v-divider>
-                <p class="text-subtitle-1 font-weight-medium mb-2">
-                  {{ $t("users.roles", "Roles") }}
-                </p>
-                <v-chip-group>
-                  <v-chip
-                    v-for="(role, i) in userData.roles"
-                    :key="i"
-                    color="primary"
-                    outlined
-                    class="ma-1"
-                  >
-                    {{ role.name }}
-                  </v-chip>
-                  <span
-                    v-if="!userData.roles?.length"
-                    class="text-caption text-grey"
-                  >
-                    {{ $t("users.no_roles", "No roles assigned") }}
-                  </span>
-                </v-chip-group>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col cols="12" class="text-center">
-                <v-chip
-                  :color="userData.blocked ? 'red' : 'green'"
-                  class="mt-4"
+          <div v-else-if="userData">
+            <!-- Personal Info Section -->
+            <div class="profile-section">
+              <div class="d-flex align-center mt-2 mb-2">
+                <v-icon color="primary" class="me-1"
+                  >mdi-account-details</v-icon
                 >
-                  {{
-                    userData.blocked
-                      ? $t("users.blocked", "Blocked")
-                      : $t("users.active", "Active")
-                  }}
+                <h4 class="text-primary">{{ t("users.personal_info") }}</h4>
+              </div>
+
+              <div class="profile-data-grid">
+                <!-- Full Name -->
+                <div class="pa-3">
+                  <div class="d-flex align-center">
+                    <v-icon size="small" color="primary" class="me-1"
+                      >mdi-account</v-icon
+                    >
+                    {{ t("actions.fullName") }}
+                  </div>
+                  <div class="d-flex align-center">
+                    <span>{{ fullName }}</span>
+                    <v-chip
+                      v-if="userData.full_name"
+                      :color="
+                        userData.full_name_verified ? 'success' : 'warning'
+                      "
+                      size="small"
+                      class="mx-2"
+                    >
+                      <v-icon size="small" class="me-1">
+                        {{
+                          userData.full_name_verified
+                            ? "mdi-check-circle"
+                            : "mdi-alert-circle"
+                        }}
+                      </v-icon>
+                      {{
+                        userData.full_name_verified
+                          ? t("users.verified")
+                          : t("users.not_verified")
+                      }}
+                    </v-chip>
+                  </div>
+                </div>
+
+                <!-- Email -->
+                <div class="pa-3">
+                  <div class="d-flex align-center">
+                    <v-icon size="small" color="primary" class="me-1"
+                      >mdi-email</v-icon
+                    >
+                    {{ t("actions.email") }}
+                  </div>
+                  <div class="d-flex align-center">
+                    <span>{{ userData.email || "—" }}</span>
+                    <v-chip
+                      v-if="userData.email"
+                      :color="userData.email_verified ? 'success' : 'warning'"
+                      size="small"
+                      class="mx-2"
+                    >
+                      <v-icon size="small" class="me-1">
+                        {{
+                          userData.email_verified
+                            ? "mdi-check-circle"
+                            : "mdi-alert-circle"
+                        }}
+                      </v-icon>
+                      {{
+                        userData.email_verified
+                          ? t("users.verified")
+                          : t("users.not_verified")
+                      }}
+                    </v-chip>
+                  </div>
+                </div>
+
+                <!-- Phone -->
+                <div class="pa-3">
+                  <div class="d-flex align-center">
+                    <v-icon size="small" color="primary" class="me-1"
+                      >mdi-phone</v-icon
+                    >
+                    {{ t("actions.phoneno") }}
+                  </div>
+                  <div class="d-flex align-center">
+                    <span>{{ formattedPhone }}</span>
+                    <v-chip
+                      v-if="userData.phone"
+                      :color="userData.phone_verified ? 'success' : 'warning'"
+                      size="small"
+                      class="mx-2"
+                    >
+                      <v-icon size="small" class="me-1">
+                        {{
+                          userData.phone_verified
+                            ? "mdi-check-circle"
+                            : "mdi-alert-circle"
+                        }}
+                      </v-icon>
+                      {{
+                        userData.phone_verified
+                          ? t("users.verified")
+                          : t("users.not_verified")
+                      }}
+                    </v-chip>
+                  </div>
+                </div>
+
+                <!-- Country -->
+                <div class="pa-3">
+                  <div class="d-flex align-center">
+                    <v-icon size="small" color="primary" class="me-1"
+                      >mdi-flag</v-icon
+                    >
+                    {{ t("users.country") }}
+                  </div>
+                  <div class="d-flex align-center">
+                    <span v-if="userData.country" class="country-value">
+                      <span class="country-flag me-1">{{
+                        userData.country.flag
+                      }}</span>
+                      {{ userData.country.name }}
+                    </span>
+                    <span v-else>—</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Roles Section -->
+            <div
+              v-if="userData.roles?.length"
+              class="profile-section roles-section mt-6"
+            >
+              <div class="d-flex align-center mt-2 mb-2">
+                <v-icon color="primary" class="me-1">mdi-shield-account</v-icon>
+                <h4 class="text-primary">{{ t("users.roles") }}</h4>
+              </div>
+              <div class="roles-container">
+                <v-chip
+                  v-for="(role, i) in userData.roles"
+                  :key="i"
+                  color="primary"
+                  variant="flat"
+                  class="role-chip ma-1"
+                  size="small"
+                >
+                  <v-icon start size="small">mdi-shield</v-icon>
+                  {{ role.name }}
                 </v-chip>
-              </v-col>
-            </v-row>
+              </div>
+            </div>
+
+            <!-- Account Status Section -->
+            <div class="profile-section status-section mt-6">
+              <div class="d-flex align-center mt-2 mb-2">
+                <v-icon color="primary" class="me-1">mdi-account-cog</v-icon>
+                <h4 class="text-primary">{{ t("users.account_status") }}</h4>
+              </div>
+              <div class="status-container">
+                <div
+                  class="status-box"
+                  :class="userData.blocked ? 'blocked' : 'active'"
+                >
+                  <v-icon
+                    :color="userData.blocked ? 'error' : 'success'"
+                    size="large"
+                    class="me-1"
+                  >
+                    {{
+                      userData.blocked
+                        ? "mdi-account-lock"
+                        : "mdi-account-check"
+                    }}
+                  </v-icon>
+                  <div>
+                    {{
+                      userData.blocked ? t("users.blocked") : t("users.active")
+                    }}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div v-else class="text-center">
-            <v-icon size="40" color="grey">mdi-alert-circle-outline</v-icon>
-            <p class="mt-2">{{ $t("users.no_data", "No data available") }}</p>
+
+          <div v-else class="profile-empty-state">
+            <v-icon size="80" color="grey-lighten-1"
+              >mdi-account-question</v-icon
+            >
+            <h3 class="text-h6 mt-4 mb-2">{{ t("users.no_data_title") }}</h3>
+            <p class="text-body-1 text-medium-emphasis">
+              {{ t("users.no_data") }}
+            </p>
           </div>
         </v-card-text>
 
-        <v-card-actions class="pa-4">
+        <v-card-actions class="profile-actions pa-4">
           <v-spacer></v-spacer>
           <OutlinedButton
             color="primary"
             rounded
-            width="100"
+            width="120"
             @click="dialog = false"
+            class="close-button"
           >
-            {{ $t("users.close", "Close") }}
+            {{ t("users.close") }}
           </OutlinedButton>
         </v-card-actions>
       </v-card>
@@ -209,40 +285,54 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useApi } from "../../../composables/api";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-
 const props = defineProps({
-  userId: {
-    type: [Number, String],
-    required: true,
-  },
+  userId: { type: [Number, String], required: true },
+  preload: { type: Boolean, default: false },
 });
 
 const { GET, loading } = useApi();
 const dialog = ref(false);
 const userData = ref(null);
 
+const visibleRoles = computed(() => userData.value?.roles?.slice(0, 2) || []);
+const additionalRolesCount = computed(() =>
+  userData.value?.roles?.length > 2 ? userData.value.roles.length - 2 : 0
+);
+const fullName = computed(() => {
+  if (!userData.value) return "—";
+  return (
+    `${userData.value.firstname || ""} ${userData.value.middlename || ""} ${
+      userData.value.lastname || ""
+    }`.trim() || "—"
+  );
+});
+const formattedPhone = computed(() => {
+  if (!userData.value?.phone) return "—";
+  return `${userData.value.phone.country_code} ${userData.value.phone.number}`;
+});
+
+const getInitial = (username) => username?.charAt(0).toUpperCase() || "?";
+
 const openDialog = async () => {
   dialog.value = true;
-  if (!userData.value) {
-    await fetchUserData();
-  }
+  if (!userData.value) await fetchUserData();
 };
 
 const fetchUserData = async () => {
   try {
     const response = await GET(`/admin-panel/users/${props.userId}`);
-    if (response?.data) {
-      userData.value = response.data.user;
-    }
+    userData.value = response?.data?.user;
   } catch (error) {
     console.error("Error fetching user data:", error);
   }
 };
-</script>
 
-<style scoped></style>
+onMounted(() => {
+  if (props.preload) fetchUserData();
+});
+</script>
