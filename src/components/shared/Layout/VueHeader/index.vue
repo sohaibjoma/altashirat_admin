@@ -97,12 +97,11 @@ const { setAppLocale } = appLocale;
 const localed = ref(localStorage.getItem("locale") || "en");
 
 const setLocale = () => {
+  window.location.reload();
   localStorage.setItem("locale", localed.value);
-  i18n.global.locale = localed.value;
   vuetify.locale.current = localed.value;
   vuetify.locale.rtl = localed.value === "ar";
   setAppLocale(localed.value);
-  window.location.reload();
 };
 
 watch(localed, (newLocale) => {
