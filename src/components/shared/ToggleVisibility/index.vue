@@ -27,16 +27,6 @@ const props = defineProps({
 
 const emit = defineEmits(["visibility-toggled"]);
 
-watch(
-  () => props.record,
-  (newRecord) => {
-    if (newRecord && newRecord.visible !== undefined) {
-      switcher.value = !newRecord.visible;
-    }
-  },
-  { immediate: true }
-);
-
 onMounted(() => {
   if (props.record && props.record.visible !== undefined) {
     switcher.value = !props.record.visible;

@@ -254,8 +254,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.pink-border {
-  border-left: 4px solid #ec4899;
-  padding-left: 12px;
-}
+
 </style>
