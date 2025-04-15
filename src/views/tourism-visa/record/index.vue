@@ -20,23 +20,28 @@
         date: 'created_at',
         status: 'status',
       }"
-      :tableHeaders="['order_id', 'user', 'date', 'status', 'actions']"
+      :tableHeaders="['user', 'date', 'editStatus']"
       :page="page"
       @update:page="page = $event"
       :refreshEvent="'tourism-visa-updated'"
       class="rounded-lg"
     >
-      
-     
-
       <!-- User Column Template -->
       <template #user="{ item }">
-        <div v-if="item.user">{{ item.user.name }} ({{ item.user.email }})</div>
-        <span v-else>N/A</span>
-      </template>
+    <div>
+      {{ item.user.name }} ({{ item.user.firstname }})
+    </div>
+  </template>
 
-      
+  <template #date="{ item }">
+    <div>
+      {{ item.user.name }} ({{ item.statuses[0].activated_at }})
+    </div>
+  </template>
 
+  <template #editStatus>
+  <v-icon>mdi-pencil</v-icon>
+  </template>
       
         <DeleteDialog
           :record="item"
@@ -72,27 +77,5 @@ function getTourismVisaPayload(responseData) {
   return formData;
 }
 
-const handleCreate = () => {
-  router.push("/tourism-visa/add");
-};
 
-const handleEdit = (id) => {
-  router.push(`/tourism-visa/edit/${id}`);
-};
-
-const handleVisibilityToggled = () => {
-  notificationStore.setNotification(
-    t("notifications.tourism_visa_visibility_toggled"),
-    "success"
-  );
-  eventBus.emit("tourism-visa-updated");
-};
-
-const handleItemDeleted = () => {
-  notificationStore.setNotification(
-    t("notifications.tourism_visa_deleted_success"),
-    "success"
-  );
-  eventBus.emit("tourism-visa-updated");
-};
 </script>

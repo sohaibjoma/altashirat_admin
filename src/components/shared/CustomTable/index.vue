@@ -26,9 +26,17 @@
                 <slot name="profile" :item="item"></slot>
               </div>
             </template>
+            <template v-else-if="header === 'editStatus'">
+              <div class="d-flex align-center justify-start">
+                <slot name="editStatus" :item="item"></slot>
+              </div>
+            </template>
+            <template v-else-if="$slots[header]">
+              <slot :name="header" :item="item"></slot>
+            </template>
             <template v-else>
               <span>
-                {{ getCellValue(item, header) || t('profile.N/A') }}
+                {{ getCellValue(item, header) || t("profile.N/A") }}
               </span>
             </template>
           </td>
@@ -74,8 +82,8 @@ const props = defineProps({
   },
   refreshEvent: {
     type: String,
-    default: 'table-refresh'
-  }
+    default: "table-refresh",
+  },
 });
 
 const { GET } = useApi();
