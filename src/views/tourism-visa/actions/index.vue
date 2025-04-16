@@ -1,348 +1,585 @@
-<!-- <template>
-  <v-container>
-    <v-row justify="center">
-      <v-col cols="12" md="10" lg="8" xl="7">
-        <v-card class="mt-5 py-4">
-          <v-card-title class="pt-4 pb-2 text-start pink-border font-weight-bold">
-            {{ isEdit ? t("actions.editTourismVisa") : t("actions.addTourismVisa  ") }}
-          </v-card-title>
-          <v-card-text>
-            <Form
-              v-if="!loading && tourismVisa"
-              v-slot="{ handleSubmit }"
-              :initial-values="formValues"
-              ref="form"
-            >
-              <v-form @submit.prevent="handleSubmit(submitForm)">
-                <TextInput
-                  v-model="formValues.name"
-                  :label="$t('table.name')"
-                  :placeholder="$t('enterName')"
-                  name="name"
-                  rules="required"
-                  class="mb-3"
-                />
+<template>
+  <div class="pa-4 pr-3-4">
+    <v-card class="mb-6 py-2 px-2 elevation-2">
+      <v-card-title
+        class="text-h5 font-weight-bold text-align-center justify-center"
+      >
+        {{ $t("tourism_visa.details") }}
+      </v-card-title>
+      <v-card-text>
+        <div class="d-flex flex-column mx-2">
+          <v-row v-if="isLoading">
+            <v-col cols="12" class="text-center">
+              <v-progress-circular
+                indeterminate
+                color="primary"
+              ></v-progress-circular>
+              <div class="mt-2">Loading tourism visa data...</div>
+            </v-col>
+          </v-row>
 
-                <TextInput
-                  v-model="formValues.duration"
-                  :label="$t('duration')"
-                  :placeholder="$t('enterDuration')"
-                  name="duration"
-                  rules="required"
-                  class="mb-3"
-                />
+          <v-row v-else-if="!hasData">
+            <v-col cols="12" class="text-center">
+              <div class="text-subtitle-1">
+                No data available or failed to load data.
+              </div>
+              <custom-button
+                color="primary"
+                width="150px"
+                height="40px"
+                fontSize="14px"
+                class="mt-4"
+                @click="retryFetch"
+              >
+                {{ $t("common.retry") }}
+              </custom-button>
+            </v-col>
+          </v-row>
 
-                <TextInput
-                  v-model="formValues.cost"
-                  :label="$t('cost')"
-                  :placeholder="$t('enterCost')"
-                  name="cost"
-                  rules="required"
-                  class="mb-3"
-                />
+          <v-row v-else>
+            <!-- Personal Information Section -->
+            <v-col cols="12">
+              <div class="text-subtitle-1 font-weight-bold mb-3 primary--text">
+                {{ $t("tourism_visa.personal_info") }}
+              </div>
+            </v-col>
 
-                <Select
-                  v-model="formValues.visible"
-                  :label="$t('visible')"
-                  :placeholder="$t('selectVisibility')"
-                  :items="[
-                    { text: $t('visible'), value: 1 },
-                    { text: $t('hidden'), value: 0 },
-                  ]"
-                  name="visible"
-                />
+            <v-col cols="12" sm="6">
+              <v-row>
+                <v-col cols="12" md="6" class="py-2">
+                  <div class="text-subtitle-2 font-weight-medium">
+                    {{ $t("tourism_visa.firstname") }}
+                  </div>
+                  <div>
+                    {{
+                      tourismVisaData.firstname || $t("common.not_available")
+                    }}
+                  </div>
+                </v-col>
 
-                <LocaleSelector
-                  v-if="isEdit"
-                  name="locale"
-                  v-model="formValues.locale"
-                  :label="$t('actions.language')"
-                  @update:modelValue="handleLocaleChange"
-                />
+                <v-col cols="12" md="6" class="py-2">
+                  <div class="text-subtitle-2 font-weight-medium">
+                    {{ $t("tourism_visa.middlename") }}
+                  </div>
+                  <div>
+                    {{
+                      tourismVisaData.middlename || $t("common.not_available")
+                    }}
+                  </div>
+                </v-col>
 
-                <div class="d-flex mt-5 align-center justify-end">
-                  <MainButton
-                    type="submit"
-                    color="secondary"
-                    width="120"
-                    height="40"
-                    class="mx-2"
-                    :loading="loading"
+                <v-col cols="12" md="6" class="py-2">
+                  <div class="text-subtitle-2 font-weight-medium">
+                    {{ $t("tourism_visa.birthdate") }}
+                  </div>
+                  <div>
+                    {{
+                      tourismVisaData.birthdate || $t("common.not_available")
+                    }}
+                  </div>
+                </v-col>
+
+                <v-col cols="12" md="6" class="py-2">
+                  <div class="text-subtitle-2 font-weight-medium">
+                    {{ $t("tourism_visa.gender") }}
+                  </div>
+                  <div>
+                    {{
+                      getGenderText(tourismVisaData.gender) ||
+                      $t("common.not_available")
+                    }}
+                  </div>
+                </v-col>
+              </v-row>
+            </v-col>
+
+            <v-col cols="12" sm="6">
+              <v-row>
+                <v-col cols="12" md="6" class="py-2">
+                  <div class="text-subtitle-2 font-weight-medium">
+                    {{ $t("tourism_visa.lastname") }}
+                  </div>
+                  <div>
+                    {{ tourismVisaData.lastname || $t("common.not_available") }}
+                  </div>
+                </v-col>
+                <v-col cols="12" md="6" class="py-2">
+                  <div class="text-subtitle-2 font-weight-medium">
+                    {{ $t("tourism_visa.nationality") }}
+                  </div>
+                  <div>
+                    {{
+                      tourismVisaData.nationality?.name ||
+                      $t("common.not_available")
+                    }}
+                  </div>
+                </v-col>
+              </v-row>
+            </v-col>
+
+            <v-col cols="12">
+              <v-divider class="my-4"></v-divider>
+            </v-col>
+
+            <!-- Passport Information Section -->
+            <v-col cols="12">
+              <div class="text-subtitle-1 font-weight-bold mb-3 primary--text">
+                {{ $t("tourism_visa.passport_info") }}
+              </div>
+            </v-col>
+
+            <v-col cols="12" md="3" class="py-2">
+              <v-row>
+                <v-col cols="12" class="py-2">
+                  <div class="text-subtitle-2 font-weight-medium">
+                    {{ $t("tourism_visa.passport_number") }}
+                  </div>
+                  <div>
+                    {{
+                      tourismVisaData.passport_number ||
+                      $t("common.not_available")
+                    }}
+                  </div>
+                </v-col>
+              </v-row>
+            </v-col>
+
+            <!-- Vertically Aligned Field (Passport Image) -->
+            <v-col cols="12" sm="6">
+              <v-row>
+                <v-col cols="12" class="py-2">
+                  <div class="text-subtitle-2 font-weight-medium">
+                    {{ $t("tourism_visa.passport_image") }}
+                  </div>
+                  <div
+                    v-if="
+                      tourismVisaData.passport_images &&
+                      tourismVisaData.passport_images.length > 0
+                    "
+                    class="mt-2"
                   >
-                    {{ isEdit ? t("actions.update") : t("actions.add") }}
-                  </MainButton>
-                  <OutlinedButton
-                    @click="goBack"
-                    color="secondary"
-                    width="120"
-                    height="40"
-                    class="mx-2"
-                  >
-                    {{ t("actions.cancel") }}
-                  </OutlinedButton>
-                </div>
-              </v-form>
-            </Form>
-            <v-skeleton-loader v-else type="article, actions" class="mt-4" />
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+                    <v-img
+                      :src="tourismVisaData.passport_images[0].path"
+                      height="80"
+                      max-width="120"
+                      contain
+                      class="grey lighten-2 rounded"
+                    ></v-img>
+                  </div>
+                  <div v-else class="text-body-2 grey--text">
+                    {{ $t("tourism_visa.no_passport_image") }}
+                  </div>
+                </v-col>
+              </v-row>
+            </v-col>
+
+            <v-col cols="12">
+              <v-divider class="my-4"></v-divider>
+            </v-col>
+
+            <!-- Contact Information Section -->
+            <v-col cols="12">
+              <div class="text-subtitle-1 font-weight-bold mb-3 primary--text">
+                {{ $t("tourism_visa.contact_info") }}
+              </div>
+            </v-col>
+
+            <v-col cols="12" md="3" class="py-2" sm="6">
+              <v-row>
+                <v-col cols="12" class="py-2">
+                  <div class="text-subtitle-2 font-weight-medium">
+                    {{ $t("tourism_visa.email") }}
+                  </div>
+                  <div>
+                    {{
+                      tourismVisaData.contact_email ||
+                      $t("common.not_available")
+                    }}
+                  </div>
+                </v-col>
+              </v-row>
+            </v-col>
+
+            <!-- Vertically Aligned Field (Phone Number) -->
+            <v-col cols="12" sm="6">
+              <v-row>
+                <v-col cols="12" class="py-2">
+                  <div class="text-subtitle-2 font-weight-medium">
+                    {{ $t("tourism_visa.phone") }}
+                  </div>
+                  <div>
+                    {{
+                      formatPhoneNumber(tourismVisaData.phone) ||
+                      $t("common.not_available")
+                    }}
+                  </div>
+                </v-col>
+              </v-row>
+            </v-col>
+
+            <v-col cols="12">
+              <v-divider class="my-4"></v-divider>
+            </v-col>
+
+            <!-- Visit Information Section -->
+            <v-col cols="12">
+              <div class="text-subtitle-1 font-weight-bold mb-3 primary--text">
+                {{ $t("tourism_visa.visit_info") }}
+              </div>
+            </v-col>
+
+            <v-col cols="12" md="3" class="py-2">
+              <div class="text-subtitle-2 font-weight-medium">
+                {{ $t("tourism_visa.purpose_of_visit") }}
+              </div>
+              <div>
+                {{
+                  tourismVisaData.purpose_of_visit || $t("common.not_available")
+                }}
+              </div>
+            </v-col>
+
+            <v-col cols="12" md="3" class="py-2">
+              <div class="text-subtitle-2 font-weight-medium">
+                {{ $t("tourism_visa.adults_count") }}
+              </div>
+              <div>
+                {{ tourismVisaData.adults_count || $t("common.not_available") }}
+              </div>
+            </v-col>
+
+            <v-col cols="12" md="3" class="py-2">
+              <div class="text-subtitle-2 font-weight-medium">
+                {{ $t("tourism_visa.children_count") }}
+              </div>
+              <div>
+                {{
+                  tourismVisaData.children_count || $t("common.not_available")
+                }}
+              </div>
+            </v-col>
+
+            <v-col cols="12" md="2" class="py-2">
+              <div class="text-subtitle-2 font-weight-medium">
+                {{ $t("tourism_visa.destination_country") }}
+              </div>
+              <div>
+                {{
+                  tourismVisaData.destination_country?.name ||
+                  $t("common.not_available")
+                }}
+              </div>
+            </v-col>
+
+            <v-col cols="12" md="4" class="py-2">
+              <div class="text-subtitle-2 font-weight-medium">
+                {{ $t("tourism_visa.message") }}
+              </div>
+              <div class="mt-1 pa-2 rounded bg-grey-lighten-4">
+                {{ tourismVisaData.message || $t("common.no_message") }}
+              </div>
+            </v-col>
+            <v-col cols="12">
+              <v-divider class="my-4"></v-divider>
+            </v-col>
+
+            <!-- Status Section -->
+            <v-col cols="12">
+              <div class="text-subtitle-1 font-weight-bold mb-3 primary--text">
+                {{ $t("tourism_visa.status") }}
+              </div>
+            </v-col>
+
+            <v-col cols="12" sm="6" class="py-2">
+              <div class="text-subtitle-2 font-weight-medium">
+                {{ $t("tourism_visa.current_status") }}
+              </div>
+              <v-chip
+                v-if="activeStatus"
+                :color="activeStatus.color"
+                text-color="white"
+                small
+                class="mt-1"
+              >
+                {{ activeStatus.name }}
+              </v-chip>
+              <div v-else class="text-body-2 grey--text">
+                {{ $t("common.not_available") }}
+              </div>
+            </v-col>
+          </v-row>
+        </div>
+      </v-card-text>
+      <v-card>
+        <v-card-title>{{ $t("tourism_visa.update_status") }}</v-card-title>
+        <v-card-text>
+          <Select
+            v-model="status"
+            :label="$t('visible')"
+            :placeholder="$t('selectVisibility')"
+            :items="[
+              { text: $t('visible'), value: 1 },
+              { text: $t('hidden'), value: 0 },
+            ]"
+            name="visible"
+          />
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <!-- <custom-button color="secondary"
+            width="120px" height="40px" fontSize="14px" @click="statusDialog =
+            false">
+            {{ $t("common.cancel") }}
+        
+          </custom-button>
+          <custom-button
+            v-if="tourismVisaData.can_update_status"
+            color="success"
+            width="150px"
+            height="40px"
+            fontSize="14px"
+            @click="openStatusUpdateDialog"
+            :disabled="isUpdating || !tourismVisaData.can_update_status"
+          >
+            {{ $t("common.update_status") }}
+          </custom-button>  -->
+
+          <MainButton
+            type="submit"
+            color="secondary"
+            width="120"
+            height="40"
+            class="mx-2"
+            :loading="loading"
+          >
+            {{ t("actions.update_status") }}
+          </MainButton>
+        </v-card-actions>
+      </v-card>
+    </v-card>
+
+    <div class="d-flex justify-end flex-wrap gap-2">
+      <!-- <custom-button
+        color="primary"
+        width="120px"
+        height="40px"
+        fontSize="14px"
+        @click="goBack"
+      >
+       
+      </custom-button> -->
+      <custom-button
+        v-if="tourismVisaData.can_update_status"
+        color="success"
+        width="150px"
+        height="40px"
+        fontSize="14px"
+        @click="openStatusUpdateDialog"
+        :disabled="isUpdating || !tourismVisaData.can_update_status"
+      >
+        {{ $t("common.update_status") }}
+      </custom-button>
+    </div>
+
+    
+  </div>
 </template>
 
 <script setup>
-import { Form } from "vee-validate";
-import { ref, watch, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useApi } from "../../../composables/api";
-import { useErrorStore } from "../../../stores/errors";
-import { useNotificationStore } from "../../../stores/notification";
+import { ref, computed, onMounted } from "vue";
 import { useEventBus } from "../../../composables/eventBus";
+import { useNotificationStore } from "../../../stores/notification";
 import { useI18n } from "vue-i18n";
-import { debounce } from "lodash-es";
-
-// Constants
-const BASE_API_PATH = "/admin-panel/tourism-visa";
-const DEBOUNCE_DELAY = 1000;
-
-// Composables
-const { t } = useI18n();
+import { useApi } from "../../../composables/api";
+const status = ref("");
 const route = useRoute();
 const router = useRouter();
-const { POST, GET, loading } = useApi();
-const errorStore = useErrorStore();
+const tourismVisaData = ref({});
 const notificationStore = useNotificationStore();
 const eventBus = useEventBus();
+const { t } = useI18n();
+const { GET, PUT } = useApi();
 
-// Refs
-const isEdit = ref(false);
-const tourismVisa = ref(null);
-const form = ref(null);
-const isSubmitting = ref(false);
+const isLoading = ref(false);
+const isUpdating = ref(false);
+const statusDialog = ref(false);
+const selectedStatus = ref(null);
+const fetchError = ref(null);
+const showDebug = ref(true); // Set to false in production
 
-// Form schema
-const validationSchema = {
-  name: 'required|min:3|max:50',
-  duration: 'required|numeric|min_value:1',
-  cost: 'required|decimal:2|min_value:0',
-  visible: 'required|boolean'
-};
-
-// Form values
-const formValues = ref({
-  name: "",
-  duration: "",
-  cost: "",
-  visible: 1,
-  locale: getSafeLocale(),
+// Computed property to check if we have data
+const hasData = computed(() => {
+  return tourismVisaData.value && Object.keys(tourismVisaData.value).length > 0;
 });
 
-// Utility functions
-function getSafeLocale() {
-  try {
-    return localStorage.getItem("locale") || "en";
-  } catch {
-    return "en";
+// Get the active status from the statuses array
+const activeStatus = computed(() => {
+  if (!tourismVisaData.value || !tourismVisaData.value.statuses) return null;
+  return tourismVisaData.value.statuses.find(
+    (status) => status.active === true
+  );
+});
+
+// Status options dynamically generated from the response
+const statusOptions = computed(() => {
+  if (!tourismVisaData.value || !tourismVisaData.value.statuses) return [];
+  return tourismVisaData.value.statuses;
+});
+
+const latestStatus = computed(() => {
+  if (!tourismVisaData.value || !tourismVisaData.value.statuses || tourismVisaData.value.statuses.length === 0) {
+    return null;
   }
-}
-
-function showError(messageKey, error = null) {
-  console.error("API Error:", error);
-  notificationStore.setNotification({
-    message: t(messageKey),
-    type: "error",
-    duration: 5000
+  
+  // Filter active statuses
+  const activeStatuses = tourismVisaData.value.statuses.filter(status => status.active === true);
+  
+  if (activeStatuses.length === 0) {
+    // If no active status, return first status (or null)
+    return tourismVisaData.value.statuses[0]?.id || null;
+  }
+  
+  if (activeStatuses.length === 1) {
+    // If only one active status, return it
+    return activeStatuses[0].id;
+  }
+  
+  // Multiple active statuses - sort by activated_at timestamp (most recent first)
+  const sortedByDate = [...activeStatuses].sort((a, b) => {
+    // Handle null activated_at values
+    if (!a.activated_at) return 1;
+    if (!b.activated_at) return -1;
+    
+    // Compare dates (newer first)
+    return new Date(b.activated_at) - new Date(a.activated_at);
   });
-}
+  
+  // Return the most recently activated status ID
+  return sortedByDate[0].id;
+});
 
-function showSuccess(messageKey) {
-  notificationStore.setNotification({
-    message: t(messageKey),
-    type: "success",
-    duration: 3000
-  });
-}
+const getGenderText = (genderCode) => {
+  switch (genderCode) {
+    case 0:
+      return t("gender.male");
+    case 1:
+      return t("gender.female");
+    case 2:
+      return t("gender.other");
+    default:
+      return t("common.not_available");
+  }
+};
 
-// Data operations
-const fetchTourismVisa = async (id) => {
+const formatPhoneNumber = (phoneObj) => {
+  if (!phoneObj?.country_code || !phoneObj?.number) return null;
+  return `${phoneObj.country_code} ${phoneObj.number}`;
+};
+
+const fetchTourismVisa = async () => {
+  isLoading.value = true;
+  fetchError.value = null;
+
   try {
-    loading.value = true;
-    const response = await GET(`/admin-panel/tourism-visa/${id}`, {
-      headers: { "x-locale": formValues.value.locale },
-    });
+    console.log("Fetching tourism visa data for ID:", route.params.id);
+    const response = await GET(`/admin-panel/tourism-visa/${route.params.id}`);
 
-    if (response.data?.tourism_visa) {
-      tourismVisa.value = response.data.tourism_visa;
-      formValues.value = {
-        name: response.data.tourism_visa.name || "",
-        duration: response.data.tourism_visa.duration || "",
-        cost: parseFloat(response.data.tourism_visa.cost || 0).toFixed(2),
-        visible: response.data.tourism_visa.visible ? 1 : 0,
-        locale: response.data.tourism_visa.locale || getSafeLocale(),
-      };
+    console.log("API Response:", response);
+
+    if (response && response.data && response.data.tourism_visa) {
+      console.log("Tourism visa data received:", response.data.tourism_visa);
+      tourismVisaData.value = response.data.tourism_visa;
+      console.log("Processed tourism visa data:", tourismVisaData.value);
+
+      // Set the selected status to the active one
+      if (activeStatus.value) {
+        selectedStatus.value = activeStatus.value.id;
+      }
     } else {
+      console.error("No tourism_visa data in response");
+      fetchError.value = "No tourism_visa data returned from API";
       showError("notifications.tourism_visa_load_error");
     }
   } catch (error) {
-    if (error.response?.status === 401) {
-      router.push("/login");
-    }
-    showError("notifications.tourism_visa_load_error", error);
+    console.error("Error fetching tourism visa:", error);
+    fetchError.value = error.message || "Error fetching data";
+    showError("notifications.tourism_visa_load_error");
   } finally {
-    loading.value = false;
+    isLoading.value = false;
   }
 };
 
-const handleLocaleChange = async (newLocale) => {
-  if (!newLocale || !tourismVisa.value) return;
+const retryFetch = () => {
+  fetchTourismVisa();
+};
+
+const openStatusUpdateDialog = () => {
+  if (activeStatus.value) {
+    selectedStatus.value = activeStatus.value.id;
+  }
+  statusDialog.value = true;
+};
+
+const updateStatus = async () => {
+  statusDialog.value = false;
+  isUpdating.value = true;
 
   try {
-    loading.value = true;
-    localStorage.setItem("locale", newLocale);
-
-    const response = await GET(`${BASE_API_PATH}/${route.params.id}`, {
-      headers: { "x-locale": newLocale },
+    await PUT(`/admin-panel/tourism-visa/${route.params.id}/status`, {
+      status_id: selectedStatus.value,
     });
 
-    if (response?.data?.tourism_visa) {
-      formValues.value = {
-        ...formValues.value,
-        name: response.data.tourism_visa.name || "",
-        duration: response.data.tourism_visa.duration || "",
-        cost: parseFloat(response.data.tourism_visa.cost || 0).toFixed(2),
-        visible: response.data.tourism_visa.visible ? 1 : 0,
-        locale: newLocale,
-      };
-    }
-  } catch (error) {
-    showError("notifications.locale_data_load_error", error);
-  } finally {
-    loading.value = false;
-  }
-};
+    // Refresh the data to get the updated status
+    await fetchTourismVisa();
 
-// Form operations
-const createFormData = () => {
-  const formData = new FormData();
-  formData.append("name", formValues.value.name.trim());
-  formData.append("duration", parseInt(formValues.value.duration));
-  formData.append("cost", parseFloat(formValues.value.cost).toFixed(2));
-  formData.append("visible", formValues.value.visible.toString());
-  formData.append("locale", formValues.value.locale);
-  return formData;
-};
-
-const updateFormData = () => {
-  const formData = createFormData();
-  formData.append("_method", "put");
-  return formData;
-};
-
-const resetForm = () => {
-  if (isSubmitting.value) return;
-  
-  formValues.value = {
-    name: "",
-    duration: "",
-    cost: "",
-    visible: 1,
-    locale: getSafeLocale(),
-  };
-};
-
-const submitForm = async () => {
-  errorStore.clearErrors();
-  isSubmitting.value = true;
-
-  try {
-    const endpoint = isEdit.value
-      ? `${BASE_API_PATH}/${route.params.id}`
-      : BASE_API_PATH;
-
-    const formData = isEdit.value ? updateFormData() : createFormData();
-
-    await POST(endpoint, formData);
-
-    showSuccess(
-      `notifications.tourism_visa_${isEdit.value ? "updated" : "added"}_success`
+    notificationStore.setNotification(
+      t("notifications.tourism_visa_updated"),
+      "success"
     );
-
     eventBus.emit("tourism-visa-updated");
-    
-    // Delay for better UX
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    router.push("/tourism-visa");
   } catch (error) {
-    if (error.response?.status === 401) {
-      router.push("/login");
-    } else if (error.response?.status === 422 || error.response?.status === 409) {
-      errorStore.setErrors(error.response.data.errors);
-      showError("notifications.form_validation_error", error);
-    } else {
-      showError("notifications.unexpected_error", error);
-    }
+    showError("notifications.tourism_visa_update_error");
   } finally {
-    isSubmitting.value = false;
+    isUpdating.value = false;
   }
 };
 
 const goBack = () => {
-  if (confirm(t("confirmations.discard_changes"))) {
-    router.push("/tourism-visa");
-  }
+  router.push({ name: "tourism-visa-list" }); // Adjust the route name according to your route configuration
 };
 
-// Auto-save draft for new entries
-watch(
-  formValues,
-  debounce((newVal) => {
-    if (!isEdit.value && newVal.name) {
-      try {
-        localStorage.setItem(
-          "tourism_visa_draft",
-          JSON.stringify(newVal)
-        );
-      } catch (error) {
-        console.warn("Failed to save draft:", error);
-      }
-    }
-  }, DEBOUNCE_DELAY),
-  { deep: true }
-);
+const showError = (messageKey) => {
+  notificationStore.setNotification(t(messageKey), "error");
+};
 
-// Lifecycle hooks
 onMounted(() => {
+  console.log("Component mounted");
+
   if (route.params.id) {
-    isEdit.value = true;
-    fetchTourismVisa(route.params.id);
-    eventBus.emit("edit-tourism-visa-started", { id: route.params.id });
+    console.log("Route ID found:", route.params.id);
+    fetchTourismVisa();
   } else {
-    // Load draft if exists
-    try {
-      const draft = localStorage.getItem("tourism_visa_draft");
-      if (draft) {
-        formValues.value = JSON.parse(draft);
-      }
-    } catch {
-      localStorage.removeItem("tourism_visa_draft");
-    }
-    eventBus.emit("create-tourism-visa-started");
+    console.warn("No route ID parameter found");
   }
 });
+</script>
 
-// Route watcher
-watch(
-  () => route.params.id,
-  async (newId) => {
-    if (newId) {
-      isEdit.value = true;
-      await fetchTourismVisa(newId);
-    } else {
-      isEdit.value = false;
-      resetForm();
-    }
-  },
-  { immediate: true }
-);
-</script> -->
+<style scoped>
+/* Enhance responsiveness for smaller screens */
+@media (max-width: 600px) {
+  .pa-4 {
+    padding: 8px !important;
+  }
+  .v-card-title {
+    font-size: 1.25rem !important;
+  }
+  .v-btn {
+    width: 100% !important;
+    margin-bottom: 8px;
+  }
+  .gap-2 {
+    gap: 8px !important;
+  }
+}
+</style>

@@ -31,6 +31,12 @@
                 <slot name="editStatus" :item="item"></slot>
               </div>
             </template>
+            <template v-else-if="header === 'show-updates'">
+              <div class="d-flex align-center justify-start">
+                <slot name="editStatus" :item="item"></slot>
+              </div>
+            </template>
+            
             <template v-else-if="$slots[header]">
               <slot :name="header" :item="item"></slot>
             </template>
@@ -56,6 +62,7 @@ import { useApi } from "../../../composables/api";
 import { onMounted, onUnmounted, ref, watch } from "vue";
 import { useEventBus } from "../../../composables/eventBus";
 import { useI18n } from "vue-i18n";
+
 
 const { t } = useI18n();
 

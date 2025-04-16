@@ -7,6 +7,8 @@ import visaTypesRoutes from "../visa-types";
 import UsersRoutes from "../users";
 import EmploymentTypesRoutes from "../employment-types";
 import TourismVisasRoutes from "../tourism-visa";
+
+
   
 const mainLayoutRoute = {
   path: "/dashboard",
@@ -19,7 +21,9 @@ const mainLayoutRoute = {
     ...visaTypesRoutes,
     ...EmploymentTypesRoutes,
     ...settingsRoutes,
-    ...TourismVisasRoutes
+    ...TourismVisasRoutes,
+    
+    
   ],
 };
 

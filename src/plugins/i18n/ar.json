@@ -58,7 +58,9 @@
     "titles": "المسميات الوظيفية",
     "countries": "الدول",
     "visaTypes": "أنواع التأشيرات",
-    "employmentTypes": "أنواع التوظيف"
+    "employmentTypes": "أنواع التوظيف",
+    "TourismVisa" : "التأشيرة السياحية",
+    "tourismVisa" :"التأشيرة السياحية"
   },
 
   "table": {
@@ -72,7 +74,11 @@
     "role": "الصلاحيات",
     "phone": "رقم الهاتف",
     "visibility": "الاظهار",
-    "profile": "الملف الشخصي"
+    "profile": "الملف الشخصي",
+    "user": "المستخدم",
+    "date": "التاريخ",
+    "editStatus": "تحديث حالة التاءشيرة",
+    "passport_number": "رقم الجواز"
   },
 
   "actions": {
@@ -236,5 +242,57 @@
     "close": "إغلاق",
     "personal_info": "معلومات شخصية",
     "account_status": "حالة الحساب"
-  }
+  },
+  "tourism_visa": {
+    "details": "تفاصيل تأشيرة السياحة",
+    "personal_info": "المعلومات الشخصية",
+    "firstname": "الاسم الأول",
+    "middlename": "الاسم الأوسط",
+    "lastname": "اسم العائلة",
+    "gender": "الجنس",
+    "birthdate": "تاريخ الميلاد",
+    "nationality": "الجنسية",
+    "passport_info": "معلومات جواز السفر",
+    "passport_number": "رقم جواز السفر",
+    "passport_image": "صورة جواز السفر",
+    "no_passport_image": "لا توجد صورة جواز سفر متاحة",
+    "contact_info": "معلومات الاتصال",
+    "email": "البريد الإلكتروني",
+    "phone": "رقم الهاتف",
+    "visit_info": "معلومات الزيارة",
+    "purpose_of_visit": "الغرض من الزيارة",
+    "adults_count": "عدد البالغين",
+    "children_count": "عدد الأطفال",
+    "destination_country": "بلد الوجهة",
+    "message": "رسالة إضافية",
+    "status": "حالة الطلب",
+    "current_status": "الحالة الحالية",
+    "update_status": "تحديث الحالة",
+    "select_status": "اختر حالة جديدة"
+  },
+  "gender": {
+    "male": "ذكر",
+    "female": "أنثى",
+    "other": "آخر"
+  },
+  "common": {
+    "not_available": "غير متوفر",
+    "no_message": "لم يتم تقديم رسالة",
+    "back": "رجوع",
+    "update_status": "تحديث الحالة",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "update_status": "تحديث الحالة"
+  },
+  "notifications": {
+    "tourism_visa_load_error": "فشل في تحميل معلومات تأشيرة السياحة",
+    "tourism_visa_updated": "تم تحديث حالة تأشيرة السياحة بنجاح",
+    "tourism_visa_update_error": "فشل في تحديث حالة تأشيرة السياحة"
+  },
+  "Statuses":{
+      "Accepted":"تم قبول طلبك",
+      "Pending":"ة",
+      "Rejected":"طلبك مرفو",
+      "Reviewing":"طلبك قيد المراجع"
+    }
 }

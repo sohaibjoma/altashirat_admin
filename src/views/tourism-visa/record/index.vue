@@ -15,12 +15,15 @@
       width="100%"
       :URLEndpoint="`/admin-panel/tourism-visa`"
       :headerFieldMapping="{
-        order_id: 'order_id.id',
+        id: 'id',
         user: 'user',
         date: 'created_at',
         status: 'status',
+        phone_id: 'phone_id.id',
+        passport_number: 'passport',
+       
       }"
-      :tableHeaders="['user', 'date', 'editStatus']"
+      :tableHeaders="['id','user', 'date', 'phone', 'passport_number', 'editStatus']"
       :page="page"
       @update:page="page = $event"
       :refreshEvent="'tourism-visa-updated'"
@@ -28,29 +31,36 @@
     >
       <!-- User Column Template -->
       <template #user="{ item }">
-    <div>
-      {{ item.user.name }} ({{ item.user.firstname }})
-    </div>
-  </template>
+        <div>{{ item.user.name }} ({{ item.user.firstname }})</div>
+      </template>
+      <template #phone="{ item }">
+        <div>
+          {{ formatPhoneNumber(item.user.phone) || t("profile.N/A") }}
+        </div>
+      </template>
+      <template #passport_number="{ item }">
+        <div>
+          {{ item.passport_number || t("profile.N/A") }}
+        </div>
+      </template>
 
-  <template #date="{ item }">
-    <div>
-      {{ item.user.name }} ({{ item.statuses[0].activated_at }})
-    </div>
-  </template>
+      <template #date="{ item }">
+        <div>
+          {{ item.user.name }} ({{
+            new Date(item.statuses[0].activated_at).toLocaleDateString("en-GB")
+          }})
+        </div>
+      </template>
 
-  <template #editStatus>
-  <v-icon>mdi-pencil</v-icon>
-  </template>
-      
-        <DeleteDialog
+      <template #editStatus="{ item }">
+        <EditFiring
           :record="item"
           :resource="'tourism-visa'"
-          class="mt-3"
-          @item-deleted="handleItemDeleted"
+          class="mb-2"
+          @edit-clicked="handleEdit(item.id)"
         />
-     
-     </CustomTable>
+      </template>
+    </CustomTable>
   </v-app>
 </template>
 
@@ -61,6 +71,8 @@ import { useNotificationStore } from "../../../stores/notification";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
+
+
 const { t } = useI18n();
 const notificationStore = useNotificationStore();
 const eventBus = useEventBus();
@@ -68,14 +80,22 @@ const router = useRouter();
 
 const page = ref(1);
 
-function getTourismVisaPayload(responseData) {
-  const formData = new FormData();
-  formData.append("_method", "put");
-  formData.append("visible", responseData.tourism_visa.visible ? "0" : "1");
-  formData.append("name", responseData.tourism_visa.name);
-  formData.append("locale", responseData.tourism_visa.locale || "en");
-  return formData;
-}
+// function getTourismVisaPayload(responseData) {
+//   const formData = new FormData();
+//   formData.append("_method", "put");
+//   formData.append("visible", responseData.tourism_visa.visible ? "0" : "1");
+//   formData.append("name", responseData.tourism_visa.name);
+//   formData.append("locale", responseData.tourism_visa.locale || "en");
+//   return formData;
+// }
 
+const formatPhoneNumber = (phoneObj) => {
+  if (!phoneObj?.number) return null;
 
+  const fullNumber = [phoneObj.country_code, phoneObj.number]
+    .filter(Boolean)
+    .join(" ");
+
+  return fullNumber.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
+};
 </script>

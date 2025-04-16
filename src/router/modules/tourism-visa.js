@@ -9,13 +9,7 @@ export default [
       title: t("drawer.TourismVisa"),
     },
   },
-  {
-    path: "/tourism-visa/add",
-    component: () => import("../../views/tourism-visa/actions/index.vue"),
-    meta: {
-      hidden: true,
-    },
-  },
+  
   {
     path: "/tourism-visa/:id/edit",
     component: () => import("../../views/tourism-visa/actions/index.vue"),
@@ -23,4 +17,6 @@ export default [
       hidden: true,
     },
   },
+  
+  
 ];

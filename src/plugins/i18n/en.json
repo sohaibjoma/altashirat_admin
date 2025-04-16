@@ -58,7 +58,9 @@
     "titles": "Job Titles",
     "countries": "Countries",
     "visaTypes": "Visa Types",
-    "employmentTypes": "Employment Types"
+    "employmentTypes": "Employment Types",
+    "TourismVisa" : "Tourism visa",
+    "tourismVisa" : "Tourism Visa"
   },
 
   "table": {
@@ -72,7 +74,11 @@
     "role": "Role",
     "phone": "Phone Number",
     "visibility": "Visibility",
-    "profile": "Profile"
+    "profile": "Profile",
+    "user": "User",
+    "date": "Date",
+    "editStatus": "Edit Status",
+    "passport_number":"Passport"
   },
 
   "actions": {
@@ -235,5 +241,61 @@
     "close": "Close",
     "personal_info": "Personal Information",
     "account_status": "Account Status"
-  }
+  },
+  
+    "tourism_visa": {
+      "details": "Tourism Visa Details",
+      "personal_info": "Personal Information",
+      "firstname": "First Name",
+      "middlename": "Middle Name",
+      "lastname": "Last Name",
+      "gender": "Gender",
+      "birthdate": "Date of Birth",
+      "nationality": "Nationality",
+      "passport_info": "Passport Information",
+      "passport_number": "Passport Number",
+      "passport_image": "Passport Image",
+      "no_passport_image": "No passport image available",
+      "contact_info": "Contact Information",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "visit_info": "Visit Information",
+      "purpose_of_visit": "Purpose of Visit",
+      "adults_count": "Number of Adults",
+      "children_count": "Number of Children",
+      "destination_country": "Destination Country",
+      "message": "Additional Message",
+      "status": "Application Status",
+      "current_status": "Current Status",
+      "update_status": "Update Status",
+      "select_status": "Select New Status"
+    },
+    "gender": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "common": {
+      "not_available": "Not available",
+      "no_message": "No message provided",
+      "back": "Back",
+      "update_status": "Update Status",
+      "cancel": "Cancel",
+      "save": "Save",
+      "update_status": "Update Status"
+    },
+    "notifications": {
+      "tourism_visa_load_error": "Failed to load tourism visa information",
+      "tourism_visa_updated": "Tourism visa status successfully updated",
+      "tourism_visa_update_error": "Failed to update tourism visa status"
+    },
+    "Statuses":{
+      "Accepted":"Accepted",
+      "Pending":"Pending",
+      "Rejected":"Rejected",
+      "Reviewing":"Reviewing"
+    }
+
+  
+  
 }
