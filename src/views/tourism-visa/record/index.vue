@@ -10,7 +10,7 @@
     </div>
     <CustomTable
       width="100%"
-      :URLEndpoint="`/admin-panel/tourism-visa`"
+      :URLEndpoint="`/admin-panel/tourism-visa?page=${page}`"
       :headerFieldMapping="{
         id: 'id',
         user: 'user',
