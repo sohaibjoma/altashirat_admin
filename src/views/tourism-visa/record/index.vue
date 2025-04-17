@@ -28,7 +28,7 @@
     >
       <!-- User Column Template -->
       <template #user="{ item }">
-        <div>{{ item.user.name }} ({{ item.user.firstname }})</div>
+        <div>{{ item.user.name }} {{ item.user.firstname }}</div>
       </template>
       <template #phone="{ item }">
         <div>
@@ -43,9 +43,9 @@
 
       <template #date="{ item }">
         <div>
-          {{ item.user.name }} ({{
+          {{ item.user.name }} {{
             new Date(item.statuses[0].activated_at).toLocaleDateString("en-GB")
-          }})
+          }}
         </div>
       </template>
 
