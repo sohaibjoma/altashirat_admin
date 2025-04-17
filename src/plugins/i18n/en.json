@@ -211,7 +211,10 @@
     "visa_type_visibility_toggled": "Visa type visibility toggled successfully!",
     "visa_type_deleted_success": "Visa type deleted successfully!",
     "employment_type_visibility_toggled": "Employment type visibility toggled successfully!",
-    "employment_type_deleted_success": "Employment type deleted successfully!"
+    "employment_type_deleted_success": "Employment type deleted successfully!",
+    "tourism_visa_load_error": "Failed to load tourism visa information",
+    "tourism_visa_updated": "Tourism visa status successfully updated",
+    "tourism_visa_update_error": "Failed to update tourism visa status"
   },
 
   "error404": {
@@ -281,14 +284,9 @@
       "back": "Back",
       "update_status": "Update Status",
       "cancel": "Cancel",
-      "save": "Save",
-      "update_status": "Update Status"
+      "save": "Save"
     },
-    "notifications": {
-      "tourism_visa_load_error": "Failed to load tourism visa information",
-      "tourism_visa_updated": "Tourism visa status successfully updated",
-      "tourism_visa_update_error": "Failed to update tourism visa status"
-    },
+
     "Statuses":{
       "Accepted":"Accepted",
       "Pending":"Pending",

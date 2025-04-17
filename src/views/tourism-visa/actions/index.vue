@@ -1,8 +1,8 @@
 <template>
-  <div class="pa-4 pr-3-4">
-    <v-card class="mb-6 py-2 px-2 elevation-2">
+  <div class="mx-8">
+    <v-card class="mb-6 py-2 elevation-2">
       <v-card-title
-        class="text-h5 font-weight-bold text-align-center justify-center"
+        class="font-weight-bold text-align-center pink-border justify-center"
       >
         {{ $t("tourism_visa.details") }}
       </v-card-title>
@@ -17,37 +17,18 @@
               <div class="mt-2">Loading tourism visa data...</div>
             </v-col>
           </v-row>
-
-          <v-row v-else-if="!hasData">
-            <v-col cols="12" class="text-center">
-              <div class="text-subtitle-1">
-                No data available or failed to load data.
-              </div>
-              <custom-button
-                color="primary"
-                width="150px"
-                height="40px"
-                fontSize="14px"
-                class="mt-4"
-                @click="retryFetch"
-              >
-                {{ $t("common.retry") }}
-              </custom-button>
-            </v-col>
-          </v-row>
-
-          <v-row v-else>
+          <v-row>
             <!-- Personal Information Section -->
             <v-col cols="12">
-              <div class="text-subtitle-1 font-weight-bold mb-3 primary--text">
+              <h3 class="font-weight-bold mb-3">
                 {{ $t("tourism_visa.personal_info") }}
-              </div>
+              </h3>
             </v-col>
 
             <v-col cols="12" sm="6">
               <v-row>
                 <v-col cols="12" md="6" class="py-2">
-                  <div class="text-subtitle-2 font-weight-medium">
+                  <div class="font-weight-medium">
                     {{ $t("tourism_visa.firstname") }}
                   </div>
                   <div>
@@ -58,7 +39,7 @@
                 </v-col>
 
                 <v-col cols="12" md="6" class="py-2">
-                  <div class="text-subtitle-2 font-weight-medium">
+                  <div class="font-weight-medium">
                     {{ $t("tourism_visa.middlename") }}
                   </div>
                   <div>
@@ -69,7 +50,7 @@
                 </v-col>
 
                 <v-col cols="12" md="6" class="py-2">
-                  <div class="text-subtitle-2 font-weight-medium">
+                  <div class="font-weight-medium">
                     {{ $t("tourism_visa.birthdate") }}
                   </div>
                   <div>
@@ -80,7 +61,7 @@
                 </v-col>
 
                 <v-col cols="12" md="6" class="py-2">
-                  <div class="text-subtitle-2 font-weight-medium">
+                  <div class="font-weight-medium">
                     {{ $t("tourism_visa.gender") }}
                   </div>
                   <div>
@@ -96,7 +77,7 @@
             <v-col cols="12" sm="6">
               <v-row>
                 <v-col cols="12" md="6" class="py-2">
-                  <div class="text-subtitle-2 font-weight-medium">
+                  <div class="font-weight-medium">
                     {{ $t("tourism_visa.lastname") }}
                   </div>
                   <div>
@@ -104,7 +85,7 @@
                   </div>
                 </v-col>
                 <v-col cols="12" md="6" class="py-2">
-                  <div class="text-subtitle-2 font-weight-medium">
+                  <div class="font-weight-medium">
                     {{ $t("tourism_visa.nationality") }}
                   </div>
                   <div>
@@ -123,15 +104,15 @@
 
             <!-- Passport Information Section -->
             <v-col cols="12">
-              <div class="text-subtitle-1 font-weight-bold mb-3 primary--text">
+              <h3 class="font-weight-bold mb-3">
                 {{ $t("tourism_visa.passport_info") }}
-              </div>
+              </h3>
             </v-col>
 
             <v-col cols="12" md="3" class="py-2">
               <v-row>
                 <v-col cols="12" class="py-2">
-                  <div class="text-subtitle-2 font-weight-medium">
+                  <div class="font-weight-medium">
                     {{ $t("tourism_visa.passport_number") }}
                   </div>
                   <div>
@@ -148,7 +129,7 @@
             <v-col cols="12" sm="6">
               <v-row>
                 <v-col cols="12" class="py-2">
-                  <div class="text-subtitle-2 font-weight-medium">
+                  <div class="font-weight-medium">
                     {{ $t("tourism_visa.passport_image") }}
                   </div>
                   <div
@@ -166,7 +147,7 @@
                       class="grey lighten-2 rounded"
                     ></v-img>
                   </div>
-                  <div v-else class="text-body-2 grey--text">
+                  <div v-else class="text-gray-3">
                     {{ $t("tourism_visa.no_passport_image") }}
                   </div>
                 </v-col>
@@ -179,15 +160,15 @@
 
             <!-- Contact Information Section -->
             <v-col cols="12">
-              <div class="text-subtitle-1 font-weight-bold mb-3 primary--text">
+              <h3 class="font-weight-bold mb-3">
                 {{ $t("tourism_visa.contact_info") }}
-              </div>
+              </h3>
             </v-col>
 
             <v-col cols="12" md="3" class="py-2" sm="6">
               <v-row>
                 <v-col cols="12" class="py-2">
-                  <div class="text-subtitle-2 font-weight-medium">
+                  <div class="font-weight-medium">
                     {{ $t("tourism_visa.email") }}
                   </div>
                   <div>
@@ -204,7 +185,7 @@
             <v-col cols="12" sm="6">
               <v-row>
                 <v-col cols="12" class="py-2">
-                  <div class="text-subtitle-2 font-weight-medium">
+                  <div class="font-weight-medium">
                     {{ $t("tourism_visa.phone") }}
                   </div>
                   <div>
@@ -223,13 +204,13 @@
 
             <!-- Visit Information Section -->
             <v-col cols="12">
-              <div class="text-subtitle-1 font-weight-bold mb-3 primary--text">
+              <h3 class="font-weight-bold mb-3">
                 {{ $t("tourism_visa.visit_info") }}
-              </div>
+              </h3>
             </v-col>
 
             <v-col cols="12" md="3" class="py-2">
-              <div class="text-subtitle-2 font-weight-medium">
+              <div class="font-weight-medium">
                 {{ $t("tourism_visa.purpose_of_visit") }}
               </div>
               <div>
@@ -240,7 +221,7 @@
             </v-col>
 
             <v-col cols="12" md="3" class="py-2">
-              <div class="text-subtitle-2 font-weight-medium">
+              <div class="font-weight-medium">
                 {{ $t("tourism_visa.adults_count") }}
               </div>
               <div>
@@ -249,7 +230,7 @@
             </v-col>
 
             <v-col cols="12" md="3" class="py-2">
-              <div class="text-subtitle-2 font-weight-medium">
+              <div class="font-weight-medium">
                 {{ $t("tourism_visa.children_count") }}
               </div>
               <div>
@@ -260,7 +241,7 @@
             </v-col>
 
             <v-col cols="12" md="2" class="py-2">
-              <div class="text-subtitle-2 font-weight-medium">
+              <div class="font-weight-medium">
                 {{ $t("tourism_visa.destination_country") }}
               </div>
               <div>
@@ -272,7 +253,7 @@
             </v-col>
 
             <v-col cols="12" md="4" class="py-2">
-              <div class="text-subtitle-2 font-weight-medium">
+              <div class="font-weight-medium">
                 {{ $t("tourism_visa.message") }}
               </div>
               <div class="mt-1 pa-2 rounded bg-grey-lighten-4">
@@ -285,180 +266,137 @@
 
             <!-- Status Section -->
             <v-col cols="12">
-              <div class="text-subtitle-1 font-weight-bold mb-3 primary--text">
+              <h3 class="font-weight-bold">
                 {{ $t("tourism_visa.status") }}
-              </div>
+              </h3>
             </v-col>
 
-            <v-col cols="12" sm="6" class="py-2">
-              <div class="text-subtitle-2 font-weight-medium">
+            <v-col cols="12" sm="4" class="py-2">
+              <div class="font-weight-medium">
                 {{ $t("tourism_visa.current_status") }}
               </div>
               <v-chip
-                v-if="activeStatus"
-                :color="activeStatus.color"
+                v-if="latestStatus"
+                color="gray"
                 text-color="white"
                 small
                 class="mt-1"
               >
-                {{ activeStatus.name }}
+                {{ latestStatus }}
               </v-chip>
-              <div v-else class="text-body-2 grey--text">
+              <div v-else class="text-gray-3">
                 {{ $t("common.not_available") }}
               </div>
+            </v-col>
+            <v-col cols="12" md="8">
+              <v-card class="pa-4">
+                <v-card-title>{{
+                  $t("tourism_visa.update_status")
+                }}</v-card-title>
+                <v-card-text>
+                  <Form
+                    v-slot="{ handleSubmit }"
+                    :initial-values="formValues"
+                    ref="form"
+                  >
+                    <v-form @submit.prevent="handleSubmit(updateStatus)">
+                      <Select
+                        v-model="selectedStatus"
+                        :label="$t('visible')"
+                        :items="[
+                          { text: $t('Statuses.Pending'), value: '1' },
+                          { text: $t('Statuses.Reviewing'), value: '2' },
+                          { text: $t('Statuses.Accepted'), value: '3' },
+                          { text: $t('Statuses.Rejected'), value: '4' },
+                        ]"
+                        name="status"
+                      />
+                      <div class="d-flex justify-end px-10">
+                        <MainButton
+                          type="submit"
+                          color="primary"
+                          width="150px"
+                          height="40px"
+                          fontSize="14px"
+                          :disabled="
+                            isUpdating || !tourismVisaData.can_update_status
+                          "
+                        >
+                          {{ $t("common.update_status") }}
+                        </MainButton>
+                      </div>
+                    </v-form>
+                  </Form>
+                </v-card-text>
+              </v-card>
             </v-col>
           </v-row>
         </div>
       </v-card-text>
-      <v-card>
-        <v-card-title>{{ $t("tourism_visa.update_status") }}</v-card-title>
-        <v-card-text>
-          <Select
-            v-model="status"
-            :label="$t('visible')"
-            :placeholder="$t('selectVisibility')"
-            :items="[
-              { text: $t('visible'), value: 1 },
-              { text: $t('hidden'), value: 0 },
-            ]"
-            name="visible"
-          />
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <!-- <custom-button color="secondary"
-            width="120px" height="40px" fontSize="14px" @click="statusDialog =
-            false">
-            {{ $t("common.cancel") }}
-        
-          </custom-button>
-          <custom-button
-            v-if="tourismVisaData.can_update_status"
-            color="success"
-            width="150px"
-            height="40px"
-            fontSize="14px"
-            @click="openStatusUpdateDialog"
-            :disabled="isUpdating || !tourismVisaData.can_update_status"
-          >
-            {{ $t("common.update_status") }}
-          </custom-button>  -->
-
-          <MainButton
-            type="submit"
-            color="secondary"
-            width="120"
-            height="40"
-            class="mx-2"
-            :loading="loading"
-          >
-            {{ t("actions.update_status") }}
-          </MainButton>
-        </v-card-actions>
-      </v-card>
     </v-card>
-
-    <div class="d-flex justify-end flex-wrap gap-2">
-      <!-- <custom-button
-        color="primary"
-        width="120px"
-        height="40px"
-        fontSize="14px"
-        @click="goBack"
-      >
-       
-      </custom-button> -->
-      <custom-button
-        v-if="tourismVisaData.can_update_status"
-        color="success"
-        width="150px"
-        height="40px"
-        fontSize="14px"
-        @click="openStatusUpdateDialog"
-        :disabled="isUpdating || !tourismVisaData.can_update_status"
-      >
-        {{ $t("common.update_status") }}
-      </custom-button>
-    </div>
-
-    
   </div>
 </template>
 
 <script setup>
-import { useRoute, useRouter } from "vue-router";
+import { Form } from "vee-validate";
+
+import { useRoute } from "vue-router";
 import { ref, computed, onMounted } from "vue";
+
 import { useEventBus } from "../../../composables/eventBus";
 import { useNotificationStore } from "../../../stores/notification";
 import { useI18n } from "vue-i18n";
 import { useApi } from "../../../composables/api";
-const status = ref("");
-const route = useRoute();
-const router = useRouter();
-const tourismVisaData = ref({});
+
 const notificationStore = useNotificationStore();
 const eventBus = useEventBus();
 const { t } = useI18n();
-const { GET, PUT } = useApi();
+const { GET, POST } = useApi();
+
+const route = useRoute();
+const tourismVisaData = ref({});
 
 const isLoading = ref(false);
 const isUpdating = ref(false);
-const statusDialog = ref(false);
-const selectedStatus = ref(null);
-const fetchError = ref(null);
-const showDebug = ref(true); // Set to false in production
-
-// Computed property to check if we have data
-const hasData = computed(() => {
-  return tourismVisaData.value && Object.keys(tourismVisaData.value).length > 0;
-});
-
-// Get the active status from the statuses array
-const activeStatus = computed(() => {
-  if (!tourismVisaData.value || !tourismVisaData.value.statuses) return null;
-  return tourismVisaData.value.statuses.find(
-    (status) => status.active === true
-  );
-});
-
-// Status options dynamically generated from the response
-const statusOptions = computed(() => {
-  if (!tourismVisaData.value || !tourismVisaData.value.statuses) return [];
-  return tourismVisaData.value.statuses;
-});
+const selectedStatus = ref("");
 
 const latestStatus = computed(() => {
-  if (!tourismVisaData.value || !tourismVisaData.value.statuses || tourismVisaData.value.statuses.length === 0) {
+  if (
+    !tourismVisaData.value ||
+    !tourismVisaData.value.statuses ||
+    tourismVisaData.value.statuses.length === 0
+  ) {
     return null;
   }
-  
-  // Filter active statuses
-  const activeStatuses = tourismVisaData.value.statuses.filter(status => status.active === true);
-  
+
+  const activeStatuses = tourismVisaData.value.statuses.filter(
+    (status) => status.active === true
+  );
+
   if (activeStatuses.length === 0) {
     // If no active status, return first status (or null)
-    return tourismVisaData.value.statuses[0]?.id || null;
+    return tourismVisaData.value.statuses[0]?.name || null;
   }
-  
+
   if (activeStatuses.length === 1) {
     // If only one active status, return it
-    return activeStatuses[0].id;
+    return activeStatuses[0].name;
   }
-  
+
   // Multiple active statuses - sort by activated_at timestamp (most recent first)
   const sortedByDate = [...activeStatuses].sort((a, b) => {
     // Handle null activated_at values
     if (!a.activated_at) return 1;
     if (!b.activated_at) return -1;
-    
+
     // Compare dates (newer first)
     return new Date(b.activated_at) - new Date(a.activated_at);
   });
-  
-  // Return the most recently activated status ID
-  return sortedByDate[0].id;
-});
 
+  // Return the most recently activated status ID
+  return sortedByDate[0].name;
+});
+//form data formating start
 const getGenderText = (genderCode) => {
   switch (genderCode) {
     case 0:
@@ -476,61 +414,46 @@ const formatPhoneNumber = (phoneObj) => {
   if (!phoneObj?.country_code || !phoneObj?.number) return null;
   return `${phoneObj.country_code} ${phoneObj.number}`;
 };
+// form data formatting end
 
 const fetchTourismVisa = async () => {
   isLoading.value = true;
-  fetchError.value = null;
 
   try {
-    console.log("Fetching tourism visa data for ID:", route.params.id);
     const response = await GET(`/admin-panel/tourism-visa/${route.params.id}`);
 
-    console.log("API Response:", response);
-
     if (response && response.data && response.data.tourism_visa) {
-      console.log("Tourism visa data received:", response.data.tourism_visa);
       tourismVisaData.value = response.data.tourism_visa;
-      console.log("Processed tourism visa data:", tourismVisaData.value);
 
-      // Set the selected status to the active one
-      if (activeStatus.value) {
-        selectedStatus.value = activeStatus.value.id;
+      // Set the selected status after the data is available
+      if (latestStatus.value) {
+        selectedStatus.value = latestStatus.value;
       }
     } else {
       console.error("No tourism_visa data in response");
-      fetchError.value = "No tourism_visa data returned from API";
-      showError("notifications.tourism_visa_load_error");
     }
   } catch (error) {
     console.error("Error fetching tourism visa:", error);
-    fetchError.value = error.message || "Error fetching data";
-    showError("notifications.tourism_visa_load_error");
   } finally {
     isLoading.value = false;
   }
 };
 
-const retryFetch = () => {
-  fetchTourismVisa();
-};
-
-const openStatusUpdateDialog = () => {
-  if (activeStatus.value) {
-    selectedStatus.value = activeStatus.value.id;
-  }
-  statusDialog.value = true;
+const TourismFormData = () => {
+  const formData = new FormData();
+  formData.append("status", selectedStatus.value);
+  formData.append("_method", "patch");
+  return formData;
 };
 
 const updateStatus = async () => {
-  statusDialog.value = false;
   isUpdating.value = true;
 
   try {
-    await PUT(`/admin-panel/tourism-visa/${route.params.id}/status`, {
-      status_id: selectedStatus.value,
-    });
-
-    // Refresh the data to get the updated status
+    await POST(
+      `/admin-panel/tourism-visa/${route.params.id}`,
+      TourismFormData()
+    );
     await fetchTourismVisa();
 
     notificationStore.setNotification(
@@ -539,29 +462,14 @@ const updateStatus = async () => {
     );
     eventBus.emit("tourism-visa-updated");
   } catch (error) {
-    showError("notifications.tourism_visa_update_error");
+    console.log("error posting data");
   } finally {
     isUpdating.value = false;
   }
 };
 
-const goBack = () => {
-  router.push({ name: "tourism-visa-list" }); // Adjust the route name according to your route configuration
-};
-
-const showError = (messageKey) => {
-  notificationStore.setNotification(t(messageKey), "error");
-};
-
 onMounted(() => {
-  console.log("Component mounted");
-
-  if (route.params.id) {
-    console.log("Route ID found:", route.params.id);
-    fetchTourismVisa();
-  } else {
-    console.warn("No route ID parameter found");
-  }
+  fetchTourismVisa();
 });
 </script>
 
@@ -573,10 +481,6 @@ onMounted(() => {
   }
   .v-card-title {
     font-size: 1.25rem !important;
-  }
-  .v-btn {
-    width: 100% !important;
-    margin-bottom: 8px;
   }
   .gap-2 {
     gap: 8px !important;

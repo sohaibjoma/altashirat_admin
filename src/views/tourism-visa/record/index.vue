@@ -6,9 +6,6 @@
         class="dashboard__breadcrumb me-3 rounded-te-lg rounded-be-lg"
       />
       <div>
-        <MainButton color="primary" width="135px" @click="handleCreate">
-          {{ $t("create") }}
-        </MainButton>
       </div>
     </div>
     <CustomTable
