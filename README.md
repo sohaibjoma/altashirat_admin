@@ -1,5 +1,25 @@
-# Vue 3 + Vite
+# Altashirat Admin Panel
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+An admin dashboard for managing the Altashirat platform, built using [Vue 3](https://vuejs.org/) and [Vite](https://vitejs.dev/).
+The project follows a Git Flow structure with two main branches: `master` and `develop`.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## 🚀 Tech Stack
+
+- Vue 3
+- Vite
+- Vue Router
+- Pinia
+- Axios
+- Vuetify
+- VeeValidate
+
+## 📦 Getting Started
+
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/sohaibjoma/altashirat_admin.git
+cd altashirat_admin
+npm install
+npm run dev
+```
